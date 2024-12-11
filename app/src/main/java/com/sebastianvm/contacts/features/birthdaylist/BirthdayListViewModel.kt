@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.sebastianvm.contacts.data.ContactsRepository
 import com.sebastianvm.contacts.model.ContactWithBirthday
+import com.sebastianvm.contacts.util.findNextAnniversary
 import java.time.LocalDate
-import java.time.MonthDay
 
 class BirthdayListViewModel(private val contactsRepository: ContactsRepository) : ViewModel() {
 
@@ -19,21 +19,15 @@ class BirthdayListViewModel(private val contactsRepository: ContactsRepository) 
   val contacts: State<Map<LocalDate, List<ContactWithBirthday>>> = _contacts
 
   fun loadContacts() {
-    val today = LocalDate.now()
     _contacts.value =
         contactsRepository
             .getBirthdays()
             .map {
               val date = it.birthday
-              val anniversaryThisYear = MonthDay.from(date).atYear(today.year)
-              if (anniversaryThisYear.isBefore(today)) {
-                anniversaryThisYear.plusYears(1) to it
-              } else {
-                // Anniversary is upcoming this year, calculate days until then
-                anniversaryThisYear to it
-              }
+              findNextAnniversary(date) to it
             }
-            .groupBy({ it.first }) { it.second }.toSortedMap()
+            .groupBy({ it.first }) { it.second }
+            .toSortedMap()
   }
 
   class Factory(private val context: Context) : ViewModelProvider.Factory {
