@@ -1,10 +1,7 @@
 package com.sebastianvm.contacts.features.birthdaylist
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.content.res.Configuration
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,10 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,11 +29,11 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.sebastianvm.contacts.model.ContactWithBirthday
 import com.sebastianvm.contacts.ui.theme.ContactsTheme
+import com.sebastianvm.contacts.ui.util.permissions.rememberPermissionHandler
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -63,38 +57,13 @@ fun BirthdayListUi(
     modifier: Modifier
 ) {
 
-  var hasBirthdaysPermissions by remember { mutableStateOf(false) }
-  val context = LocalContext.current
+  val contactsPermissionHandler =
+      rememberPermissionHandler(Manifest.permission.READ_CONTACTS) { loadBirthdays() }
 
-  val permissionLauncher =
-      rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-          hasBirthdaysPermissions = true
-          loadBirthdays()
-        } else {
-          hasBirthdaysPermissions = false
-        }
-      }
-  LaunchedEffect(hasBirthdaysPermissions) {
-    if (hasBirthdaysPermissions) {
-      loadBirthdays()
-      return@LaunchedEffect
-    }
-
-    val permissionState =
-        ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS)
-
-    if (permissionState == PackageManager.PERMISSION_GRANTED) {
-      hasBirthdaysPermissions = true
-      return@LaunchedEffect
-    }
-
-    permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
-  }
   Scaffold(modifier = modifier) { innerPadding ->
-    if (!hasBirthdaysPermissions) {
+    if (!contactsPermissionHandler.hasPermission) {
       Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Button(onClick = { permissionLauncher.launch(Manifest.permission.READ_CONTACTS) }) {
+        Button(onClick = { contactsPermissionHandler.requestPermission() }) {
           Text(text = "Grant contacts permission")
         }
       }
@@ -105,8 +74,7 @@ fun BirthdayListUi(
             ListItem(
                 headlineContent = {
                   Text(date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)))
-                }
-            )
+                })
           }
           items(contacts) {
             Birthday(
@@ -156,5 +124,5 @@ fun Birthday(
 @Preview
 @Composable
 fun BirthdayPreview() {
-  ContactsTheme { Birthday(name = "Sebastian Villegas", null, "1970-01-01") {} }
+  ContactsTheme { Birthday(name = "Tony Stark", null, "1970-01-01") {} }
 }
