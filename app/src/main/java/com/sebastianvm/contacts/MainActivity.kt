@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
-import com.sebastianvm.contacts.features.contactlist.ContactListUi
+import com.sebastianvm.contacts.features.birthdaylist.BirthdayListUi
 import com.sebastianvm.contacts.ui.theme.ContactsTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,6 +14,6 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
-    setContent { ContactsTheme { ContactListUi(modifier = Modifier.fillMaxSize()) } }
+    setContent { ContactsTheme { BirthdayListUi(modifier = Modifier.fillMaxSize()) } }
   }
 }
