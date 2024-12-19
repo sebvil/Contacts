@@ -5,7 +5,9 @@ import android.content.Context
 import android.provider.ContactsContract
 import com.sebastianvm.contacts.model.ContactWithBirthday
 import com.sebastianvm.contacts.model.SimpleContact
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
+import java.time.MonthDay
+import java.time.format.DateTimeFormatter
 
 class ContactsRepository(private val context: Context) {
 
@@ -45,7 +47,8 @@ class ContactsRepository(private val context: Context) {
             ContactsContract.Contacts.PHOTO_THUMBNAIL_URI)
 
     val cursor =
-        contentResolver.query(ContactsContract.Contacts.CONTENT_URI, projection, null, null, "display_name ASC")
+        contentResolver.query(
+            ContactsContract.Contacts.CONTENT_URI, projection, null, null, "display_name ASC")
 
     cursor?.use {
       while (it.moveToNext()) {
@@ -56,7 +59,13 @@ class ContactsRepository(private val context: Context) {
         val birthday = getContactBirthday(contactId)
 
         if (birthday != null) {
-          contactsList.add(ContactWithBirthday(name, photoUri = photoUri, birthday = LocalDate.parse(birthday)))
+            contactsList.add(
+                ContactWithBirthday(
+                    name,
+                    photoUri = photoUri,
+                    birthday = LocalDate.parse(birthday)
+                )
+            )
         }
       }
     }
