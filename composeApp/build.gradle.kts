@@ -18,14 +18,14 @@ ksp { arg("circuit.codegen.mode", "metro") }
 
 kotlin {
     android {
-        namespace = "com.sebastianvm.watcher.composeApp"
+        namespace = "com.sebastianvm.contacts.composeApp"
         compileSdk = libs.versions.compileSdk.get().toInt()
         minSdk = libs.versions.minSdk.get().toInt()
         compilerOptions {
             jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvm.get()))
             freeCompilerArgs.addAll(
                 "-P",
-                "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=com.sebastianvm.watcher.util.CommonParcelize",
+                "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=com.sebastianvm.contacts.util.CommonParcelize",
             )
         }
         androidResources.enable = true
@@ -86,11 +86,11 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "com.sebastianvm.watcher.MainKt"
+        mainClass = "com.sebastianvm.contacts.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.sebastianvm.watcher"
+            packageName = "com.sebastianvm.contacts"
             packageVersion = "1.0.0"
         }
     }

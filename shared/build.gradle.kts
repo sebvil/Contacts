@@ -7,7 +7,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.sebastianvm.watcher.shared"
+        namespace = "com.sebastianvm.contacts.shared"
         compileSdk = libs.versions.compileSdk.get().toInt()
         minSdk = libs.versions.minSdk.get().toInt()
 

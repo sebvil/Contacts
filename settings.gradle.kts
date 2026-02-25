@@ -1,4 +1,4 @@
-rootProject.name = "Watcher"
+rootProject.name = "Contacts"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 

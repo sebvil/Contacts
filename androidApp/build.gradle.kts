@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.sebastianvm.watcher"
+    namespace = "com.sebastianvm.contacts"
     compileSdk { version = release(libs.versions.compileSdk.get().toInt()) }
 
     defaultConfig {
-        applicationId = "com.sebastianvm.watcher"
+        applicationId = "com.sebastianvm.contacts"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
         versionCode = 1

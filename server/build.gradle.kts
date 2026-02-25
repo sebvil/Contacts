@@ -5,12 +5,12 @@ plugins {
     application
 }
 
-group = "com.sebastianvm.watcher"
+group = "com.sebastianvm.contacts"
 
 version = "1.0.0"
 
 application {
-    mainClass.set("com.sebastianvm.watcher.ApplicationKt")
+    mainClass.set("com.sebastianvm.contacts.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
