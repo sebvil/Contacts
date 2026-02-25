@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Default: block clear‑text -->
+    <base-config cleartextTrafficPermitted="false" />
+
+    <!-- Allow clear‑text only for the specific IP (or subnet) -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <!-- If you also need the whole LAN subnet, you can list each host,
+             or use a <trust-anchors> with a custom CA for HTTPS. -->
+    </domain-config>
+</network-security-config>
