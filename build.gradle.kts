@@ -18,6 +18,7 @@ plugins {
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.spotless)
     alias(libs.plugins.testBalloon) apply false
+    alias(libs.plugins.androidLint) apply false
 }
 
 // Configure Spotless for the root project (this file, settings, etc.)

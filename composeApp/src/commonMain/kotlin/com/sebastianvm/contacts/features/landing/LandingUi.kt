@@ -18,12 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sebastianvm.contacts.mvvm.Ui
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dev.zacsweers.metro.AppScope
-import org.jetbrains.compose.resources.stringResource
 import contacts.composeapp.generated.resources.Res
 import contacts.composeapp.generated.resources.log_in
 import contacts.composeapp.generated.resources.sign_up
 import contacts.composeapp.generated.resources.welcome_to_contacts
+import dev.zacsweers.metro.AppScope
+import org.jetbrains.compose.resources.stringResource
 
 @CircuitInject(LandingScreen::class, AppScope::class)
 class LandingUi : Ui<LandingState, LandingUserAction>() {

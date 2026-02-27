@@ -8,11 +8,11 @@ import com.sebastianvm.contacts.features.login.LoginScreen
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
+import contacts.composeapp.generated.resources.Res
+import contacts.composeapp.generated.resources.username_already_taken
 import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.assertions.asClue
 import io.kotest.matchers.shouldBe
-import contacts.composeapp.generated.resources.Res
-import contacts.composeapp.generated.resources.username_already_taken
 
 val SignUpPresenterTest by testSuite {
     context(graph: TestAppGraph)

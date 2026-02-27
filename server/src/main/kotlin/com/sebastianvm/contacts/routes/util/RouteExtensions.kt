@@ -1,8 +1,8 @@
 package com.sebastianvm.contacts.routes.util
 
+import com.sebastianvm.contacts.routes.ContactsRoute
 import com.sebastianvm.contacts.routes.NetworkResponse
 import com.sebastianvm.contacts.routes.PostBody
-import com.sebastianvm.contacts.routes.ContactsRoute
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.plugins.BadRequestException
 import io.ktor.server.plugins.CannotTransformContentToTypeException

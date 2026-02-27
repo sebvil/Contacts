@@ -11,10 +11,10 @@ import com.sebastianvm.contacts.mvvm.util.PreviewScreen
 import com.sebastianvm.contacts.mvvm.util.ScreenPreviews
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.CircuitContent
-import dev.zacsweers.metro.AppScope
-import org.jetbrains.compose.resources.stringResource
 import contacts.composeapp.generated.resources.Res
 import contacts.composeapp.generated.resources.app_name
+import dev.zacsweers.metro.AppScope
+import org.jetbrains.compose.resources.stringResource
 
 @CircuitInject(RootScreen::class, AppScope::class)
 class RootUi : Ui<RootState, Nothing>() {

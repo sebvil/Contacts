@@ -16,11 +16,11 @@ import com.sebastianvm.contacts.mvvm.Ui
 import com.sebastianvm.contacts.mvvm.util.PreviewScreen
 import com.sebastianvm.contacts.mvvm.util.ScreenPreviews
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dev.zacsweers.metro.AppScope
-import org.jetbrains.compose.resources.stringResource
 import contacts.composeapp.generated.resources.Res
 import contacts.composeapp.generated.resources.log_out
 import contacts.composeapp.generated.resources.welcome_username
+import dev.zacsweers.metro.AppScope
+import org.jetbrains.compose.resources.stringResource
 
 @CircuitInject(HomeScreen::class, AppScope::class)
 class HomeUi : Ui<HomeState, HomeUserAction>() {

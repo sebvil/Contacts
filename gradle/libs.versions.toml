@@ -33,6 +33,10 @@ material3 = "1.10.0-alpha05"
 metro = "0.10.4"
 spotless = "8.2.1"
 testBalloon = "0.8.2-K2.3.0"
+kotlinStdlib = "2.3.10"
+kotlinTest = "2.3.10"
+runner = "1.5.2"
+core = "1.5.0"
 
 [libraries]
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
@@ -90,6 +94,10 @@ compose-rules-detekt = { module = "io.nlopez.compose.rules:detekt", version.ref 
 # Dependencies of the included build-logic
 detekt-gradlePlugin = { group = "dev.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlinTest" }
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 
 [bundles]
 buildLogic = [
@@ -143,3 +151,4 @@ testBalloon = { id = "de.infix.testBalloon", version.ref = "testBalloon" }
 
 kmp = { id = "kmpPlugin", version = "unspecified" }
 jvm = { id = "jvmPlugin", version = "unspecified" }
+androidLint = { id = "com.android.lint", version.ref = "agp" }

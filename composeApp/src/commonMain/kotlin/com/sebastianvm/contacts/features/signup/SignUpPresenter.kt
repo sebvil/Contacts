@@ -9,19 +9,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.sebastianvm.contacts.data.repository.AuthRepository
 import com.sebastianvm.contacts.features.login.LoginScreen
-import com.sebastianvm.contacts.mvvm.ScreenState
 import com.sebastianvm.contacts.mvvm.ContactsPresenter
+import com.sebastianvm.contacts.mvvm.ScreenState
 import com.sebastianvm.contacts.routes.Register
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
+import contacts.composeapp.generated.resources.Res
+import contacts.composeapp.generated.resources.username_already_taken
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import contacts.composeapp.generated.resources.Res
-import contacts.composeapp.generated.resources.username_already_taken
 
 @AssistedInject
 class SignUpPresenter(

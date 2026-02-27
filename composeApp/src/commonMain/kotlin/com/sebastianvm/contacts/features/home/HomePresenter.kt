@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import com.sebastianvm.contacts.data.repository.AuthRepository
-import com.sebastianvm.contacts.mvvm.ScreenState
 import com.sebastianvm.contacts.mvvm.ContactsPresenter
+import com.sebastianvm.contacts.mvvm.ScreenState
 import com.sebastianvm.contacts.networking.get
 import com.sebastianvm.contacts.routes.Home
 import com.slack.circuit.codegen.annotations.CircuitInject

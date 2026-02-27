@@ -3,8 +3,8 @@ package com.sebastianvm.contacts.testutils
 import com.sebastianvm.contacts.authentication.AuthenticationTestHelpers.testRoute
 import com.sebastianvm.contacts.authentication.configureAuthentication
 import com.sebastianvm.contacts.configureExternalPlugins
-import com.sebastianvm.contacts.routes.PostBody
 import com.sebastianvm.contacts.routes.ContactsRoute
+import com.sebastianvm.contacts.routes.PostBody
 import com.sebastianvm.contacts.routes.configureRoutes
 import de.infix.testBalloon.framework.core.Test
 import de.infix.testBalloon.framework.core.TestFixture
