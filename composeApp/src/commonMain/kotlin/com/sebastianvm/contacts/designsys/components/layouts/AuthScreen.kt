@@ -26,13 +26,13 @@ import com.sebastianvm.contacts.designsys.icons.Eye
 import com.sebastianvm.contacts.designsys.icons.EyeOff
 import com.sebastianvm.contacts.designsys.icons.Icons
 import com.sebastianvm.contacts.designsys.theme.Spacing
-import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
 import contacts.composeapp.generated.resources.Res
 import contacts.composeapp.generated.resources.hide_password
 import contacts.composeapp.generated.resources.password_noun
 import contacts.composeapp.generated.resources.show_password
 import contacts.composeapp.generated.resources.username_noun
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 object AuthScreen {
 

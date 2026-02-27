@@ -40,4 +40,5 @@ include(":server")
 include(":shared")
 
 include(":androidApp")
+
 include(":vcard")

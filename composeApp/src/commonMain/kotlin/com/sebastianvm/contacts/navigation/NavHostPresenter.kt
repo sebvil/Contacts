@@ -1,8 +1,8 @@
 package com.sebastianvm.contacts.navigation
 
 import androidx.compose.runtime.Composable
-import com.sebastianvm.contacts.mvvm.ScreenState
 import com.sebastianvm.contacts.mvvm.ContactsPresenter
+import com.sebastianvm.contacts.mvvm.ScreenState
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.rememberCircuitNavigator

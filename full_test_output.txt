@@ -1,0 +1,35 @@
+Reusing configuration cache.
+> Task :vcard:jvmTestProcessResources NO-SOURCE
+> Task :vcard:kmpPartiallyResolvedDependenciesChecker
+> Task :vcard:processJvmTestResources SKIPPED
+> Task :vcard:generateTestBalloonEntryPoint UP-TO-DATE
+> Task :vcard:jvmProcessResources NO-SOURCE
+> Task :vcard:processJvmMainResources SKIPPED
+> Task :vcard:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :vcard:compileKotlinJvm UP-TO-DATE
+> Task :vcard:compileJvmMainJava NO-SOURCE
+> Task :vcard:jvmMainClasses UP-TO-DATE
+> Task :vcard:jvmJar UP-TO-DATE
+> Task :vcard:compileTestKotlinJvm UP-TO-DATE
+> Task :vcard:compileJvmTestJava NO-SOURCE
+> Task :vcard:jvmTestClasses UP-TO-DATE
+
+> Task :vcard:jvmTest FAILED
+
+TestSession ↘ @Default ↘ VCardParserTest[jvm] > parses escaped characters in structured values[jvm] FAILED
+    org.opentest4j.AssertionFailedError at VCardParserTest.kt:361
+
+85 tests completed, 1 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':vcard:jvmTest'.
+> There were failing tests. See the report at: file:///home/sebas/dev/src/Contacts/vcard/build/reports/tests/jvmTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 1s
+6 actionable tasks: 2 executed, 4 up-to-date
+Configuration cache entry reused.

@@ -9,12 +9,12 @@ import com.sebastianvm.contacts.mvvm.util.PreviewScreen
 import com.sebastianvm.contacts.mvvm.util.ScreenPreviews
 import com.sebastianvm.contacts.ui.previews.LongString
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dev.zacsweers.metro.AppScope
-import org.jetbrains.compose.resources.StringResource
 import contacts.composeapp.generated.resources.Res
 import contacts.composeapp.generated.resources.already_have_an_account_log_in_instead
 import contacts.composeapp.generated.resources.sign_up
 import contacts.composeapp.generated.resources.username_already_taken
+import dev.zacsweers.metro.AppScope
+import org.jetbrains.compose.resources.StringResource
 
 @CircuitInject(screen = SignUpScreen::class, scope = AppScope::class)
 class SignUpUi : Ui<SignUpState, SignUpUserAction>() {

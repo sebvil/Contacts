@@ -5,8 +5,8 @@ import androidx.compose.runtime.collectAsState
 import com.sebastianvm.contacts.data.repository.AuthRepository
 import com.sebastianvm.contacts.features.home.HomeScreen
 import com.sebastianvm.contacts.features.landing.LandingScreen
-import com.sebastianvm.contacts.mvvm.ScreenState
 import com.sebastianvm.contacts.mvvm.ContactsPresenter
+import com.sebastianvm.contacts.mvvm.ScreenState
 import com.sebastianvm.contacts.navigation.NavHostScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dev.zacsweers.metro.AppScope
