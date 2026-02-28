@@ -17,8 +17,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `TEL;VALUE=uri;TYPE=home:tel:+1-555-555-5555`
- *
- * @property value The telephone number or URI.
  */
 data class TelephoneProperty(
     override val value: String,

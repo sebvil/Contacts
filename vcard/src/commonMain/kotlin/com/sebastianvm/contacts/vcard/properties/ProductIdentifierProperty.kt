@@ -10,8 +10,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `PRODID:-//ONLINE DIRECTORY//NONSGML Version 1//EN`
- *
- * @property value The product identifier.
  */
 data class ProductIdentifierProperty(
     override val value: String,

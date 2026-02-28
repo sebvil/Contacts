@@ -17,8 +17,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `TZ:Raleigh/North America`
- *
- * @property value The time zone identifier or offset.
  */
 data class TimezoneProperty(
     override val value: String,

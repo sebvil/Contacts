@@ -12,8 +12,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `BDAY:19960415`
- *
- * @property value The date of birth.
  */
 data class BirthdayProperty(
     override val value: String,

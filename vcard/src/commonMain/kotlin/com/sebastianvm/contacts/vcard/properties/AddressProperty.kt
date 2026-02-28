@@ -29,8 +29,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * - Country Name
  *
  * Example: `ADR;TYPE=work:;;100 Waters Edge;Baytown;LA;30314;United States of America`
- *
- * @property value The list of address components.
  */
 data class AddressProperty(
     override val value: List<String>,
@@ -59,14 +57,21 @@ data class AddressProperty(
         get() = value.getOrElse(2) { "" }
 
     val locality: String
-        get() = value.getOrElse(3) { "" }
+        get() = value.getOrElse(LOCALITY_INDEX) { "" }
 
     val region: String
-        get() = value.getOrElse(4) { "" }
+        get() = value.getOrElse(REGION_INDEX) { "" }
 
     val postalCode: String
-        get() = value.getOrElse(5) { "" }
+        get() = value.getOrElse(POSTAL_CODE_INDEX) { "" }
 
     val country: String
-        get() = value.getOrElse(6) { "" }
+        get() = value.getOrElse(COUNTRY_INDEX) { "" }
+
+    companion object {
+        private const val LOCALITY_INDEX = 3
+        private const val REGION_INDEX = 4
+        private const val POSTAL_CODE_INDEX = 5
+        private const val COUNTRY_INDEX = 6
+    }
 }

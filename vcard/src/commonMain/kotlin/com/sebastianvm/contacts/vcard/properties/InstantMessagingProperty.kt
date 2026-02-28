@@ -16,8 +16,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * This property is based on the semantics of the RFC 6350 6.4.3 (vCard 4.0).
  *
  * Example: `IMPP;PREF=1:xmpp:alice@example.com`
- *
- * @property value The IMPP address URI.
  */
 data class InstantMessagingProperty(
     override val value: String,

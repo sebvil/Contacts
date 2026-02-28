@@ -17,8 +17,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `FN:Mr. John Q. Public, Esq.`
- *
- * @property value The formatted name string.
  */
 data class FormattedNameProperty(
     override val value: String,

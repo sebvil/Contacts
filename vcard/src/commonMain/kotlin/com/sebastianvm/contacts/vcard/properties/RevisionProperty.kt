@@ -10,8 +10,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `REV:19951031T222710Z`
- *
- * @property value The revision timestamp.
  */
 data class RevisionProperty(override val value: String, val valueParam: ValueParameter? = null) :
     StringVCardProperty {

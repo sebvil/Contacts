@@ -17,8 +17,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `ROLE:Project Leader`
- *
- * @property value The role text.
  */
 data class RoleProperty(
     override val value: String,

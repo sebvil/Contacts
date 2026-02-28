@@ -61,7 +61,7 @@ object ContentLineParser {
 
         // Find parameter name
         val nameStart = i
-        while (i < len && line[i] != '=' && line[i] != ';' && line[i] != ':') {
+        while (i < len && line[i] !in "=;:") {
             i++
         }
         val paramName = line.substring(nameStart, i).uppercase()

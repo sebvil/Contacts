@@ -11,8 +11,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * This property is based on the semantics of the RFC 6350 6.2.6 (vCard 4.0).
  *
  * Example: `ANNIVERSARY:19960415`
- *
- * @property value The anniversary date.
  */
 data class AnniversaryProperty(
     override val value: String,

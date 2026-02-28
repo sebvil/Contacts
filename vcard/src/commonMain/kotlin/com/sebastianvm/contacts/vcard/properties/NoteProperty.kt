@@ -17,8 +17,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `NOTE:This vCard is\n for a person with a\n really long note.`
- *
- * @property value The note text.
  */
 data class NoteProperty(
     override val value: String,

@@ -17,8 +17,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `GEO:geo:37.386013,-122.082932`
- *
- * @property value The geographic position URI (vCard 4.0) or semicolon-separated coordinates.
  */
 data class GeographicPositionProperty(
     override val value: String,

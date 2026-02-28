@@ -10,8 +10,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `UID:urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6`
- *
- * @property value The unique identifier.
  */
 data class UniqueIdentifierProperty(
     override val value: String,

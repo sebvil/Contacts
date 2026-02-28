@@ -53,6 +53,7 @@ import com.sebastianvm.contacts.vcard.splitListValue
 import com.sebastianvm.contacts.vcard.splitStructuredValue
 import com.sebastianvm.contacts.vcard.unescapeVCardText
 
+@Suppress("TooManyFunctions")
 object PropertyFactory {
 
     fun create(contentLine: ContentLine): VCardProperty<*>? {

@@ -55,25 +55,23 @@ object VCardParser {
 
         while (i < lines.size) {
             val line = lines[i]
-            if (line.equals("BEGIN:VCARD", ignoreCase = true)) {
+            if (!line.equals("BEGIN:VCARD", ignoreCase = true)) {
                 i++
-                val result = parseVCard(lines, i)
-                if (result != null) {
-                    vcards.add(result.first)
-                    i = result.second
-                } else {
-                    return VCardParseResult.Failure("Failed to parse vCard starting at line $i")
-                }
-            } else {
-                i++
+                continue
             }
+            i++
+            val result =
+                parseVCard(lines, i)
+                    ?: return VCardParseResult.Failure("Failed to parse vCard starting at line $i")
+            vcards.add(result.first)
+            i = result.second
         }
 
-        if (vcards.isEmpty()) {
-            return VCardParseResult.Failure("No vCard found in input")
+        return if (vcards.isEmpty()) {
+            VCardParseResult.Failure("No vCard found in input")
+        } else {
+            VCardParseResult.Success(vcards)
         }
-
-        return VCardParseResult.Success(vcards)
     }
 
     private fun parseVCard(lines: List<String>, startIndex: Int): Pair<VCard, Int>? {
@@ -125,48 +123,47 @@ object VCardParser {
 
             val contentLine = ContentLineParser.parse(line)
 
-            when (contentLine.name) {
-                "VERSION" -> version = contentLine.value
-                else -> {
-                    val property = PropertyFactory.create(contentLine)
-                    when (property) {
-                        is FormattedNameProperty -> formattedName = property
-                        is NameProperty -> name = property
-                        is EmailProperty -> emailAddresses.add(property)
-                        is TelephoneProperty -> telephoneNumbers.add(property)
-                        is AddressProperty -> physicalAddresses.add(property)
-                        is OrganizationProperty -> organization = property
-                        is TitleProperty -> title = property
-                        is NoteProperty -> note = property
-                        is UrlProperty -> urls.add(property)
-                        is BirthdayProperty -> birthday = property
-                        is NicknameProperty -> nicknames.add(property)
-                        is PhotoProperty -> photo = property
-                        is AnniversaryProperty -> anniversary = property
-                        is GenderProperty -> gender = property
-                        is InstantMessagingProperty -> instantMessagingAddresses.add(property)
-                        is LanguageProperty -> spokenLanguages.add(property)
-                        is TimezoneProperty -> timezones.add(property)
-                        is GeographicPositionProperty -> geographicPositions.add(property)
-                        is RoleProperty -> roles.add(property)
-                        is LogoProperty -> logos.add(property)
-                        is MemberProperty -> members.add(property)
-                        is RelatedProperty -> relatedPeople.add(property)
-                        is CategoriesProperty -> categories.add(property)
-                        is ProductIdentifierProperty -> productIdentifier = property
-                        is RevisionProperty -> revision = property
-                        is SoundProperty -> sounds.add(property)
-                        is UniqueIdentifierProperty -> uniqueIdentifier = property
-                        is ClientPidMapProperty -> clientPidMaps.add(property)
-                        is KeyProperty -> keys.add(property)
-                        is FreeBusyUrlProperty -> freeBusyUrls.add(property)
-                        is CalendarAddressUriProperty -> calendarAddressUris.add(property)
-                        is CalendarUriProperty -> calendarUris.add(property)
-                        is SourceProperty -> sources.add(property)
-                        is KindProperty -> kind = property
-                        is XmlProperty -> xmls.add(property)
-                        null -> {}
-                    }
+            if (contentLine.name == "VERSION") {
+                version = contentLine.value
+            } else {
+                val property = PropertyFactory.create(contentLine)
+                when (property) {
+                    is FormattedNameProperty -> formattedName = property
+                    is NameProperty -> name = property
+                    is EmailProperty -> emailAddresses.add(property)
+                    is TelephoneProperty -> telephoneNumbers.add(property)
+                    is AddressProperty -> physicalAddresses.add(property)
+                    is OrganizationProperty -> organization = property
+                    is TitleProperty -> title = property
+                    is NoteProperty -> note = property
+                    is UrlProperty -> urls.add(property)
+                    is BirthdayProperty -> birthday = property
+                    is NicknameProperty -> nicknames.add(property)
+                    is PhotoProperty -> photo = property
+                    is AnniversaryProperty -> anniversary = property
+                    is GenderProperty -> gender = property
+                    is InstantMessagingProperty -> instantMessagingAddresses.add(property)
+                    is LanguageProperty -> spokenLanguages.add(property)
+                    is TimezoneProperty -> timezones.add(property)
+                    is GeographicPositionProperty -> geographicPositions.add(property)
+                    is RoleProperty -> roles.add(property)
+                    is LogoProperty -> logos.add(property)
+                    is MemberProperty -> members.add(property)
+                    is RelatedProperty -> relatedPeople.add(property)
+                    is CategoriesProperty -> categories.add(property)
+                    is ProductIdentifierProperty -> productIdentifier = property
+                    is RevisionProperty -> revision = property
+                    is SoundProperty -> sounds.add(property)
+                    is UniqueIdentifierProperty -> uniqueIdentifier = property
+                    is ClientPidMapProperty -> clientPidMaps.add(property)
+                    is KeyProperty -> keys.add(property)
+                    is FreeBusyUrlProperty -> freeBusyUrls.add(property)
+                    is CalendarAddressUriProperty -> calendarAddressUris.add(property)
+                    is CalendarUriProperty -> calendarUris.add(property)
+                    is SourceProperty -> sources.add(property)
+                    is KindProperty -> kind = property
+                    is XmlProperty -> xmls.add(property)
+                    null -> {}
                 }
             }
             i++
@@ -174,73 +171,73 @@ object VCardParser {
 
         val vcard =
             when (version) {
-                "4.0" -> {
-                    formattedName ?: return null
-                    V4VCard(
-                        formattedName = formattedName,
-                        name = name,
-                        emailAddresses = emailAddresses,
-                        telephoneNumbers = telephoneNumbers,
-                        physicalAddresses = physicalAddresses,
-                        organization = organization,
-                        title = title,
-                        note = note,
-                        urls = urls,
-                        birthday = birthday,
-                        nicknames = nicknames,
-                        photo = photo,
-                        anniversary = anniversary,
-                        gender = gender,
-                        productIdentifier = productIdentifier,
-                        revision = revision,
-                        uniqueIdentifier = uniqueIdentifier,
-                        kind = kind,
-                        instantMessagingAddresses = instantMessagingAddresses,
-                        spokenLanguages = spokenLanguages,
-                        timezones = timezones,
-                        geographicPositions = geographicPositions,
-                        roles = roles,
-                        logos = logos,
-                        members = members,
-                        relatedPeople = relatedPeople,
-                        categories = categories,
-                        sounds = sounds,
-                        clientPidMaps = clientPidMaps,
-                        keys = keys,
-                        freeBusyUrls = freeBusyUrls,
-                        calendarAddressUris = calendarAddressUris,
-                        calendarUris = calendarUris,
-                        sources = sources,
-                        xmls = xmls,
-                    )
-                }
-                "3.0" -> {
-                    formattedName ?: return null
-                    V3VCard(
-                        formattedName = formattedName,
-                        name = name,
-                        emailAddresses = emailAddresses,
-                        telephoneNumbers = telephoneNumbers,
-                        physicalAddresses = physicalAddresses,
-                        organization = organization,
-                        title = title,
-                        note = note,
-                        urls = urls,
-                        birthday = birthday,
-                        nicknames = nicknames,
-                        photo = photo,
-                        timezones = timezones,
-                        geographicPositions = geographicPositions,
-                        roles = roles,
-                        logos = logos,
-                        categories = categories,
-                        productIdentifier = productIdentifier,
-                        revision = revision,
-                        sounds = sounds,
-                        uniqueIdentifier = uniqueIdentifier,
-                        keys = keys,
-                    )
-                }
+                "4.0" ->
+                    formattedName?.let { fn ->
+                        V4VCard(
+                            formattedName = fn,
+                            name = name,
+                            emailAddresses = emailAddresses,
+                            telephoneNumbers = telephoneNumbers,
+                            physicalAddresses = physicalAddresses,
+                            organization = organization,
+                            title = title,
+                            note = note,
+                            urls = urls,
+                            birthday = birthday,
+                            nicknames = nicknames,
+                            photo = photo,
+                            anniversary = anniversary,
+                            gender = gender,
+                            productIdentifier = productIdentifier,
+                            revision = revision,
+                            uniqueIdentifier = uniqueIdentifier,
+                            kind = kind,
+                            instantMessagingAddresses = instantMessagingAddresses,
+                            spokenLanguages = spokenLanguages,
+                            timezones = timezones,
+                            geographicPositions = geographicPositions,
+                            roles = roles,
+                            logos = logos,
+                            members = members,
+                            relatedPeople = relatedPeople,
+                            categories = categories,
+                            sounds = sounds,
+                            clientPidMaps = clientPidMaps,
+                            keys = keys,
+                            freeBusyUrls = freeBusyUrls,
+                            calendarAddressUris = calendarAddressUris,
+                            calendarUris = calendarUris,
+                            sources = sources,
+                            xmls = xmls,
+                        )
+                    }
+                "3.0" ->
+                    formattedName?.let { fn ->
+                        V3VCard(
+                            formattedName = fn,
+                            name = name,
+                            emailAddresses = emailAddresses,
+                            telephoneNumbers = telephoneNumbers,
+                            physicalAddresses = physicalAddresses,
+                            organization = organization,
+                            title = title,
+                            note = note,
+                            urls = urls,
+                            birthday = birthday,
+                            nicknames = nicknames,
+                            photo = photo,
+                            timezones = timezones,
+                            geographicPositions = geographicPositions,
+                            roles = roles,
+                            logos = logos,
+                            categories = categories,
+                            productIdentifier = productIdentifier,
+                            revision = revision,
+                            sounds = sounds,
+                            uniqueIdentifier = uniqueIdentifier,
+                            keys = keys,
+                        )
+                    }
                 "2.1" -> {
                     V2VCard(
                         formattedName = formattedName,
@@ -265,8 +262,8 @@ object VCardParser {
                         keys = keys,
                     )
                 }
-                else -> return null
-            }
+                else -> null
+            } ?: return null
 
         return vcard to i
     }
