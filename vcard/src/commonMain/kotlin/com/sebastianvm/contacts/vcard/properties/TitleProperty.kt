@@ -17,8 +17,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `TITLE:Director\, Research and Development`
- *
- * @property value The title text.
  */
 data class TitleProperty(
     override val value: String,

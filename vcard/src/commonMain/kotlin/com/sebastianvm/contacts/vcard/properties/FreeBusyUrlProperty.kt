@@ -16,8 +16,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * This property is based on the semantics of the RFC 6350 6.9.1 (vCard 4.0).
  *
  * Example: `FBURL;MEDIATYPE=text/calendar:https://www.example.com/calendar/busy`
- *
- * @property value The free/busy URL.
  */
 data class FreeBusyUrlProperty(
     override val value: String,

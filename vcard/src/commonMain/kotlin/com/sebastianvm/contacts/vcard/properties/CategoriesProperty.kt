@@ -15,8 +15,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `CATEGORIES:TRAVEL AGENT,INTERNET,HOTEL`
- *
- * @property value The list of categories.
  */
 data class CategoriesProperty(
     override val value: List<String>,

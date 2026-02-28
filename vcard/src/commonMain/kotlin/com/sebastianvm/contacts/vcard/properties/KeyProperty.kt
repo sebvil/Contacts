@@ -17,8 +17,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `KEY;VALUE=uri:https://www.example.com/keys/jdoe.cer`
- *
- * @property value The key URI or base64 encoded data.
  */
 data class KeyProperty(
     override val value: String,

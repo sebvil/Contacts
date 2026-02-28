@@ -19,8 +19,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `SOUND;MEDIATYPE=audio/basic:https://www.example.com/sounds/jdoe.au`
- *
- * @property value The sound URI or base64 encoded data.
  */
 data class SoundProperty(
     override val value: String,

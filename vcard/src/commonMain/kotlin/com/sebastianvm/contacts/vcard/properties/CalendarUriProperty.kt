@@ -16,8 +16,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * This property is based on the semantics of the RFC 6350 6.9.3 (vCard 4.0).
  *
  * Example: `CALURI;MEDIATYPE=text/calendar:https://ftp.example.com/calendars/jdoe.ics`
- *
- * @property value The calendar URI.
  */
 data class CalendarUriProperty(
     override val value: String,

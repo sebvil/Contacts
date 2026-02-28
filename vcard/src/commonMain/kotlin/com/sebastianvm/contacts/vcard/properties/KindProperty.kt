@@ -11,8 +11,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * Valid values include: `individual`, `group`, `org`, `location`, `application`, and x-name values.
  *
  * Example: `KIND:individual`
- *
- * @property value The kind value.
  */
 data class KindProperty(override val value: String, val valueParam: ValueParameter? = null) :
     StringVCardProperty {

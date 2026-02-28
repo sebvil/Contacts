@@ -21,8 +21,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * - Honorific Suffixes
  *
  * Example: `N:Public;John;Quinlan;Mr.;Esq.`
- *
- * @property value The list of name components.
  */
 data class NameProperty(
     override val value: List<String>,
@@ -46,8 +44,13 @@ data class NameProperty(
         get() = value.getOrElse(2) { "" }
 
     val honorificPrefixes: String
-        get() = value.getOrElse(3) { "" }
+        get() = value.getOrElse(HONORIFIC_PREFIXES_INDEX) { "" }
 
     val honorificSuffixes: String
-        get() = value.getOrElse(4) { "" }
+        get() = value.getOrElse(HONORIFIC_SUFFIXES_INDEX) { "" }
+
+    companion object {
+        private const val HONORIFIC_PREFIXES_INDEX = 3
+        private const val HONORIFIC_SUFFIXES_INDEX = 4
+    }
 }

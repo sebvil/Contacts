@@ -7,6 +7,7 @@ import com.sebastianvm.contacts.di.testWithDependencies
 import com.sebastianvm.contacts.features.home.HomeScreen
 import com.sebastianvm.contacts.features.landing.LandingScreen
 import com.sebastianvm.contacts.navigation.NavHostScreen
+import com.sebastianvm.contacts.navigation.isDesktop
 import com.slack.circuit.test.test
 import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
@@ -22,9 +23,11 @@ val RootPresenterTests by testSuite {
         makeSubject().test {
             awaitItem().uiState.screen shouldBe null
             authRepository.loginState.value = LoginState.LoggedOut
-            awaitItem().uiState.screen shouldBe NavHostScreen(LandingScreen)
+            awaitItem().uiState.screen shouldBe
+                NavHostScreen(initialScreen = LandingScreen, showTopNavBar = isDesktop())
             authRepository.loginState.value = LoginState.LoggedIn
-            awaitItem().uiState.screen shouldBe NavHostScreen(HomeScreen)
+            awaitItem().uiState.screen shouldBe
+                NavHostScreen(initialScreen = HomeScreen, showTopNavBar = isDesktop())
         }
     }
 }

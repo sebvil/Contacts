@@ -161,8 +161,8 @@ val VCardRoundtripTest by testSuite {
                             type = TypeParameter(listOf("spouse")),
                         )
                     ),
-                members = listOf(),
-                logos = listOf(),
+                members = emptyList(),
+                logos = emptyList(),
             )
 
         val encoded = original.toVCardString()

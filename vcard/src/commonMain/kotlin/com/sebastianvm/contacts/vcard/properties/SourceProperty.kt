@@ -14,8 +14,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * This property is based on the semantics of the RFC 6350 6.1.3 (vCard 4.0).
  *
  * Example: `SOURCE:ldap://ldap.example.com/cn=Babs%20Jensen,o=University%20of%20Michigan,c=US`
- *
- * @property value The source URI.
  */
 data class SourceProperty(
     override val value: String,

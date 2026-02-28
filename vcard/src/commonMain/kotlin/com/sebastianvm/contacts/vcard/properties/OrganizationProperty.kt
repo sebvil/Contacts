@@ -21,8 +21,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * organizational units.
  *
  * Example: `ORG:ABC\, Inc.;North American Division;Marketing`
- *
- * @property value The list of organization components.
  */
 data class OrganizationProperty(
     override val value: List<String>,

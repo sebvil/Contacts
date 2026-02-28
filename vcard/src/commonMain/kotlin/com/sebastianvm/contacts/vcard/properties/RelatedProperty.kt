@@ -16,8 +16,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * This property is based on the semantics of the RFC 6350 6.6.6 (vCard 4.0).
  *
  * Example: `RELATED;TYPE=friend:urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6`
- *
- * @property value The related URI.
  */
 data class RelatedProperty(
     override val value: String,

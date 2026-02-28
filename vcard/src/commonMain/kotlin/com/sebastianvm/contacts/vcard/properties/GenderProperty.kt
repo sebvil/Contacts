@@ -13,8 +13,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * - Gender identity (free text)
  *
  * Example: `GENDER:M;male`
- *
- * @property value The gender components.
  */
 data class GenderProperty(
     override val value: List<String>,

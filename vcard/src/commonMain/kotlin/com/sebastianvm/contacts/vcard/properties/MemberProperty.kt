@@ -14,8 +14,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * This property is based on the semantics of the RFC 6350 6.6.5 (vCard 4.0).
  *
  * Example: `MEMBER:urn:uuid:550e8400-e29b-11d4-a716-446655440000`
- *
- * @property value The member URI.
  */
 data class MemberProperty(
     override val value: String,

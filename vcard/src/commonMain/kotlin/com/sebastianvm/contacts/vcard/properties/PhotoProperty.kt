@@ -17,8 +17,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `PHOTO;MEDIATYPE=image/jpeg:https://www.example.com/pub/photos/jqpublic.jpg`
- *
- * @property value The photo URI or base64 encoded data.
  */
 data class PhotoProperty(
     override val value: String,

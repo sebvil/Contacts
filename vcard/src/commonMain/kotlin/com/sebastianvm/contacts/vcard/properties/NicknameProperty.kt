@@ -17,8 +17,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `NICKNAME:Robbie`
- *
- * @property value The list of nicknames.
  */
 data class NicknameProperty(
     override val value: List<String>,

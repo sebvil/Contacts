@@ -14,8 +14,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * This property is based on the semantics of the RFC 6350 6.9.2 (vCard 4.0).
  *
  * Example: `CALADRURI:mailto:janedoe@example.com`
- *
- * @property value The calendar address URI.
  */
 data class CalendarAddressUriProperty(
     override val value: String,

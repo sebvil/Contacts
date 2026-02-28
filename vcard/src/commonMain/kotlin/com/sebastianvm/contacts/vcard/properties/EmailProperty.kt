@@ -15,8 +15,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * 3.0), and vCard 2.1 specifications.
  *
  * Example: `EMAIL;TYPE=work:jqpublic@xyz.example.com`
- *
- * @property value The email address.
  */
 data class EmailProperty(
     override val value: String,

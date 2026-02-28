@@ -10,8 +10,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * This property is based on the semantics of the RFC 6350 6.10.1 (vCard 4.0).
  *
  * Example: `XML:<data xmlns="http://www.example.com">...</data>`
- *
- * @property value The XML data.
  */
 data class XmlProperty(
     override val value: String,

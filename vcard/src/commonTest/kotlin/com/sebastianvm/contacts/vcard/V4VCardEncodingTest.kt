@@ -149,30 +149,6 @@ val V4VCardEncodingTest by testSuite {
                     ),
                 keys = listOf(KeyProperty(value = "https://example.com/key.pub")),
             )
-        val expected =
-            """
-            BEGIN:VCARD
-            VERSION:4.0
-            KIND:individual
-            FN:Test User
-            ANNIVERSARY:2010-06-15
-            GENDER:M;
-            TEL;TYPE=work,voice;VALUE=uri:tel:+1-555-555-5555
-            IMPP:xmpp:test@example.com
-            TZ:America/New_York
-            GEO:geo:37.386013,-122.082932
-            TITLE:Senior Engineer
-            ROLE:Developer
-            CATEGORIES:friend,colleague
-            NOTE:A note about John
-            PRODID:-//Test//EN
-            REV:20200101T000000Z
-            UID:urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6
-            URL:https://example.com
-            KEY:https://example.com/key.pub
-            END:VCARD
-            """
-                .trimIndent()
         // Only check a few key lines rather than exact match due to ordering
         val output = vcard.toVCardString()
         output.lines().filter { it.startsWith("KIND:") } shouldBe listOf("KIND:individual")

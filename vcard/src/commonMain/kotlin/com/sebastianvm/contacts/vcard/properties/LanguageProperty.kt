@@ -14,8 +14,6 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  * This property is based on the semantics of the RFC 6350 6.4.4 (vCard 4.0).
  *
  * Example: `LANG;TYPE=work;PREF=1:en`
- *
- * @property value The language tag.
  */
 data class LanguageProperty(
     override val value: String,
