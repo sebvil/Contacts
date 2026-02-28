@@ -1,7 +1,11 @@
 package com.sebastianvm.contacts.navigation
 
 import com.sebastianvm.contacts.mvvm.UiState
-import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.runtime.Navigator
+import com.slack.circuit.runtime.navigation.NavStack
 
-data class NavHostState(val backstack: SaveableBackStack, val navigator: Navigator) : UiState
+data class NavHostState(
+    val navStack: NavStack<*>,
+    val navigator: Navigator,
+    val showTopNavBar: Boolean,
+) : UiState

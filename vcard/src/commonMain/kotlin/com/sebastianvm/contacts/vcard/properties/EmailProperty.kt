@@ -11,8 +11,8 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
 /**
  * Represents the electronic mail addresses for communication with the object.
  *
- * This property is based on the semantics of the RFC 6350 6.4.2 (vCard 4.0),
- * RFC 2426 3.3.2 (vCard 3.0), and vCard 2.1 specifications.
+ * This property is based on the semantics of the RFC 6350 6.4.2 (vCard 4.0), RFC 2426 3.3.2 (vCard
+ * 3.0), and vCard 2.1 specifications.
  *
  * Example: `EMAIL;TYPE=work:jqpublic@xyz.example.com`
  *

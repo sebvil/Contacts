@@ -15,8 +15,8 @@ import com.sebastianvm.contacts.vcard.properties.CalendarUriProperty
 import com.sebastianvm.contacts.vcard.properties.CategoriesProperty
 import com.sebastianvm.contacts.vcard.properties.ClientPidMapProperty
 import com.sebastianvm.contacts.vcard.properties.EmailProperty
-import com.sebastianvm.contacts.vcard.properties.FreeBusyUrlProperty
 import com.sebastianvm.contacts.vcard.properties.FormattedNameProperty
+import com.sebastianvm.contacts.vcard.properties.FreeBusyUrlProperty
 import com.sebastianvm.contacts.vcard.properties.GenderProperty
 import com.sebastianvm.contacts.vcard.properties.GeographicPositionProperty
 import com.sebastianvm.contacts.vcard.properties.InstantMessagingProperty
@@ -35,8 +35,8 @@ import com.sebastianvm.contacts.vcard.properties.RoleProperty
 import com.sebastianvm.contacts.vcard.properties.SoundProperty
 import com.sebastianvm.contacts.vcard.properties.SourceProperty
 import com.sebastianvm.contacts.vcard.properties.TelephoneProperty
-import com.sebastianvm.contacts.vcard.properties.TitleProperty
 import com.sebastianvm.contacts.vcard.properties.TimezoneProperty
+import com.sebastianvm.contacts.vcard.properties.TitleProperty
 import com.sebastianvm.contacts.vcard.properties.UniqueIdentifierProperty
 import com.sebastianvm.contacts.vcard.properties.UrlProperty
 import com.sebastianvm.contacts.vcard.properties.XmlProperty
@@ -56,7 +56,10 @@ val VCardRoundtripTest by testSuite {
 
     test("roundtrips v4 vcard with language") {
         val original =
-            V4VCard(formattedName = FormattedNameProperty(value = "John Doe", language = LanguageParameter("en")))
+            V4VCard(
+                formattedName =
+                    FormattedNameProperty(value = "John Doe", language = LanguageParameter("en"))
+            )
         val encoded = original.toVCardString()
         val result = VCard.parse(encoded)
         result.shouldBeInstanceOf<VCardParseResult.Success>()
@@ -131,10 +134,12 @@ val VCardRoundtripTest by testSuite {
                 kind = KindProperty(value = "individual"),
                 anniversary = AnniversaryProperty(value = "2010-06-15"),
                 gender = GenderProperty(value = listOf("M", "male")),
-                instantMessagingAddresses = listOf(InstantMessagingProperty(value = "xmpp:test@example.com")),
+                instantMessagingAddresses =
+                    listOf(InstantMessagingProperty(value = "xmpp:test@example.com")),
                 spokenLanguages = listOf(LanguageProperty(value = "en", pref = PrefParameter(1))),
                 timezones = listOf(TimezoneProperty(value = "America/New_York")),
-                geographicPositions = listOf(GeographicPositionProperty(value = "geo:37.386013,-122.082932")),
+                geographicPositions =
+                    listOf(GeographicPositionProperty(value = "geo:37.386013,-122.082932")),
                 roles = listOf(RoleProperty(value = "Developer")),
                 categories = listOf(CategoriesProperty(value = listOf("friend", "colleague"))),
                 productIdentifier = ProductIdentifierProperty(value = "-//Test//EN"),
@@ -144,7 +149,8 @@ val VCardRoundtripTest by testSuite {
                 clientPidMaps = listOf(ClientPidMapProperty(value = listOf("1", "urn:uuid:abc"))),
                 keys = listOf(KeyProperty(value = "https://example.com/key.pub")),
                 freeBusyUrls = listOf(FreeBusyUrlProperty(value = "https://example.com/fb")),
-                calendarAddressUris = listOf(CalendarAddressUriProperty(value = "mailto:cal@example.com")),
+                calendarAddressUris =
+                    listOf(CalendarAddressUriProperty(value = "mailto:cal@example.com")),
                 calendarUris = listOf(CalendarUriProperty(value = "https://example.com/cal")),
                 sources = listOf(SourceProperty(value = "ldap://ldap.example.com/o=Acme")),
                 xmls = listOf(XmlProperty(value = "<custom>data</custom>")),

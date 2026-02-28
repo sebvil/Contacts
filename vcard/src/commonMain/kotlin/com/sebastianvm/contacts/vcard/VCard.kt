@@ -8,8 +8,8 @@ import com.sebastianvm.contacts.vcard.properties.CalendarUriProperty
 import com.sebastianvm.contacts.vcard.properties.CategoriesProperty
 import com.sebastianvm.contacts.vcard.properties.ClientPidMapProperty
 import com.sebastianvm.contacts.vcard.properties.EmailProperty
-import com.sebastianvm.contacts.vcard.properties.FreeBusyUrlProperty
 import com.sebastianvm.contacts.vcard.properties.FormattedNameProperty
+import com.sebastianvm.contacts.vcard.properties.FreeBusyUrlProperty
 import com.sebastianvm.contacts.vcard.properties.GenderProperty
 import com.sebastianvm.contacts.vcard.properties.GeographicPositionProperty
 import com.sebastianvm.contacts.vcard.properties.InstantMessagingProperty
@@ -30,8 +30,8 @@ import com.sebastianvm.contacts.vcard.properties.RoleProperty
 import com.sebastianvm.contacts.vcard.properties.SoundProperty
 import com.sebastianvm.contacts.vcard.properties.SourceProperty
 import com.sebastianvm.contacts.vcard.properties.TelephoneProperty
-import com.sebastianvm.contacts.vcard.properties.TitleProperty
 import com.sebastianvm.contacts.vcard.properties.TimezoneProperty
+import com.sebastianvm.contacts.vcard.properties.TitleProperty
 import com.sebastianvm.contacts.vcard.properties.UniqueIdentifierProperty
 import com.sebastianvm.contacts.vcard.properties.UrlProperty
 import com.sebastianvm.contacts.vcard.properties.VCardProperty
@@ -53,9 +53,7 @@ sealed class VCard : VCardComponent {
     companion object
 }
 
-/**
- * Represents a vCard 4.0 object as defined in RFC 6350.
- */
+/** Represents a vCard 4.0 object as defined in RFC 6350. */
 data class V4VCard(
     /** The formatted name string associated with the vCard object (RFC 6350 6.2.1) */
     val formattedName: FormattedNameProperty,
@@ -89,7 +87,10 @@ data class V4VCard(
     val productIdentifier: ProductIdentifierProperty? = null,
     /** The revision date and time when the vCard was last updated (RFC 6350 6.7.4) */
     val revision: RevisionProperty? = null,
-    /** A value that represents a globally unique identifier corresponding to the entity (RFC 6350 6.7.6) */
+    /**
+     * A value that represents a globally unique identifier corresponding to the entity (RFC 6350
+     * 6.7.6)
+     */
     val uniqueIdentifier: UniqueIdentifierProperty? = null,
     /** The type of entity that the vCard represents (RFC 6350 6.1.4) */
     val kind: KindProperty? = null,
@@ -177,9 +178,7 @@ data class V4VCard(
     }
 }
 
-/**
- * Represents a vCard 3.0 object as defined in RFC 2426.
- */
+/** Represents a vCard 3.0 object as defined in RFC 2426. */
 data class V3VCard(
     /** The formatted name string associated with the vCard object (RFC 2426 3.1.1) */
     val formattedName: FormattedNameProperty,
@@ -221,7 +220,10 @@ data class V3VCard(
     val revision: RevisionProperty? = null,
     /** Digital sound content that annotates some aspect of the object (RFC 2426 3.6.5) */
     val sounds: List<SoundProperty> = emptyList(),
-    /** A value that represents a globally unique identifier corresponding to the entity (RFC 2426 3.6.7) */
+    /**
+     * A value that represents a globally unique identifier corresponding to the entity (RFC 2426
+     * 3.6.7)
+     */
     val uniqueIdentifier: UniqueIdentifierProperty? = null,
     /** The public keys or certificates associated with the object (RFC 2426 3.7.1) */
     val keys: List<KeyProperty> = emptyList(),
@@ -253,9 +255,7 @@ data class V3VCard(
     }
 }
 
-/**
- * Represents a vCard 2.1 object.
- */
+/** Represents a vCard 2.1 object. */
 data class V2VCard(
     /** The formatted name string associated with the vCard object (vCard 2.1) */
     val formattedName: FormattedNameProperty? = null,
@@ -293,7 +293,9 @@ data class V2VCard(
     val revision: RevisionProperty? = null,
     /** Digital sound content that annotates some aspect of the object (vCard 2.1) */
     val sounds: List<SoundProperty> = emptyList(),
-    /** A value that represents a globally unique identifier corresponding to the entity (vCard 2.1) */
+    /**
+     * A value that represents a globally unique identifier corresponding to the entity (vCard 2.1)
+     */
     val uniqueIdentifier: UniqueIdentifierProperty? = null,
     /** The public keys or certificates associated with the object (vCard 2.1) */
     val keys: List<KeyProperty> = emptyList(),

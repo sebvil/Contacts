@@ -8,8 +8,7 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
  *
  * This property is based on the semantics of the RFC 6350 6.1.4 (vCard 4.0).
  *
- * Valid values include: `individual`, `group`, `org`, `location`, `application`,
- * and x-name values.
+ * Valid values include: `individual`, `group`, `org`, `location`, `application`, and x-name values.
  *
  * Example: `KIND:individual`
  *

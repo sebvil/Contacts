@@ -25,8 +25,8 @@ import com.sebastianvm.contacts.vcard.properties.ProductIdentifierProperty
 import com.sebastianvm.contacts.vcard.properties.RevisionProperty
 import com.sebastianvm.contacts.vcard.properties.RoleProperty
 import com.sebastianvm.contacts.vcard.properties.TelephoneProperty
-import com.sebastianvm.contacts.vcard.properties.TitleProperty
 import com.sebastianvm.contacts.vcard.properties.TimezoneProperty
+import com.sebastianvm.contacts.vcard.properties.TitleProperty
 import com.sebastianvm.contacts.vcard.properties.UniqueIdentifierProperty
 import com.sebastianvm.contacts.vcard.properties.UrlProperty
 import de.infix.testBalloon.framework.core.testSuite
@@ -34,7 +34,11 @@ import io.kotest.matchers.shouldBe
 
 val V4VCardEncodingTest by testSuite {
     test("encodes a v4 vcard with language") {
-        val vcard = V4VCard(formattedName = FormattedNameProperty(value = "John Doe", language = LanguageParameter("en")))
+        val vcard =
+            V4VCard(
+                formattedName =
+                    FormattedNameProperty(value = "John Doe", language = LanguageParameter("en"))
+            )
         val expected =
             """
             BEGIN:VCARD
@@ -130,14 +134,19 @@ val V4VCardEncodingTest by testSuite {
                 kind = KindProperty(value = "individual"),
                 anniversary = AnniversaryProperty(value = "2010-06-15"),
                 gender = GenderProperty(value = listOf("M", "")),
-                instantMessagingAddresses = listOf(InstantMessagingProperty(value = "xmpp:test@example.com")),
+                instantMessagingAddresses =
+                    listOf(InstantMessagingProperty(value = "xmpp:test@example.com")),
                 timezones = listOf(TimezoneProperty(value = "America/New_York")),
-                geographicPositions = listOf(GeographicPositionProperty(value = "geo:37.386013,-122.082932")),
+                geographicPositions =
+                    listOf(GeographicPositionProperty(value = "geo:37.386013,-122.082932")),
                 roles = listOf(RoleProperty(value = "Developer")),
                 categories = listOf(CategoriesProperty(value = listOf("friend", "colleague"))),
                 productIdentifier = ProductIdentifierProperty(value = "-//Test//EN"),
                 revision = RevisionProperty(value = "20200101T000000Z"),
-                uniqueIdentifier = UniqueIdentifierProperty(value = "urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6"),
+                uniqueIdentifier =
+                    UniqueIdentifierProperty(
+                        value = "urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6"
+                    ),
                 keys = listOf(KeyProperty(value = "https://example.com/key.pub")),
             )
         val expected =

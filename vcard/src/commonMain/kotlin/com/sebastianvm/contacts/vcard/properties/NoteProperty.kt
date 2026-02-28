@@ -13,8 +13,8 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
 /**
  * Represents supplemental information or a comment that is associated with the vCard.
  *
- * This property is based on the semantics of the RFC 6350 6.7.2 (vCard 4.0),
- * RFC 2426 3.6.2 (vCard 3.0), and vCard 2.1 specifications.
+ * This property is based on the semantics of the RFC 6350 6.7.2 (vCard 4.0), RFC 2426 3.6.2 (vCard
+ * 3.0), and vCard 2.1 specifications.
  *
  * Example: `NOTE:This vCard is\n for a person with a\n really long note.`
  *
