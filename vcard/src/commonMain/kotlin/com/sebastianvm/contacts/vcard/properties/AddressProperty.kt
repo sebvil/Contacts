@@ -16,8 +16,8 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
 /**
  * Represents the delivery addresses for the object.
  *
- * This property is based on the semantics of the RFC 6350 6.3.1 (vCard 4.0),
- * RFC 2426 3.2.1 (vCard 3.0), and vCard 2.1 specifications.
+ * This property is based on the semantics of the RFC 6350 6.3.1 (vCard 4.0), RFC 2426 3.2.1 (vCard
+ * 3.0), and vCard 2.1 specifications.
  *
  * The structured property value corresponds to the following components:
  * - Post Office Box

@@ -8,7 +8,8 @@ fun String.toVCardString(): String =
     }
 
 fun escapeVCardText(text: String): String =
-    text.replace("\\", "\\\\")
+    text
+        .replace("\\", "\\\\")
         .replace(";", "\\;")
         .replace(",", "\\,")
         .replace("\n", "\\n")
@@ -37,7 +38,8 @@ fun unescapeVCardText(text: String): String = buildString {
     }
 }
 
-fun splitStructuredValue(raw: String): List<String> = splitBy(raw, ';').map { unescapeVCardText(it) }
+fun splitStructuredValue(raw: String): List<String> =
+    splitBy(raw, ';').map { unescapeVCardText(it) }
 
 fun splitListValue(raw: String): List<String> = splitBy(raw, ',').map { unescapeVCardText(it) }
 

@@ -13,8 +13,8 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
 /**
  * Represents the telephone numbers for communication with the object.
  *
- * This property is based on the semantics of the RFC 6350 6.4.1 (vCard 4.0),
- * RFC 2426 3.3.1 (vCard 3.0), and vCard 2.1 specifications.
+ * This property is based on the semantics of the RFC 6350 6.4.1 (vCard 4.0), RFC 2426 3.3.1 (vCard
+ * 3.0), and vCard 2.1 specifications.
  *
  * Example: `TEL;VALUE=uri;TYPE=home:tel:+1-555-555-5555`
  *

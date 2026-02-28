@@ -18,8 +18,8 @@ import com.sebastianvm.contacts.vcard.properties.CalendarUriProperty
 import com.sebastianvm.contacts.vcard.properties.CategoriesProperty
 import com.sebastianvm.contacts.vcard.properties.ClientPidMapProperty
 import com.sebastianvm.contacts.vcard.properties.EmailProperty
-import com.sebastianvm.contacts.vcard.properties.FreeBusyUrlProperty
 import com.sebastianvm.contacts.vcard.properties.FormattedNameProperty
+import com.sebastianvm.contacts.vcard.properties.FreeBusyUrlProperty
 import com.sebastianvm.contacts.vcard.properties.GenderProperty
 import com.sebastianvm.contacts.vcard.properties.GeographicPositionProperty
 import com.sebastianvm.contacts.vcard.properties.InstantMessagingProperty
@@ -40,8 +40,8 @@ import com.sebastianvm.contacts.vcard.properties.RoleProperty
 import com.sebastianvm.contacts.vcard.properties.SoundProperty
 import com.sebastianvm.contacts.vcard.properties.SourceProperty
 import com.sebastianvm.contacts.vcard.properties.TelephoneProperty
-import com.sebastianvm.contacts.vcard.properties.TitleProperty
 import com.sebastianvm.contacts.vcard.properties.TimezoneProperty
+import com.sebastianvm.contacts.vcard.properties.TitleProperty
 import com.sebastianvm.contacts.vcard.properties.UniqueIdentifierProperty
 import com.sebastianvm.contacts.vcard.properties.UrlProperty
 import com.sebastianvm.contacts.vcard.properties.XmlProperty
@@ -53,7 +53,11 @@ val PropertyEncodingTest by testSuite {
     // Existing properties
 
     test("FN with altId and pid") {
-        FormattedNameProperty(value = "John", altId = AltIdParameter("1"), pid = PidParameter("1.1"))
+        FormattedNameProperty(
+                value = "John",
+                altId = AltIdParameter("1"),
+                pid = PidParameter("1.1"),
+            )
             .toVCardString() shouldBe "FN;ALTID=1;PID=1.1:John"
     }
 
@@ -94,7 +98,10 @@ val PropertyEncodingTest by testSuite {
     }
 
     test("ORG with sortAs") {
-        OrganizationProperty(value = listOf("Acme", "Engineering"), sortAs = SortAsParameter(listOf("Acme")))
+        OrganizationProperty(
+                value = listOf("Acme", "Engineering"),
+                sortAs = SortAsParameter(listOf("Acme")),
+            )
             .toVCardString() shouldBe """ORG;SORT-AS="Acme":Acme;Engineering"""
     }
 
@@ -121,7 +128,6 @@ val PropertyEncodingTest by testSuite {
             .toVCardString() shouldBe "NOTE;TYPE=work:A note"
     }
 
-
     // New properties
 
     test("ANNIVERSARY") {
@@ -137,7 +143,10 @@ val PropertyEncodingTest by testSuite {
     }
 
     test("IMPP") {
-        InstantMessagingProperty(value = "xmpp:test@example.com", type = TypeParameter(listOf("home")))
+        InstantMessagingProperty(
+                value = "xmpp:test@example.com",
+                type = TypeParameter(listOf("home")),
+            )
             .toVCardString() shouldBe "IMPP;TYPE=home:xmpp:test@example.com"
     }
 
@@ -213,8 +222,8 @@ val PropertyEncodingTest by testSuite {
     }
 
     test("NOTE escaping") {
-        NoteProperty(value = "Line 1\nLine 2; and comma, and backslash\\")
-            .toVCardString() shouldBe "NOTE:Line 1\\nLine 2\\; and comma\\, and backslash\\\\"
+        NoteProperty(value = "Line 1\nLine 2; and comma, and backslash\\").toVCardString() shouldBe
+            "NOTE:Line 1\\nLine 2\\; and comma\\, and backslash\\\\"
     }
 
     test("NOTE with all params") {
@@ -230,7 +239,8 @@ val PropertyEncodingTest by testSuite {
     }
 
     test("PRODID") {
-        ProductIdentifierProperty(value = "-//Test//EN").toVCardString() shouldBe "PRODID:-//Test//EN"
+        ProductIdentifierProperty(value = "-//Test//EN").toVCardString() shouldBe
+            "PRODID:-//Test//EN"
     }
 
     test("REV") {
@@ -300,6 +310,7 @@ val PropertyEncodingTest by testSuite {
                 altId = AltIdParameter("1"),
                 language = LanguageParameter("en"),
             )
-            .toVCardString() shouldBe "NICKNAME;TYPE=work;PREF=1;LANGUAGE=en;ALTID=1;PID=1.1:Johnny,John"
+            .toVCardString() shouldBe
+            "NICKNAME;TYPE=work;PREF=1;LANGUAGE=en;ALTID=1;PID=1.1:Johnny,John"
     }
 }

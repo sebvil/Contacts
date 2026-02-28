@@ -11,8 +11,8 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
 /**
  * Represents the application categories that the object belongs to.
  *
- * This property is based on the semantics of the RFC 6350 6.7.1 (vCard 4.0),
- * RFC 2426 3.6.1 (vCard 3.0), and vCard 2.1 specifications.
+ * This property is based on the semantics of the RFC 6350 6.7.1 (vCard 4.0), RFC 2426 3.6.1 (vCard
+ * 3.0), and vCard 2.1 specifications.
  *
  * Example: `CATEGORIES:TRAVEL AGENT,INTERNET,HOTEL`
  *

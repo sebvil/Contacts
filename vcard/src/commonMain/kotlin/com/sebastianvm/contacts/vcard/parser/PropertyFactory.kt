@@ -21,8 +21,8 @@ import com.sebastianvm.contacts.vcard.properties.CalendarUriProperty
 import com.sebastianvm.contacts.vcard.properties.CategoriesProperty
 import com.sebastianvm.contacts.vcard.properties.ClientPidMapProperty
 import com.sebastianvm.contacts.vcard.properties.EmailProperty
-import com.sebastianvm.contacts.vcard.properties.FreeBusyUrlProperty
 import com.sebastianvm.contacts.vcard.properties.FormattedNameProperty
+import com.sebastianvm.contacts.vcard.properties.FreeBusyUrlProperty
 import com.sebastianvm.contacts.vcard.properties.GenderProperty
 import com.sebastianvm.contacts.vcard.properties.GeographicPositionProperty
 import com.sebastianvm.contacts.vcard.properties.InstantMessagingProperty
@@ -43,8 +43,8 @@ import com.sebastianvm.contacts.vcard.properties.RoleProperty
 import com.sebastianvm.contacts.vcard.properties.SoundProperty
 import com.sebastianvm.contacts.vcard.properties.SourceProperty
 import com.sebastianvm.contacts.vcard.properties.TelephoneProperty
-import com.sebastianvm.contacts.vcard.properties.TitleProperty
 import com.sebastianvm.contacts.vcard.properties.TimezoneProperty
+import com.sebastianvm.contacts.vcard.properties.TitleProperty
 import com.sebastianvm.contacts.vcard.properties.UniqueIdentifierProperty
 import com.sebastianvm.contacts.vcard.properties.UrlProperty
 import com.sebastianvm.contacts.vcard.properties.VCardProperty
@@ -244,7 +244,10 @@ object PropertyFactory {
             valueParam = params.find<ValueParameter>(),
         )
 
-    private fun createInstantMessagingAddress(value: String, params: List<VCardPropertyParameter<*>>) =
+    private fun createInstantMessagingAddress(
+        value: String,
+        params: List<VCardPropertyParameter<*>>,
+    ) =
         InstantMessagingProperty(
             value = value,
             valueParam = params.find<ValueParameter>(),

@@ -14,11 +14,11 @@ import com.sebastianvm.contacts.vcard.parameters.ValueParameter
 /**
  * Represents the name and units of the organization associated with the object.
  *
- * This property is based on the semantics of the RFC 6350 6.6.4 (vCard 4.0),
- * RFC 2426 3.5.5 (vCard 3.0), and vCard 2.1 specifications.
+ * This property is based on the semantics of the RFC 6350 6.6.4 (vCard 4.0), RFC 2426 3.5.5 (vCard
+ * 3.0), and vCard 2.1 specifications.
  *
- * The structured property value corresponds to the organization name followed by
- * zero or more organizational units.
+ * The structured property value corresponds to the organization name followed by zero or more
+ * organizational units.
  *
  * Example: `ORG:ABC\, Inc.;North American Division;Marketing`
  *

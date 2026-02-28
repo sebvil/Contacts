@@ -8,6 +8,7 @@ import com.sebastianvm.contacts.features.landing.LandingScreen
 import com.sebastianvm.contacts.mvvm.ContactsPresenter
 import com.sebastianvm.contacts.mvvm.ScreenState
 import com.sebastianvm.contacts.navigation.NavHostScreen
+import com.sebastianvm.contacts.navigation.isDesktop
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
@@ -20,8 +21,8 @@ class RootPresenter(private val auth: AuthRepository) : ContactsPresenter<RootSt
         val loginState = auth.loginState.collectAsState()
         val screen =
             when (loginState.value) {
-                LoggedOut -> NavHostScreen(LandingScreen)
-                LoggedIn -> NavHostScreen(HomeScreen)
+                LoggedOut -> NavHostScreen(LandingScreen, showTopNavBar = isDesktop())
+                LoggedIn -> NavHostScreen(HomeScreen, showTopNavBar = isDesktop())
                 null -> null
             }
         return ScreenState(RootState(screen = screen)) {}

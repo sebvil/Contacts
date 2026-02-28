@@ -368,6 +368,7 @@ val VCardParserTest by testSuite {
         val result = VCard.parse(input)
         result.shouldBeInstanceOf<VCardParseResult.Success>()
         val vcard = result.vcards[0] as V4VCard
-        vcard.categories[0].value shouldBe listOf("Category, One", "Category;Two", "Category\\Three")
+        vcard.categories[0].value shouldBe
+            listOf("Category, One", "Category;Two", "Category\\Three")
     }
 }
