@@ -17,3 +17,5 @@ internal fun Project.plugin(plugin: String) = libs.plugin(plugin)
 internal fun Project.alias(plugin: String) {
     plugins.apply(plugin(plugin))
 }
+
+internal fun Project.bundle(bundle: String) = libs.findBundle(bundle).get()

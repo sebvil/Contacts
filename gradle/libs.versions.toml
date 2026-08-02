@@ -22,6 +22,7 @@ spotless = "8.9.0"
 detekt = "2.0.0-alpha.5"
 detekt-compose = "0.6.3"
 compose-unstyled = "2.9.0"
+testBalloon = "1.0.1-K2.4.0"
 
 [libraries]
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
@@ -52,6 +53,8 @@ circuit-retained = { module = "com.slack.circuit:circuit-retained", version.ref 
 circuit-overlay = { module = "com.slack.circuit:circuit-overlay", version.ref = "circuit" }
 circuit-gestureNav = { module = "com.slack.circuit:circuitx-gesture-navigation", version.ref = "circuit" }
 detekt-compose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detekt-compose"}
+testBalloon = { module = "de.infix.testBalloon:testBalloon-framework-core", version.ref = "testBalloon"}
+kotest-assertions = { module = "de.infix.testBalloon:testBalloon-integration-kotest-assertions", version.ref = "testBalloon"}
 
 # Dependencies of the included build-logic
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -64,6 +67,10 @@ buildLogic = [
     "kotlin-gradlePlugin",
     "android-gradlePlugin",
     "detekt-gradlePlugin"
+]
+unitTests = [
+    "testBalloon",
+    "kotest-assertions"
 ]
 
 [plugins]
@@ -78,6 +85,7 @@ metro = { id = "dev.zacsweers.metro", version.ref = "metro"}
 kotlin-plugin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
+testBalloon = { id = "de.infix.testBalloon", version.ref = "testBalloon"}
 
 # convention plugins
 androidApp = { id = "androidApp" }

@@ -10,6 +10,7 @@ internal inline fun <reified E : HasConfigurableKotlinCompilerOptions<*>> Projec
     hasCompose: Boolean,
 ) {
     alias("metro")
+    alias("testBalloon")
 
     configure<E> {
         this.configureKotlin(isLibrary)
