@@ -30,7 +30,7 @@ internal class AndroidPlugin(val isMultiplatform: Boolean) : Plugin<Project> {
                         withHostTest {
                             isIncludeAndroidResources = true
                         }
-                        this.configureJavaAndKotlin(target)
+                        this.configureJava(target)
                     }
                 }
             } else {

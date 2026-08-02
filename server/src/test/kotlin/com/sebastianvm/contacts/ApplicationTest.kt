@@ -1,21 +1,24 @@
 package com.sebastianvm.contacts
 
+import de.infix.testBalloon.framework.core.testSuite
+import io.kotest.matchers.shouldBe
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.testApplication
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class ApplicationTest {
+val ApplicationTest by testSuite {
 
-    @Test
-    fun testRoot() = testApplication {
-        application {
-            module()
+    test("test root") {
+        testApplication {
+            application {
+                module()
+            }
+            val response = client.get("/")
+            response.status shouldBe HttpStatusCode.OK
+            response.bodyAsText() shouldBe "Hello, Ktor!"
         }
-        val response = client.get("/")
-        assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals("Hello, Ktor!", response.bodyAsText())
     }
+
 }
+
