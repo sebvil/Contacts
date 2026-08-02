@@ -12,8 +12,9 @@ application {
 }
 
 dependencies {
+    implementation(project(":routes"))
     implementation(libs.logback)
-    implementation(libs.ktor.serverCore)
-    implementation(libs.ktor.serverNetty)
+    implementation(libs.bundles.ktorServer)
+    testImplementation(libs.bundles.ktorClient)
     testImplementation(libs.ktor.serverTestHost)
 }
