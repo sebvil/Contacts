@@ -33,6 +33,8 @@ plugins {
     id("io.github.ben-manes.versions.settings") version "0.56.0"
 }
 
+includeBuild("build-logic")
+
 include(":app:androidApp")
 
 include(":app:desktopApp")
@@ -43,6 +45,6 @@ include(":app:webApp")
 
 include(":server")
 
-includeBuild("build-logic")
+include(":routes")
 
-include("routes")
+include(":domain")

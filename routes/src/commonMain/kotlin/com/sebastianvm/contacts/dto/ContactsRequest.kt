@@ -1,4 +1,4 @@
-package com.sebastianvm.contacts.routes.dtos
+package com.sebastianvm.contacts.dto
 
 import kotlin.uuid.Uuid
 import kotlinx.serialization.Serializable

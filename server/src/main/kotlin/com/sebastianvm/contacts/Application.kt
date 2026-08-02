@@ -1,27 +1,29 @@
 package com.sebastianvm.contacts
 
-import com.sebastianvm.contacts.routes.contactRoutes
+import com.sebastianvm.contacts.config.Config
+import com.sebastianvm.contacts.di.AppGraph
+import com.sebastianvm.contacts.routes.Routes
+import dev.zacsweers.metro.createGraphFactory
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
+import io.ktor.server.config.getAs
+import io.ktor.server.netty.EngineMain
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.resources.Resources
-import io.ktor.server.routing.get
-import io.ktor.server.routing.routing
 
-fun main() {
-    embeddedServer(factory = Netty, port = 8080, host = "0.0.0.0", module = Application::module)
-        .start(wait = true)
+fun main(args: Array<String>) = EngineMain.main(args)
+
+suspend fun Application.appModule() {
+    val config = environment.config.getAs<Config>()
+    val graph = createGraphFactory<AppGraph.Factory>().create(config.ktor.database)
+    module(graph.routes())
 }
 
-fun Application.module() {
+fun Application.module(routes: Routes) {
     install(Resources)
     install(ContentNegotiation) {
         json()
     }
-    routing {
-        contactRoutes()
-    }
+    routes()
 }

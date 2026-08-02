@@ -1,42 +1,32 @@
 package com.sebastianvm.contacts.routes
 
-import com.sebastianvm.contacts.applicationTest
-import com.sebastianvm.contacts.client
-import com.sebastianvm.contacts.contractTest
-import com.sebastianvm.contacts.routes.dtos.ContactsRequest
-import com.sebastianvm.contacts.routes.dtos.ContactsResponse
-import de.infix.testBalloon.framework.core.testSuite
+import com.sebastianvm.contacts.dto.ContactsResponse
+import com.sebastianvm.contacts.dto.toContactsResponse
+import com.sebastianvm.contacts.fixtures.makeContact
+import com.sebastianvm.contacts.fixtures.toContactsRequest
+import com.sebastianvm.contacts.testUtils.applicationTest
+import com.sebastianvm.contacts.testUtils.contractTest
+import com.sebastianvm.contacts.testUtils.ktorTestSuite
+import com.sebastianvm.contacts.testUtils.post
 import io.kotest.matchers.shouldBe
 import io.ktor.client.call.body
-import io.ktor.client.plugins.resources.post
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.contentType
-import kotlin.uuid.Uuid
 
-val ContactRoutesTest by testSuite {
+val ContactRoutesTest by ktorTestSuite {
     testSuite("'POST /contacts'") {
         contractTest(
             executeRequest = {
-                post("/contacts") {
-                    contentType(ContentType.Application.Json)
-                    setBody(ContactsRequest(Uuid.random(), "Elliot"))
-                }
+                post(urlString = "/contacts", body = makeContact().toContactsRequest())
             },
             expectedStatus = HttpStatusCode.Created,
         )
 
         applicationTest("creates and returns contact") {
-            val id = Uuid.random()
-            val response =
-                client.post(Contacts) {
-                    contentType(ContentType.Application.Json)
-                    setBody(ContactsRequest(id, "Elliot"))
-                }
+            val contact = makeContact()
+            val response = client.post(Contacts, contact.toContactsRequest())
             response.status shouldBe HttpStatusCode.Created
-            response.body<ContactsResponse>() shouldBe ContactsResponse(id, "Elliot")
+            response.body<ContactsResponse>() shouldBe contact.toContactsResponse()
+            appGraph.contactsRepository().getContactById(contact.id) shouldBe contact
         }
     }
 }
