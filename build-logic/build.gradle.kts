@@ -40,5 +40,10 @@ gradlePlugin {
             id = "webApp"
             implementationClass = "com.sebastianvm.contacts.buildlogic.WebApplicationPlugin"
         }
+
+        register("jvmApp") {
+            id = "jvmApp"
+            implementationClass = "com.sebastianvm.contacts.buildlogic.JvmApplicationPlugin"
+        }
     }
 }

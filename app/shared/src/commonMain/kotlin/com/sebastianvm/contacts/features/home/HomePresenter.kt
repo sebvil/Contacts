@@ -12,10 +12,7 @@ import dev.zacsweers.metro.AssistedInject
 
 @AssistedInject
 internal class HomePresenter(@Assisted val navigator: Navigator) : StaticPresenter<HomeEvent>() {
-    @Composable
-    override fun presentEventHandler(): EventHandler<HomeEvent> {
-        return {  }
-    }
+    @Composable override fun presentEventHandler(): EventHandler<HomeEvent> = {}
 
     @CircuitInject(HomeScreen::class, AppScope::class)
     @AssistedFactory

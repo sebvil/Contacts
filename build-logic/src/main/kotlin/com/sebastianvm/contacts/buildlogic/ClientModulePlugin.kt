@@ -15,7 +15,6 @@ internal class ClientModulePlugin(
             if (isMultiplatform) {
                 alias("kotlinMultiplatform")
             }
-            alias("metro")
             configurations.configureEach {
                 resolutionStrategy.force(library("circuit-codegen-annotations").get())
             }

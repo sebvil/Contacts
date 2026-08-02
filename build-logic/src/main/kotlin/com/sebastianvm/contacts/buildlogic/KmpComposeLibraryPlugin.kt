@@ -45,7 +45,7 @@ internal class KmpComposeLibraryPlugin : Plugin<Project> {
             dependencies {
                 add("androidRuntimeClasspath", library("compose.uiTooling"))
             }
-            configureKotlin<KotlinMultiplatformExtension>(isLibrary = true)
+            configureKotlin<KotlinMultiplatformExtension>(isLibrary = true, hasCompose = true)
         }
     }
 }

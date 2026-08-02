@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.jvmApp)
     alias(libs.plugins.ktor)
 }
 
