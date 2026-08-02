@@ -17,24 +17,26 @@ import io.ktor.http.contentType
 import kotlin.uuid.Uuid
 
 val ContactRoutesTest by testSuite {
-
     testSuite("'POST /contacts'") {
-        contractTest(executeRequest = {
-            post("/contacts") {
-                contentType(ContentType.Application.Json)
-                setBody(ContactsRequest(Uuid.random(), "Elliot"))
-            }
-        }, expectedStatus = HttpStatusCode.Created)
+        contractTest(
+            executeRequest = {
+                post("/contacts") {
+                    contentType(ContentType.Application.Json)
+                    setBody(ContactsRequest(Uuid.random(), "Elliot"))
+                }
+            },
+            expectedStatus = HttpStatusCode.Created,
+        )
 
         applicationTest("creates and returns contact") {
             val id = Uuid.random()
-            val response = client.post(Contacts) {
-                contentType(ContentType.Application.Json)
-                setBody(ContactsRequest(id, "Elliot"))
-            }
+            val response =
+                client.post(Contacts) {
+                    contentType(ContentType.Application.Json)
+                    setBody(ContactsRequest(id, "Elliot"))
+                }
             response.status shouldBe HttpStatusCode.Created
             response.body<ContactsResponse>() shouldBe ContactsResponse(id, "Elliot")
         }
     }
-
 }

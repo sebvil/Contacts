@@ -1,14 +1,11 @@
 package com.sebastianvm.contacts.buildlogic
 
 import com.sebastianvm.contacts.buildlogic.extensions.alias
-import com.sebastianvm.contacts.buildlogic.extensions.library
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
 internal class KmpLibraryPlugin : Plugin<Project> {
 

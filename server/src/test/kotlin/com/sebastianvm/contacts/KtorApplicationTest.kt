@@ -11,7 +11,6 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.resources.Resources
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.cio.Response
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
@@ -20,32 +19,33 @@ import io.ktor.server.testing.testApplication
 fun TestSuiteScope.applicationTest(
     @TestElementName name: String,
     testConfig: TestConfig = TestConfig,
-    action: suspend context(ApplicationTestBuilder) Test.ExecutionScope.() -> Unit
-) = test(name, testConfig) {
-    testApplication {
-        application {
-            module()
-        }
-        client = createClient {
-            install(ContentNegotiation) {
-                json()
+    action: suspend context(ApplicationTestBuilder) Test.ExecutionScope.() -> Unit,
+) =
+    test(name, testConfig) {
+        testApplication {
+            application {
+                module()
             }
-            install(Resources)
+            client = createClient {
+                install(ContentNegotiation) {
+                    json()
+                }
+                install(Resources)
+            }
+            action()
         }
-        action()
     }
-}
 
 @TestRegistering
 fun TestSuiteScope.contractTest(
     testConfig: TestConfig = TestConfig,
     executeRequest: suspend HttpClient.() -> HttpResponse,
     expectedStatus: HttpStatusCode,
-) = applicationTest("contract is valid", testConfig) {
-    val response = client.executeRequest()
-    response.status shouldBe expectedStatus
-}
-
+) =
+    applicationTest("contract is valid", testConfig) {
+        val response = client.executeRequest()
+        response.status shouldBe expectedStatus
+    }
 
 context(applicationTestBuilder: ApplicationTestBuilder)
 val client: HttpClient

@@ -1,7 +1,6 @@
 package com.sebastianvm.contacts.routes.dtos
 
-import kotlinx.serialization.Serializable
 import kotlin.uuid.Uuid
+import kotlinx.serialization.Serializable
 
-@Serializable
-public data class ContactsRequest(val id: Uuid, val name: String)
+@Serializable public data class ContactsRequest(val id: Uuid, val name: String)
