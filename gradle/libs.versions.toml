@@ -84,3 +84,4 @@ androidApp = { id = "androidApp" }
 desktopApp = { id = "desktopApp" }
 kmpComposeLibrary = { id = "kmpComposeLibrary" }
 webApp = { id = "webApp" }
+jvmApp = { id = "jvmApp"}

@@ -9,14 +9,15 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 
 internal inline fun <
     reified E : HasConfigurableKotlinCompilerOptions<KotlinJvmCompilerOptions>
-> Project.configureJvm() {
+> Project.configureJavaAndKotlin(isLibrary: Boolean, hasCompose: Boolean) {
     configure<E> {
-        configureJvm(this@configureJvm)
+        configureJavaAndKotlin(this@configureJavaAndKotlin)
+        configureKotlin<E>(isLibrary = isLibrary, hasCompose = hasCompose)
     }
 }
 
 internal inline fun <reified E : HasConfigurableKotlinCompilerOptions<KotlinJvmCompilerOptions>> E
-    .configureJvm(target: Project) {
+    .configureJavaAndKotlin(target: Project) {
     compilerOptions {
         jvmTarget.set(JvmTarget.fromTarget(target.libs.findVersion("java").get().toString()))
     }

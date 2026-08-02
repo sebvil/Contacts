@@ -28,5 +28,5 @@ internal fun Project.configureWebTargets(isExecutable: Boolean) {
             binaries.executable()
         }
     }
-    configureKotlin<KotlinMultiplatformExtension>(isLibrary = !isExecutable)
+    configureKotlin<KotlinMultiplatformExtension>(isLibrary = !isExecutable, hasCompose = true)
 }

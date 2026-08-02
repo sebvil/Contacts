@@ -11,11 +11,9 @@ internal inline fun <
     reified E : HasConfigurableKotlinCompilerOptions<KotlinJvmCompilerOptions>
 > Project.configureJvmComposeApplication() {
     ClientModulePlugin(useCompose = true, isMultiplatform = false).apply(this)
-    configureJvm<E>()
+    configureJavaAndKotlin<E>(isLibrary = false, hasCompose = true)
     dependencies {
         implementation(project(":app:shared"))
         implementation(library("compose.uiToolingPreview"))
     }
-
-    configureKotlin<E>(isLibrary = false)
 }
