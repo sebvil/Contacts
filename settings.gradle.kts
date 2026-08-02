@@ -1,10 +1,8 @@
-rootProject.name = "Contacts"
+rootProject.name = "contacts"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
-    includeBuild("build-logic")
-
     repositories {
         google {
             mavenContent {
@@ -31,14 +29,18 @@ dependencyResolutionManagement {
     }
 }
 
-plugins { id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0" }
+plugins {
+    id("io.github.ben-manes.versions.settings") version "0.56.0"
+}
 
-include(":composeApp")
+include(":app:androidApp")
+
+include(":app:desktopApp")
+
+include(":app:shared")
+
+include(":app:webApp")
 
 include(":server")
 
-include(":shared")
-
-include(":androidApp")
-
-include(":vcard")
+includeBuild("build-logic")

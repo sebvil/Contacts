@@ -1,103 +1,88 @@
 import com.diffplug.gradle.spotless.BaseKotlinExtension
-import com.diffplug.spotless.kotlin.KtfmtStep
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
     // in each subproject's classloader
     alias(libs.plugins.androidApplication) apply false
-    alias(libs.plugins.androidLibrary) apply false
-    alias(libs.plugins.composeHotReload) apply false
+    alias(libs.plugins.androidMultiplatformLibrary) apply false
     alias(libs.plugins.composeMultiplatform) apply false
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
-    alias(libs.plugins.ksp) apply false
     alias(libs.plugins.ktor) apply false
     alias(libs.plugins.metro) apply false
-    alias(libs.plugins.parcelize) apply false
+    alias(libs.plugins.kotlin.plugin.parcelize) apply false
+    alias(libs.plugins.androidApp) apply false
+    alias(libs.plugins.desktopApp) apply false
+    alias(libs.plugins.kmpComposeLibrary) apply false
+    alias(libs.plugins.webApp) apply false
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.spotless)
-    alias(libs.plugins.testBalloon) apply false
-    alias(libs.plugins.androidLint) apply false
 }
 
-// Configure Spotless for the root project (this file, settings, etc.)
 spotless {
+    kotlin {
+        target("**/src/*/kotlin/**/*.kt")
+        configure()
+    }
     kotlinGradle {
         target("**/*.gradle.kts")
-        setupKtfmt()
-    }
-    format("misc-root") {
-        target("**/.gitignore", "**/*.md", "**/*.yaml", "**/*.yml")
-        targetExclude("**/build/**")
-        trimTrailingWhitespace()
-        endWithNewline()
-    }
-    kotlin {
-        // Format all Kotlin source files
-        target("**/*.kt")
-        // Exclude generated code if any
-        targetExclude("**/build/**")
-        // Exclude IDE files templates
-        targetExclude("**/.idea/**")
-
-        // Use ktfmt as the formatter
-        setupKtfmt()
+        configure()
     }
 }
 
-fun BaseKotlinExtension.setupKtfmt() {
-    ktfmt().kotlinlangStyle().configure {
-        it.setRemoveUnusedImports(true)
-        it.setTrailingCommaManagementStrategy(KtfmtStep.TrailingCommaManagementStrategy.COMPLETE)
-        it.setBlockIndent(4)
-    }
-}
+tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
+    checkForGradleUpdate = true
+    outputDir = "build/dependencyUpdates"
+    reportfileName = "report"
 
-fun getDetektTasks() =
-    subprojects.flatMap { subproject ->
-        subproject.tasks.filter {
-            it.name in
-                listOf(
-                    "detektDevJvm",
-                    "detektHostTestAndroid",
-                    "detektDeviceTestAndroid",
-                    "detektMain",
-                    "detektMainAndroid",
-                    "detektMainJvm",
-                    "detektTest",
-                    "detektTestJvm",
-                )
+    outputFormatter {
+        val res = buildString {
+            appendLine("The following dependencies are up to date:")
+            current.dependencies.forEach {
+                appendLine("- ${it.group}:${it.name}:${it.version}")
+            }
+            appendLine()
+            appendLine("The following dependencies can be updated:")
+            outdated.dependencies
+                .filter {
+                    val fullName = "${it.group}:${it.name}"
+                    "com.android." !in fullName &&
+                        "org.jacoco" !in fullName &&
+                        "hot-reload" !in fullName &&
+                        "kotlin-build-tools" !in fullName
+                }
+                .forEach {
+                    appendLine(
+                        "- ${it.group}:${it.name}:${it.version} -> ${it.available.release ?: it.available.milestone ?: it.available.integration}"
+                    )
+                }
         }
+
+        File(outputDir, "$reportfileName.txt").writeText(res)
     }
 
-fun getCheckTasks() =
-    subprojects.flatMap { subproject -> subproject.tasks.filter { it.name == "check" } }
-
-// Create a linters task that runs all formatters and lint checks
-tasks.register("linters") {
-    description = "Run all formatters and linter tasks"
-    group = "verification"
-
-    val detektTasks = getDetektTasks()
-    val spotlessTasks = tasks.matching { it.name == "spotlessApply" }
-
-    dependsOn(
-        spotlessTasks,
-        gradle.includedBuild("build-logic").task(":convention:detektMain"),
-        gradle.includedBuild("build-logic").task(":convention:detektTest"),
-        detektTasks,
-    )
-    detektTasks.forEach { it.mustRunAfter(spotlessTasks) }
+    rejectVersionIf {
+        val isRejectableAlpha =
+            "alpha" !in currentVersion.lowercase() && "alpha" in candidate.version.lowercase()
+        val isRejectableBeta =
+            "beta" !in currentVersion.lowercase() &&
+                "beta" in candidate.version.lowercase() &&
+                "androidx" !in candidate.group.lowercase()
+        isRejectableAlpha || isRejectableBeta
+    }
 }
 
-tasks.register("checks") {
-    description = "Run all formatter, linter, and test tasks"
-    group = "verification"
+private fun BaseKotlinExtension.configure() {
+    ktfmt().apply {
+        kotlinlangStyle()
+    }
+}
 
-    val lintersTask by tasks.named("linters")
-    val checkTasks = getCheckTasks()
+val buildLogicClean = gradle.includedBuild("build-logic").task(":clean")
+val rootBuildDir = layout.buildDirectory
 
-    dependsOn(lintersTask, checkTasks)
-    checkTasks.forEach { it.mustRunAfter(lintersTask) }
+tasks.named<Delete>("clean") {
+    dependsOn(buildLogicClean)
 }

@@ -8,28 +8,26 @@ config:
 processors:
   active: true
   exclude:
-    - 'DetektProgressListener'
   # - 'KtFileCountProcessor'
   # - 'PackageCountProcessor'
   # - 'ClassCountProcessor'
   # - 'FunctionCountProcessor'
   # - 'PropertyCountProcessor'
-  # - 'ProjectComplexityProcessor'
+  # - 'ProjectCyclomaticComplexityProcessor'
   # - 'ProjectCognitiveComplexityProcessor'
   # - 'ProjectLLOCProcessor'
   # - 'ProjectCLOCProcessor'
   # - 'ProjectLOCProcessor'
   # - 'ProjectSLOCProcessor'
-  # - 'LicenseHeaderLoaderExtension'
 
 console-reports:
   active: true
   exclude:
-    - 'ProjectStatisticsReport'
-    - 'ComplexityReport'
-    - 'NotificationReport'
-    - 'IssuesReport'
-    - 'FileBasedIssuesReport'
+     - 'ProjectStatisticsReport'
+     - 'ComplexityReport'
+     - 'NotificationReport'
+     - 'IssuesReport'
+     - 'FileBasedIssuesReport'
   #  - 'LiteIssuesReport'
 
 comments:
@@ -51,14 +49,14 @@ comments:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
   OutdatedDocumentation:
-    active: true
+    active: false
     matchTypeParameters: true
     matchDeclarationsOrder: true
     allowParamOnConstructorProperties: false
+    exhaustive: true
   UndocumentedPublicClass:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
-    includes: ["**/server/**", "**/shared/**"]
     searchInNestedClass: true
     searchInInnerClass: true
     searchInInnerObject: true
@@ -68,19 +66,17 @@ comments:
   UndocumentedPublicFunction:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
-    includes: ["**/server/**", "**/shared/**"]
     searchProtectedFunction: false
   UndocumentedPublicProperty:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
-    includes: ["**/server/**", "**/shared/**"]
     searchProtectedProperty: false
     ignoreEnumEntries: false
 
 complexity:
   active: true
   CognitiveComplexMethod:
-    active: false
+    active: true
     allowedComplexity: 15
   ComplexCondition:
     active: true
@@ -92,7 +88,7 @@ complexity:
     includePrivateDeclarations: false
     ignoreOverloaded: false
   CyclomaticComplexMethod:
-    active: false
+    active: true
     allowedComplexity: 14
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
@@ -115,20 +111,22 @@ complexity:
     active: true
     allowedLines: 600
   LongMethod:
-    active: false
+    active: true
     allowedLines: 60
   LongParameterList:
-    active: false
+    active: true
     allowedFunctionParameters: 5
     allowedConstructorParameters: 6
     ignoreDefaultParameters: false
     ignoreDataClasses: true
     ignoreAnnotatedParameter: []
+    ignoreAnnotated:
+      - Composable
   MethodOverloading:
     active: false
     allowedOverloads: 6
   NamedArguments:
-    active: false
+    active: true
     allowedArguments: 3
     ignoreMethods: []
     ignoreArgumentsMatchingNames: false
@@ -172,7 +170,7 @@ coroutines:
   CoroutineLaunchedInTestWithoutRunTest:
     active: false
   GlobalCoroutineUsage:
-    active: false
+    active: true
   InjectDispatcher:
     active: true
     dispatcherNames:
@@ -186,7 +184,7 @@ coroutines:
   SuspendFunInFinallySection:
     active: false
   SuspendFunSwallowedCancellation:
-    active: false
+    active: true
   SuspendFunWithCoroutineScopeReceiver:
     active: false
     aliases: ['SuspendFunctionOnCoroutineScope']
@@ -363,6 +361,7 @@ naming:
       - 'macosX64'
       - 'mingwX64'
       - 'linuxX64'
+      - 'web'
   MemberNameEqualsClassName:
     active: true
     ignoreOverridden: true
@@ -370,6 +369,7 @@ naming:
     active: true
   NonBooleanPropertyPrefixedWithIs:
     active: false
+    allowSingleTypedGenerics: false
   ObjectPropertyNaming:
     active: true
     aliases: ['ObjectPropertyName']
@@ -418,7 +418,7 @@ performance:
   UnnecessaryTemporaryInstantiation:
     active: true
   UnnecessaryTypeCasting:
-    active: true
+    active: false
 
 potential-bugs:
   active: true
@@ -436,7 +436,6 @@ potential-bugs:
   Deprecation:
     active: false
     aliases: ['DEPRECATION']
-    excludeImportStatements: false
   DontDowncastCollectionTypes:
     active: false
   DoubleMutabilityForCollection:
@@ -485,6 +484,7 @@ potential-bugs:
     active: true
   ImplicitUnitReturnType:
     active: false
+    ignoreAnnotated: ['Test']
     allowExplicitReturnType: true
   InvalidRange:
     active: true
@@ -502,12 +502,15 @@ potential-bugs:
     active: false
     excludes: ['**/*.kts']
   MissingSuperCall:
-    active: true
+    active: false
     mustInvokeSuperAnnotations:
       - 'androidx.annotation.CallSuper'
       - 'javax.annotation.OverridingMethodsMustInvokeSuper'
   MissingUseCall:
     active: false
+    ignoreClass:
+      - 'java.io.ByteArrayInputStream'
+      - 'java.io.ByteArrayOutputStream'
   NullCheckOnMutableProperty:
     active: false
   NullableToStringCall:
@@ -603,10 +606,10 @@ style:
   ExplicitItLambdaParameter:
     active: true
   ExpressionBodySyntax:
-    active: false
+    active: true
     includeLineWrapping: false
   ForbiddenAnnotation:
-    active: true
+    active: false
     annotations:
       - reason: 'it is a java annotation. Use `Suppress` instead.'
         value: 'java.lang.SuppressWarnings'
@@ -620,8 +623,6 @@ style:
         value: 'java.lang.annotation.Retention'
       - reason: 'it is a java annotation. Use `kotlin.annotation.Repeatable` instead.'
         value: 'java.lang.annotation.Repeatable'
-      - reason: 'Kotlin does not support @Inherited annotation, see https://youtrack.jetbrains.com/issue/KT-22265'
-        value: 'java.lang.annotation.Inherited'
   ForbiddenComment:
     active: true
     comments:
@@ -633,13 +634,11 @@ style:
         value: 'TODO:'
     allowedPatterns: ''
   ForbiddenImport:
-    active: true
-    forbiddenImports:
-      - reason: 'Use `kotlin.io.encoding.Base64` instead.'
-        value: 'java.util.Base64'
+    active: false
+    forbiddenImports: []
     allowedImports: []
   ForbiddenMethodCall:
-    active: true
+    active: false
     methods:
       - reason: 'print does not allow you to configure the output stream. Use a logger instead.'
         value: 'kotlin.io.print'
@@ -674,15 +673,15 @@ style:
     maxJumpCount: 1
   MagicNumber:
     active: true
-    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts', '**/designsys/icons/**']
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts']
     ignoreNumbers:
       - '-1'
       - '0'
       - '1'
       - '2'
     ignoreHashCodeFunction: true
-    ignorePropertyDeclaration: false
-    ignoreLocalVariableDeclaration: false
+    ignorePropertyDeclaration: true
+    ignoreLocalVariableDeclaration: true
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: false
@@ -697,7 +696,7 @@ style:
     maxChainedCalls: 5
   MaxLineLength:
     active: true
-    maxLineLength: 150
+    maxLineLength: 120
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
@@ -727,7 +726,7 @@ style:
   OptionalAbstractKeyword:
     active: true
   OptionalUnit:
-    active: false
+    active: true
   ProtectedMemberInFinalClass:
     active: true
   RangeUntilInsteadOfRangeTo:
@@ -735,11 +734,11 @@ style:
   RedundantConstructorKeyword:
     active: false
   RedundantExplicitType:
-    active: true
+    active: false
   RedundantHigherOrderMapUsage:
     active: true
   RedundantVisibilityModifier:
-    active: true
+    active: false
   ReturnCount:
     active: true
     max: 2
@@ -752,8 +751,8 @@ style:
     active: true
   SerialVersionUIDInSerializableClass:
     active: true
-  SpacingAfterPackageDeclaration:
-    active: true
+  SpacingAfterPackageAndImports:
+    active: false
   StringShouldBeRawString:
     active: false
     maxEscapedCharacterCount: 2
@@ -770,7 +769,7 @@ style:
       - 'trimIndent'
       - 'trimMargin'
   UnderscoresInNumericLiterals:
-    active: true
+    active: false
     acceptableLength: 4
     allowNonStandardGrouping: false
   UnnecessaryAny:
@@ -784,21 +783,21 @@ style:
   UnnecessaryFilter:
     active: true
   UnnecessaryFullyQualifiedName:
-    active: true
+    active: false
   UnnecessaryInheritance:
     active: true
   UnnecessaryInnerClass:
-    active: true
+    active: false
   UnnecessaryLet:
-    active: true
+    active: false
   UnnecessaryParentheses:
-    active: true
+    active: false
     allowForUnclearPrecedence: false
   UnnecessaryReversed:
     active: false
   UnusedImport:
     active: true
-    additionalOperatorSet: ['assign']
+    additionalOperatorSet: []
   UnusedParameter:
     active: true
     aliases: ['UNUSED_PARAMETER', 'unused']
@@ -827,19 +826,19 @@ style:
   UseCheckOrError:
     active: true
   UseDataClass:
-    active: true
+    active: false
     allowVars: false
   UseEmptyCounterpart:
-    active: true
+    active: false
   UseIfEmptyOrIfBlank:
-    active: true
+    active: false
   UseIfInsteadOfWhen:
-    active: true
+    active: false
     ignoreWhenContainingVariableDeclaration: false
   UseIsNullOrEmpty:
     active: true
   UseLet:
-    active: true
+    active: false
   UseOrEmpty:
     active: true
   UseRequire:
@@ -847,7 +846,7 @@ style:
   UseRequireNotNull:
     active: true
   UseSumOfInsteadOfFlatMapSize:
-    active: true
+    active: false
   UselessCallOnNotNull:
     active: true
   UtilityClassWithPublicConstructor:

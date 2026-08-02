@@ -1,1 +1,44 @@
-plugins { base }
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    `kotlin-dsl`
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
+    }
+    explicitApi()
+}
+
+dependencies {
+    implementation(libs.bundles.buildLogic)
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+gradlePlugin {
+    plugins {
+        register("androidApp") {
+            id = "androidApp"
+            implementationClass = "com.sebastianvm.contacts.buildlogic.AndroidApplicationPlugin"
+        }
+
+        register("desktopApp") {
+            id = "desktopApp"
+            implementationClass = "com.sebastianvm.contacts.buildlogic.DesktopApplicationPlugin"
+        }
+
+        register("kmpComposeLibrary") {
+            id = "kmpComposeLibrary"
+            implementationClass = "com.sebastianvm.contacts.buildlogic.KmpComposeLibraryPlugin"
+        }
+
+        register("webApp") {
+            id = "webApp"
+            implementationClass = "com.sebastianvm.contacts.buildlogic.WebApplicationPlugin"
+        }
+    }
+}

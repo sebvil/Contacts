@@ -1,4 +1,0 @@
-name: Localhost
-variables:
-  - name: base_url
-    value: http://0.0.0.0:8080
