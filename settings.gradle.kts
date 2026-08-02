@@ -44,3 +44,5 @@ include(":app:webApp")
 include(":server")
 
 includeBuild("build-logic")
+
+include("routes")

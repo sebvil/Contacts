@@ -45,5 +45,10 @@ gradlePlugin {
             id = "jvmApp"
             implementationClass = "com.sebastianvm.contacts.buildlogic.JvmApplicationPlugin"
         }
+
+        register("kmpLibrary") {
+            id = "kmpLibrary"
+            implementationClass = "com.sebastianvm.contacts.buildlogic.KmpLibraryPlugin"
+        }
     }
 }

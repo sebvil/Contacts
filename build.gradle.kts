@@ -18,8 +18,10 @@ plugins {
     alias(libs.plugins.kmpComposeLibrary) apply false
     alias(libs.plugins.webApp) apply false
     alias(libs.plugins.jvmApp) apply false
+    alias(libs.plugins.kmpLibrary) apply false
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.testBalloon) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.spotless)
 }
 
