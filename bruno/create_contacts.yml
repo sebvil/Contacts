@@ -1,5 +1,5 @@
 info:
-  name: /contacts
+  name: Create contact
   type: http
   seq: 1
 

@@ -1,5 +1,6 @@
 package com.sebastianvm.contacts.testUtils
 
+import com.sebastianvm.contacts.database.tables.ContactsTable
 import com.sebastianvm.contacts.di.TestAppGraph
 import com.sebastianvm.contacts.module
 import de.infix.testBalloon.framework.core.Test
@@ -21,6 +22,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.testing.testApplication
+import org.jetbrains.exposed.v1.r2dbc.deleteAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 
 @TestRegistering
 fun ktorTestSuite(
@@ -69,6 +72,9 @@ fun KtorTestSuite.applicationTest(
                     testExecutionScope = this@test,
                 )
             testDependencies.action()
+            suspendTransaction(appGraph.database()) {
+                ContactsTable.deleteAll()
+            }
         }
     }
 
