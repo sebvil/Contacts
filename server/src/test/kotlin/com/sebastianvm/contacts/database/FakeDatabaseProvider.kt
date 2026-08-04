@@ -16,9 +16,8 @@ interface FakeDatabaseProvider {
         get() = PostgreSQLContainer("postgres:16-alpine")
 
     @Provides
-    @SingleIn(AppScope::class)
-    private suspend fun provideDatabase(): R2dbcDatabase {
-        val postgres = postgres.apply { start() }
+    private suspend fun provideDatabase(providedPostgres: PostgreSQLContainer<*>): R2dbcDatabase {
+        val postgres = providedPostgres.apply { start() }
         return R2dbcDatabase.connect(
                 url =
                     with(postgres) {

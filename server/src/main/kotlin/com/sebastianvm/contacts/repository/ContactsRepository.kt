@@ -7,6 +7,7 @@ import kotlin.uuid.Uuid
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
@@ -26,6 +27,12 @@ class ContactsRepository(private val db: R2dbcDatabase) {
                 }
                 .map { it.toContact() }
                 .single()
+        }
+    }
+
+    suspend fun getAllContacts(): List<Contact> {
+        return suspendTransaction(db) {
+            ContactsTable.select(ContactsTable.columns).mapLazy { it.toContact() }.toList()
         }
     }
 
