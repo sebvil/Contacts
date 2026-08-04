@@ -1,0 +1,13 @@
+ktor:
+  deployment:
+    port: 8080
+    host: 0.0.0.0
+  application:
+    modules:
+      - com.sebastianvm.contacts.ApplicationKt.appModule
+  database:
+    databaseName: $DB_NAME
+    host: $DB_HOST
+    port: $DB_PORT
+    username: $DB_USER
+    password: $DB_PASSWORD

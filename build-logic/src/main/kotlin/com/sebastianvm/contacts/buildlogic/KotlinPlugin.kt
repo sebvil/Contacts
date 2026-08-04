@@ -1,10 +1,13 @@
 package com.sebastianvm.contacts.buildlogic
 
 import com.sebastianvm.contacts.buildlogic.extensions.alias
+import dev.zacsweers.metro.gradle.ExperimentalMetroGradleApi
+import dev.zacsweers.metro.gradle.MetroPluginExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.HasConfigurableKotlinCompilerOptions
 
+@OptIn(ExperimentalMetroGradleApi::class)
 internal inline fun <reified E : HasConfigurableKotlinCompilerOptions<*>> Project.configureKotlin(
     isLibrary: Boolean,
     hasCompose: Boolean,
@@ -16,6 +19,10 @@ internal inline fun <reified E : HasConfigurableKotlinCompilerOptions<*>> Projec
         this.configureKotlin(isLibrary)
     }
     configureDetekt(includeComposeRules = hasCompose)
+
+    configure<MetroPluginExtension> {
+        enableSuspendProviders.set(true)
+    }
 }
 
 private inline fun <reified E : HasConfigurableKotlinCompilerOptions<*>> E.configureKotlin(
