@@ -809,6 +809,9 @@ style:
     active: true
     aliases: ['unused']
     allowedNames: ''
+    ignoreAnnotated:
+      - 'PreviewComponent'
+      - 'PreviewScreens'
   UnusedPrivateProperty:
     active: true
     aliases: ['unused']
