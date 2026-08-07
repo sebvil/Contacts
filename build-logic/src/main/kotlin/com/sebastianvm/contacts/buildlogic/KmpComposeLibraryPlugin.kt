@@ -1,6 +1,7 @@
 package com.sebastianvm.contacts.buildlogic
 
 import com.sebastianvm.contacts.buildlogic.extensions.alias
+import com.sebastianvm.contacts.buildlogic.extensions.bundle
 import com.sebastianvm.contacts.buildlogic.extensions.library
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -41,6 +42,14 @@ internal class KmpComposeLibraryPlugin : Plugin<Project> {
 
                 compilerOptions {
                     freeCompilerArgs.addAll("-Xexpect-actual-classes")
+                }
+
+                sourceSets {
+                    commonTest {
+                        dependencies {
+                            implementation(bundle("unitTests"))
+                        }
+                    }
                 }
             }
 
