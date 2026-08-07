@@ -19,6 +19,10 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(project(":routes"))
+            implementation(project(":domain"))
+
+            implementation(libs.bundles.ktorClient)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.circuit.foundation)
@@ -30,6 +34,11 @@ kotlin {
 
         jsMain.dependencies {
             implementation(libs.wrappers.browser)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.ktor.client.mock)
+            implementation(libs.annotations)
         }
     }
 }
