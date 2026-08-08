@@ -6,6 +6,7 @@ import com.sebastianvm.contacts.networking.FakeContactsApiService
 import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
 import kotlin.uuid.Uuid
+import kotlinx.coroutines.flow.first
 
 val OnlineOnlyContactsRepositoryTest by testSuite {
     test("getContacts maps DTOs to domain contacts") {
@@ -15,7 +16,7 @@ val OnlineOnlyContactsRepositoryTest by testSuite {
 
         val repository = OnlineOnlyContactsRepository(contactsApiService)
 
-        repository.getContacts() shouldBe
+        repository.getContacts().first() shouldBe
             listOf(Contact(contact1.id, contact1.name), Contact(contact2.id, contact2.name))
     }
 }

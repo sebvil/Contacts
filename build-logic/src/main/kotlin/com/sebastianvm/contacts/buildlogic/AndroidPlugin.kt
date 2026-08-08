@@ -29,6 +29,7 @@ internal class AndroidPlugin(val isMultiplatform: Boolean) : Plugin<Project> {
                         }
                         withHostTest {
                             isIncludeAndroidResources = true
+                            isReturnDefaultValues = true
                         }
                         this.configureJava(target)
                     }

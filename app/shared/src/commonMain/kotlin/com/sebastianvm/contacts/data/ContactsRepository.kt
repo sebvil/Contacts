@@ -1,8 +1,9 @@
 package com.sebastianvm.contacts.data
 
 import com.sebastianvm.contacts.domain.Contact
+import kotlinx.coroutines.flow.Flow
 
 internal interface ContactsRepository {
 
-    suspend fun getContacts(): List<Contact>
+    fun getContacts(): Flow<List<Contact>>
 }

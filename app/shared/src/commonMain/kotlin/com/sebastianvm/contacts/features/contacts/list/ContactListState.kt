@@ -8,5 +8,5 @@ internal sealed interface ContactListState : UiState {
 
     data object Error : ContactListState
 
-    data class Contacts(val contacts: List<ContactListItem.State>) : ContactListState
+    data class Data(val contacts: List<ContactListItem.State>) : ContactListState
 }
