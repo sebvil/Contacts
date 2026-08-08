@@ -19,13 +19,13 @@ internal fun Project.configureWebTargets(isExecutable: Boolean) {
     configure<KotlinMultiplatformExtension> {
         js {
             browser()
-            binaries.executable()
+            if (isExecutable) binaries.executable()
         }
 
         @OptIn(ExperimentalWasmDsl::class)
         wasmJs {
             browser()
-            binaries.executable()
+            if (isExecutable) binaries.executable()
         }
     }
     configureKotlin<KotlinMultiplatformExtension>(isLibrary = !isExecutable, hasCompose = true)

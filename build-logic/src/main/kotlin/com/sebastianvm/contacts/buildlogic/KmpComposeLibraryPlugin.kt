@@ -1,7 +1,5 @@
 package com.sebastianvm.contacts.buildlogic
 
-import com.sebastianvm.contacts.buildlogic.extensions.alias
-import com.sebastianvm.contacts.buildlogic.extensions.bundle
 import com.sebastianvm.contacts.buildlogic.extensions.library
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -13,18 +11,8 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 internal class KmpComposeLibraryPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
-        with(target) {
-            alias("androidMultiplatformLibrary")
-
-            ClientModulePlugin(useCompose = true, isMultiplatform = true).apply(target)
-            AndroidPlugin(isMultiplatform = true).apply(target)
-
-            configureWebTargets(isExecutable = false)
+        target.configureKmpLibrary(useCompose = true) {
             configure<KotlinMultiplatformExtension> {
-                jvm {
-                    configureJava(this@with)
-                }
-
                 sourceSets {
                     androidMain.dependencies {
                         implementation(library("compose.uiToolingPreview"))
@@ -39,24 +27,11 @@ internal class KmpComposeLibraryPlugin : Plugin<Project> {
                         implementation(library("compose.uiToolingPreview"))
                     }
                 }
-
-                compilerOptions {
-                    freeCompilerArgs.addAll("-Xexpect-actual-classes")
-                }
-
-                sourceSets {
-                    commonTest {
-                        dependencies {
-                            implementation(bundle("unitTests"))
-                        }
-                    }
-                }
             }
 
             dependencies {
                 add("androidRuntimeClasspath", library("compose.uiTooling"))
             }
-            configureKotlin<KotlinMultiplatformExtension>(isLibrary = true, hasCompose = true)
         }
     }
 }
