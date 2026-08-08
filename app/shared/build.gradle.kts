@@ -40,6 +40,12 @@ kotlin {
             implementation(libs.ktor.client.mock)
             implementation(libs.annotations)
         }
+        named("androidHostTest") {
+            dependencies {
+                implementation(libs.testBalloon)
+                implementation(libs.junit)
+            }
+        }
     }
 }
 
