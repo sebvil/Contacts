@@ -2,8 +2,8 @@ package com.sebastianvm.contacts.buildlogic
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
+import com.sebastianvm.contacts.buildlogic.extensions.javaVersion
 import com.sebastianvm.contacts.buildlogic.extensions.libs
-import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
@@ -43,10 +43,6 @@ internal class AndroidPlugin(val isMultiplatform: Boolean) : Plugin<Project> {
                     }
 
                     compileOptions {
-                        val javaVersion =
-                            JavaVersion.entries
-                                .toTypedArray()[
-                                    libs.findVersion("java").get().toString().toInt() - 1]
                         sourceCompatibility = javaVersion
                         targetCompatibility = javaVersion
                     }

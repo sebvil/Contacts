@@ -26,7 +26,7 @@ public fun Project.configureDetekt(includeComposeRules: Boolean) {
     }
 
     tasks.named("check").configure {
-        setDependsOn(
+        dependsOn(
             tasks.named { name ->
                 "detekt" in name.lowercase() &&
                     "baseline" !in name.lowercase() &&

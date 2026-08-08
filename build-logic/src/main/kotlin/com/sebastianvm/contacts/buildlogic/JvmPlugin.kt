@@ -1,7 +1,7 @@
 package com.sebastianvm.contacts.buildlogic
 
 import com.sebastianvm.contacts.buildlogic.extensions.bundle
-import com.sebastianvm.contacts.buildlogic.extensions.libs
+import com.sebastianvm.contacts.buildlogic.extensions.javaVersion
 import com.sebastianvm.contacts.buildlogic.extensions.testImplementation
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -26,6 +26,6 @@ internal inline fun <
 internal inline fun <reified E : HasConfigurableKotlinCompilerOptions<KotlinJvmCompilerOptions>> E
     .configureJava(target: Project) {
     compilerOptions {
-        jvmTarget.set(JvmTarget.fromTarget(target.libs.findVersion("java").get().toString()))
+        jvmTarget.set(JvmTarget.fromTarget(target.javaVersion.majorVersion))
     }
 }
