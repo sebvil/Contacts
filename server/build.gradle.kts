@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.logback)
     implementation(libs.bundles.ktorServer)
     implementation(libs.bundles.exposed)
+    testImplementation(project(":fixtures"))
     testImplementation(libs.bundles.ktorClient)
     testImplementation(libs.ktor.serverTestHost)
     testImplementation(libs.testcontainers.postgresql)
