@@ -1,17 +1,19 @@
 package com.sebastianvm.contacts.data
 
 import com.sebastianvm.contacts.domain.Contact
-import com.sebastianvm.contacts.networking.ContactsApiService
-import com.sebastianvm.contacts.networking.toContact
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 @ContributesBinding(AppScope::class)
-internal class OnlineOnlyContactsRepository(private val contactsApiService: ContactsApiService) :
-    ContactsRepository {
+class FakeContactsRepository(initialContacts: List<Contact> = emptyList()) : ContactsRepository {
+    private val contacts = initialContacts.toMutableList()
+
+    var getContactsError: Throwable? = null
+
     override fun getContacts(): Flow<List<Contact>> = flow {
-        emit(contactsApiService.fetchContacts().map { it.toContact() })
+        getContactsError?.let { throw it }
+        emit(contacts.toList())
     }
 }
