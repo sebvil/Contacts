@@ -48,3 +48,5 @@ include(":server")
 include(":routes")
 
 include(":domain")
+
+include(":fixtures")
