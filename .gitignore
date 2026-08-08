@@ -5,7 +5,10 @@
 xcuserdata
 !src/**/build/
 local.properties
-.idea
+.idea/*
+!.idea/fileTemplates/
+!.idea/fileTemplates/**
+!.idea/file.template.settings.xml
 .DS_Store
 captures
 .externalNativeBuild
