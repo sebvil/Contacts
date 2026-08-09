@@ -5,6 +5,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsTargetDsl
 
 internal class WebApplicationPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -18,18 +19,21 @@ internal class WebApplicationPlugin : Plugin<Project> {
 internal fun Project.configureWebTargets(isExecutable: Boolean) {
     configure<KotlinMultiplatformExtension> {
         js {
-            browser()
-            // Compose UI tests on the js target require an executable binary to bundle the
-            // Skiko runtime with webpack, even for library modules with no `main()`.
-            // https://youtrack.jetbrains.com/issue/CMP-4906
-            binaries.executable()
+            configureJs()
         }
 
         @OptIn(ExperimentalWasmDsl::class)
         wasmJs {
-            browser()
-            if (isExecutable) binaries.executable()
+            configureJs()
         }
     }
     configureKotlin<KotlinMultiplatformExtension>(isLibrary = !isExecutable, hasCompose = true)
+}
+
+private fun KotlinJsTargetDsl.configureJs() {
+    browser()
+    // Compose UI tests on the js target require an executable binary to bundle the
+    // Skiko runtime with webpack, even for library modules with no `main()`.
+    // https://youtrack.jetbrains.com/issue/CMP-4906
+    binaries.executable()
 }

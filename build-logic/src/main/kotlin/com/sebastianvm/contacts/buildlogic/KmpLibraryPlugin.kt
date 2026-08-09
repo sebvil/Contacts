@@ -18,8 +18,8 @@ internal class KmpLibraryPlugin : Plugin<Project> {
 /**
  * Shared scaffolding for KMP library convention plugins: Android/JVM/web targets, Kotlin/Detekt
  * setup, and unit test dependencies. [useCompose] controls whether Compose Multiplatform is
- * applied; [additionalConfiguration] runs afterwards for anything specific to a given plugin
- * (e.g. Compose-only dependencies).
+ * applied; [additionalConfiguration] runs afterwards for anything specific to a given plugin (e.g.
+ * Compose-only dependencies).
  */
 internal fun Project.configureKmpLibrary(
     useCompose: Boolean,
