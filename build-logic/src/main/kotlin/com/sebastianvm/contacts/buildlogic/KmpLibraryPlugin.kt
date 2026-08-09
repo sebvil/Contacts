@@ -11,32 +11,45 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 internal class KmpLibraryPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
-        with(target) {
-            alias("androidMultiplatformLibrary")
+        target.configureKmpLibrary(useCompose = false)
+    }
+}
 
-            ClientModulePlugin(useCompose = false, isMultiplatform = true).apply(target)
-            AndroidPlugin(isMultiplatform = true).apply(target)
+/**
+ * Shared scaffolding for KMP library convention plugins: Android/JVM/web targets, Kotlin/Detekt
+ * setup, and unit test dependencies. [useCompose] controls whether Compose Multiplatform is
+ * applied; [additionalConfiguration] runs afterwards for anything specific to a given plugin
+ * (e.g. Compose-only dependencies).
+ */
+internal fun Project.configureKmpLibrary(
+    useCompose: Boolean,
+    additionalConfiguration: Project.() -> Unit = {},
+) {
+    alias("androidMultiplatformLibrary")
 
-            configureWebTargets(isExecutable = false)
-            configure<KotlinMultiplatformExtension> {
-                jvm {
-                    configureJava(this@with)
-                }
+    ClientModulePlugin(useCompose = useCompose, isMultiplatform = true).apply(this)
+    AndroidPlugin(isMultiplatform = true).apply(this)
 
-                compilerOptions {
-                    freeCompilerArgs.addAll("-Xexpect-actual-classes")
-                }
+    configureWebTargets(isExecutable = false)
+    configure<KotlinMultiplatformExtension> {
+        jvm {
+            configureJava(this@configureKmpLibrary)
+        }
 
-                sourceSets {
-                    commonTest {
-                        dependencies {
-                            implementation(bundle("unitTests"))
-                        }
-                    }
+        compilerOptions {
+            freeCompilerArgs.addAll("-Xexpect-actual-classes")
+        }
+
+        sourceSets {
+            commonTest {
+                dependencies {
+                    implementation(bundle("unitTests"))
                 }
             }
-
-            configureKotlin<KotlinMultiplatformExtension>(isLibrary = true, hasCompose = false)
         }
     }
+
+    additionalConfiguration()
+
+    configureKotlin<KotlinMultiplatformExtension>(isLibrary = true, hasCompose = useCompose)
 }
