@@ -24,8 +24,6 @@ import org.jetbrains.compose.resources.stringResource
 internal class HomeUi : StaticUi<HomeEvent>() {
     @Composable
     override fun Content(handleEvent: EventHandler<HomeEvent>, modifier: Modifier) {
-        // A single "Contacts" tab today; the navigation suite adapts automatically between a
-        // bottom nav bar, a nav rail, and a nav drawer depending on the available window size.
         NavigationSuiteScaffold(
             navigationSuiteItems = {
                 item(

@@ -3,7 +3,7 @@ package com.sebastianvm.contacts.designsys.theme.icons
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.PathParser
+import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
 public val Icons.People: ImageVector by
@@ -15,15 +15,99 @@ public val Icons.People: ImageVector by
                 viewportWidth = 24f,
                 viewportHeight = 24f,
             )
-            .addPath(
-                pathData = PathParser().parsePathString(PEOPLE_PATH_DATA).toNodes(),
-                fill = SolidColor(Color.Black),
-            )
+            .apply {
+                path(fill = SolidColor(Color.Black)) {
+                    // Back head.
+                    moveTo(x = 16f, y = 11f)
+                    curveToRelative(
+                        dx1 = 1.66f,
+                        dy1 = 0f,
+                        dx2 = 2.99f,
+                        dy2 = -1.34f,
+                        dx3 = 2.99f,
+                        dy3 = -3f,
+                    )
+                    reflectiveCurveTo(x1 = 17.66f, y1 = 5f, x2 = 16f, y2 = 5f)
+                    curveToRelative(
+                        dx1 = -1.66f,
+                        dy1 = 0f,
+                        dx2 = -3f,
+                        dy2 = 1.34f,
+                        dx3 = -3f,
+                        dy3 = 3f,
+                    )
+                    reflectiveCurveToRelative(dx1 = 1.34f, dy1 = 3f, dx2 = 3f, dy2 = 3f)
+                    close()
+
+                    // Front head.
+                    moveTo(x = 8f, y = 11f)
+                    curveToRelative(
+                        dx1 = 1.66f,
+                        dy1 = 0f,
+                        dx2 = 2.99f,
+                        dy2 = -1.34f,
+                        dx3 = 2.99f,
+                        dy3 = -3f,
+                    )
+                    reflectiveCurveTo(x1 = 9.66f, y1 = 5f, x2 = 8f, y2 = 5f)
+                    curveTo(x1 = 6.34f, y1 = 5f, x2 = 5f, y2 = 6.34f, x3 = 5f, y3 = 8f)
+                    reflectiveCurveToRelative(dx1 = 1.34f, dy1 = 3f, dx2 = 3f, dy2 = 3f)
+                    close()
+
+                    // Front body.
+                    moveTo(x = 8f, y = 13f)
+                    curveToRelative(
+                        dx1 = -2.33f,
+                        dy1 = 0f,
+                        dx2 = -7f,
+                        dy2 = 1.17f,
+                        dx3 = -7f,
+                        dy3 = 3.5f,
+                    )
+                    verticalLineTo(y = 19f)
+                    horizontalLineToRelative(dx = 14f)
+                    verticalLineToRelative(dy = -2.5f)
+                    curveToRelative(
+                        dx1 = 0f,
+                        dy1 = -2.33f,
+                        dx2 = -4.67f,
+                        dy2 = -3.5f,
+                        dx3 = -7f,
+                        dy3 = -3.5f,
+                    )
+                    close()
+
+                    // Back body.
+                    moveTo(x = 16f, y = 13f)
+                    curveToRelative(
+                        dx1 = -0.29f,
+                        dy1 = 0f,
+                        dx2 = -0.62f,
+                        dy2 = 0.02f,
+                        dx3 = -0.97f,
+                        dy3 = 0.05f,
+                    )
+                    curveToRelative(
+                        dx1 = 1.16f,
+                        dy1 = 0.84f,
+                        dx2 = 1.97f,
+                        dy2 = 1.97f,
+                        dx3 = 1.97f,
+                        dy3 = 3.45f,
+                    )
+                    verticalLineTo(y = 19f)
+                    horizontalLineToRelative(dx = 6f)
+                    verticalLineToRelative(dy = -2.5f)
+                    curveToRelative(
+                        dx1 = 0f,
+                        dy1 = -2.33f,
+                        dx2 = -4.67f,
+                        dy2 = -3.5f,
+                        dx3 = -7f,
+                        dy3 = -3.5f,
+                    )
+                    close()
+                }
+            }
             .build()
     }
-
-private const val PEOPLE_PATH_DATA =
-    "M16,11c1.66,0 2.99,-1.34 2.99,-3S17.66,5 16,5c-1.66,0 -3,1.34 -3,3s1.34,3 3,3zM8,11c1.66,0 " +
-        "2.99,-1.34 2.99,-3S9.66,5 8,5C6.34,5 5,6.34 5,8s1.34,3 3,3zM8,13c-2.33,0 -7,1.17 -7,3.5V19h14v-2.5c0,-2.33 " +
-        "-4.67,-3.5 -7,-3.5zM16,13c-0.29,0 -0.62,0.02 -0.97,0.05 1.16,0.84 1.97,1.97 1.97,3.45V19h6v-2.5c0,-2.33 " +
-        "-4.67,-3.5 -7,-3.5z"
