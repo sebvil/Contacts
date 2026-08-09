@@ -37,6 +37,7 @@ kotlin {
         }
 
         commonTest.dependencies {
+            implementation(project(":fixtures"))
             implementation(libs.ktor.client.mock)
             implementation(libs.turbine)
             implementation(libs.circuit.test)
