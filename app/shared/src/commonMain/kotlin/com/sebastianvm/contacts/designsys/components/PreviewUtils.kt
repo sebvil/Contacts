@@ -10,12 +10,12 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import com.sebastianvm.contacts.designsys.theme.AppTheme
 import com.sebastianvm.contacts.designsys.theme.Dimensions
 
-@PreviewLightDark @PreviewFontScale public annotation class PreviewComponent
+@PreviewLightDark @PreviewFontScale annotation class PreviewComponent
 
-@PreviewLightDark @PreviewFontScale @PreviewScreenSizes public annotation class PreviewScreens
+@PreviewLightDark @PreviewFontScale @PreviewScreenSizes annotation class PreviewScreens
 
 @Composable
-public fun ComponentPreview(modifier: Modifier = Modifier, content: @Composable (() -> Unit)) {
+fun ComponentPreview(modifier: Modifier = Modifier, content: @Composable (() -> Unit)) {
     AppTheme {
         Surface(modifier = modifier.padding(all = Dimensions.ScreenEdgePadding)) {
             content()

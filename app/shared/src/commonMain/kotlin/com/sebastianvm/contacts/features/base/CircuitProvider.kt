@@ -9,11 +9,11 @@ import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 
 @ContributesTo(AppScope::class)
-public interface CircuitProvider {
+interface CircuitProvider {
 
     @Provides
     @SingleIn(AppScope::class)
-    public fun provideCircuit(
+    fun provideCircuit(
         presenterFactories: Set<Presenter.Factory>,
         uiFactories: Set<Ui.Factory>,
     ): Circuit {

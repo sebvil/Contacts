@@ -8,7 +8,6 @@ kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
     }
-    explicitApi()
 }
 
 dependencies {

@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-public val Icons.RemoveCircle: ImageVector by
+val Icons.RemoveCircle: ImageVector by
     lazy(LazyThreadSafetyMode.NONE) {
         ImageVector.Builder(
                 name = "RemoveCircle",

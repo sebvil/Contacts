@@ -10,7 +10,9 @@ import kotlin.uuid.Uuid
 val KtorContactsApiServiceTest by testSuite {
     test("GET contacts fetches contacts") {
         val mockEngine = MockEngine.Queue()
-        val graph = createTestAppGraph(mockEngine)
+        val graph = createTestAppGraph {
+            engine = mockEngine
+        }
 
         val contact1 = ContactsResponse(id = Uuid.random(), "Elliot")
         val contact2 = ContactsResponse(id = Uuid.random(), "Darlene")

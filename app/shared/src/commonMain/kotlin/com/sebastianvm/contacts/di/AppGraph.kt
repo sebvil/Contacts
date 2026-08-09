@@ -6,7 +6,7 @@ import dev.zacsweers.metro.DependencyGraph
 
 @DependencyGraph(AppScope::class)
 @MustUseReturnValues
-public interface AppGraph {
+interface AppGraph {
 
-    public val app: App
+    val app: App
 }

@@ -20,10 +20,10 @@ import com.slack.circuitx.gesturenavigation.GestureNavigationDecorationFactory
 import dev.zacsweers.metro.Inject
 
 @Inject
-public class App(private val circuit: Circuit) {
+class App(private val circuit: Circuit) {
 
     @Composable
-    public operator fun invoke(modifier: Modifier = Modifier) {
+    operator fun invoke(modifier: Modifier = Modifier) {
         MaterialTheme {
             Column(
                 modifier =

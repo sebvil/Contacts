@@ -14,9 +14,9 @@ import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 
 @ContributesTo(AppScope::class)
-public interface HttpClientProvider {
+interface HttpClientProvider {
 
-    public val httpClient: HttpClient
+    val httpClient: HttpClient
 
     @Provides
     @SingleIn(AppScope::class)

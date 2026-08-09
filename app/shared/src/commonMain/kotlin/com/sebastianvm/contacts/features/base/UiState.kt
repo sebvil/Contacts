@@ -1,6 +1,6 @@
 package com.sebastianvm.contacts.features.base
 
-public interface UiState {
+interface UiState {
 
-    public data object None : UiState
+    data object None : UiState
 }
