@@ -7,7 +7,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.sebastianvm.contacts.designsys.theme.icons.Icons
-import com.sebastianvm.contacts.designsys.theme.icons.Person
+import com.sebastianvm.contacts.designsys.theme.icons.People
 import com.sebastianvm.contacts.features.base.EventHandler
 import com.sebastianvm.contacts.features.base.StaticUi
 import com.sebastianvm.contacts.features.contacts.list.ContactListScreen
@@ -31,7 +31,7 @@ internal class HomeUi : StaticUi<HomeEvent>() {
                 item(
                     selected = true,
                     onClick = {},
-                    icon = { Icon(imageVector = Icons.Person, contentDescription = null) },
+                    icon = { Icon(imageVector = Icons.People, contentDescription = null) },
                     label = { Text(text = stringResource(Res.string.contacts_tab)) },
                 )
             },
