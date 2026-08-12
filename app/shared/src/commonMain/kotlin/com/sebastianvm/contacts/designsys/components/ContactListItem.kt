@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import com.sebastianvm.contacts.designsys.components.ContactListItem.State
 import kotlin.uuid.Uuid
 
-internal object ContactListItem {
+object ContactListItem {
 
     data class State(val id: Uuid, val name: String)
 

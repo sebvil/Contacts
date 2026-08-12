@@ -6,7 +6,6 @@ import dev.zacsweers.metro.gradle.MetroPluginExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.HasConfigurableKotlinCompilerOptions
-import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
 @OptIn(ExperimentalMetroGradleApi::class)
 internal inline fun <reified E : HasConfigurableKotlinCompilerOptions<*>> Project.configureKotlin(
@@ -39,9 +38,5 @@ private inline fun <reified E : HasConfigurableKotlinCompilerOptions<*>> E.confi
             // "-Xallow-returns-result-of",
             "-Werror",
         )
-    }
-
-    if (isLibrary) {
-        (this as KotlinProjectExtension).explicitApi()
     }
 }

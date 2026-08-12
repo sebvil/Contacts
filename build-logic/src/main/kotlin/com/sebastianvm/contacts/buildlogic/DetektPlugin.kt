@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
-public fun Project.configureDetekt(includeComposeRules: Boolean) {
+fun Project.configureDetekt(includeComposeRules: Boolean) {
     alias("detekt")
 
     configure<DetektExtension> {

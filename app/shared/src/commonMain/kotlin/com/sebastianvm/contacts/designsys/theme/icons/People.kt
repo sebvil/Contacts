@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-public val Icons.People: ImageVector by
+val Icons.People: ImageVector by
     lazy(LazyThreadSafetyMode.NONE) {
         ImageVector.Builder(
                 name = "People",
