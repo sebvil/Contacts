@@ -50,3 +50,7 @@ include(":routes")
 include(":domain")
 
 include(":fixtures")
+
+include(":app:database")
+
+include(":core")

@@ -1,0 +1,12 @@
+import kotlin.uuid.Uuid;
+
+CREATE TABLE IF NOT EXISTS contact (
+  id TEXT AS Uuid PRIMARY KEY NOT NULL,
+  name TEXT NOT NULL
+);
+
+insertContact:
+INSERT OR REPLACE INTO contact(id, name) VALUES (?, ?);
+
+selectAll:
+SELECT * FROM contact;

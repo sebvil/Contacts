@@ -21,6 +21,8 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":routes"))
             implementation(project(":domain"))
+            api(project(":app:database"))
+            implementation(libs.sqldelight.coroutines)
 
             implementation(libs.bundles.ktorClient)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
@@ -35,6 +37,12 @@ kotlin {
 
         jsMain.dependencies {
             implementation(libs.wrappers.browser)
+        }
+
+        webMain.dependencies {
+            // CIO (used on jvm/android) requires a real Node.js `net` module, which browsers
+            // don't have. The Js engine wraps `fetch` instead, which browsers support natively.
+            implementation(libs.ktor.client.js)
         }
 
         commonTest.dependencies {

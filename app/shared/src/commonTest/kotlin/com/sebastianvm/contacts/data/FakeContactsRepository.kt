@@ -23,4 +23,6 @@ class FakeContactsRepository(
         getContactsError?.let { throw it }
         emit(contacts.toList())
     }
+
+    override suspend fun refreshContacts() = Unit
 }

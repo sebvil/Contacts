@@ -1,5 +1,6 @@
 package com.sebastianvm.contacts.networking
 
+import com.sebastianvm.contacts.core.corutines.runCatchingSuspend
 import com.sebastianvm.contacts.dto.ContactsResponse
 import com.sebastianvm.contacts.routes.Contacts
 import dev.zacsweers.metro.AppScope
@@ -10,6 +11,7 @@ import io.ktor.client.plugins.resources.get
 
 @ContributesBinding(AppScope::class)
 internal class KtorContactsApiService(private val client: HttpClient) : ContactsApiService {
-    override suspend fun fetchContacts(): List<ContactsResponse> =
+    override suspend fun fetchContacts(): Result<List<ContactsResponse>> = runCatchingSuspend {
         client.get(Contacts).body<List<ContactsResponse>>()
+    }
 }

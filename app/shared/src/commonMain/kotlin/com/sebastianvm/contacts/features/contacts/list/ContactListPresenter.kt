@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 @CircuitInject(ContactListScreen::class, AppScope::class)
 @Inject
-class ContactListPresenter(private val contactsRepository: ContactsRepository) :
+class ContactListPresenter(private val contactsRepository: suspend () -> ContactsRepository) :
     Presenter<ContactListState, ContactListUiEvent> {
 
     private companion object {
@@ -54,12 +54,15 @@ class ContactListPresenter(private val contactsRepository: ContactsRepository) :
                     // kill.
                     minLoadingDurationJob = producerScope.launch { delay(MIN_LOADING_DURATION) }
                 }
-                contactsRepository
+                contactsRepository()
                     .getContacts()
                     .map<List<Contact>, ContactListState> { contacts ->
                         ContactListState.Data(contacts.map { it.toContactListItemState() })
                     }
-                    .catch { emit(ContactListState.Error) }
+                    .catch {
+                        println(it)
+                        emit(ContactListState.Error)
+                    }
                     .collect { newState ->
                         showLoadingJob.cancel()
                         minLoadingDurationJob?.join()
