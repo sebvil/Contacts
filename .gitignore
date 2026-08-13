@@ -21,3 +21,4 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
 **/.env
+*.db

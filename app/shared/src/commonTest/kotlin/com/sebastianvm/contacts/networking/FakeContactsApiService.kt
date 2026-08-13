@@ -6,5 +6,8 @@ class FakeContactsApiService(initialContacts: List<ContactsResponse> = emptyList
     ContactsApiService {
     private val contacts = initialContacts.toMutableList()
 
-    override suspend fun fetchContacts(): List<ContactsResponse> = contacts.toList()
+    var fetchContactsError: Throwable? = null
+
+    override suspend fun fetchContacts(): Result<List<ContactsResponse>> =
+        fetchContactsError?.let { Result.failure(it) } ?: Result.success(contacts.toList())
 }

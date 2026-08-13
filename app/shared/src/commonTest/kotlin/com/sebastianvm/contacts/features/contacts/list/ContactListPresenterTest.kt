@@ -141,4 +141,4 @@ val ContactListPresenterTest by testSuite {
 private fun makeSubject(
     contactsRepository: FakeContactsRepository =
         FakeContactsRepository(responseDelay = FAST_RESPONSE)
-) = ContactListPresenter(contactsRepository)
+) = ContactListPresenter { contactsRepository }

@@ -4,5 +4,5 @@ import com.sebastianvm.contacts.dto.ContactsResponse
 
 internal interface ContactsApiService {
 
-    suspend fun fetchContacts(): List<ContactsResponse>
+    suspend fun fetchContacts(): Result<List<ContactsResponse>>
 }
