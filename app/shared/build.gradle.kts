@@ -33,6 +33,7 @@ kotlin {
             implementation(libs.circuit.gestureNav)
             implementation(libs.circuit.codegen.annotations)
             implementation(libs.compose.material3.adaptiveNavigationSuite)
+            implementation(libs.compose.material3.adaptive)
         }
 
         jsMain.dependencies {
