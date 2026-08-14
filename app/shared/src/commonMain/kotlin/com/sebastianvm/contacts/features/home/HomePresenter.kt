@@ -3,6 +3,7 @@ package com.sebastianvm.contacts.features.home
 import androidx.compose.runtime.Composable
 import com.sebastianvm.contacts.features.base.EventHandler
 import com.sebastianvm.contacts.features.base.StaticPresenter
+import com.sebastianvm.contacts.features.contacts.create.CreateContactScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import dev.zacsweers.metro.AppScope
@@ -12,7 +13,12 @@ import dev.zacsweers.metro.AssistedInject
 
 @AssistedInject
 internal class HomePresenter(@Assisted val navigator: Navigator) : StaticPresenter<HomeEvent>() {
-    @Composable override fun presentEventHandler(): EventHandler<HomeEvent> = {}
+    @Composable
+    override fun presentEventHandler(): EventHandler<HomeEvent> = { event ->
+        when (event) {
+            HomeEvent.AddContact -> navigator.goTo(CreateContactScreen)
+        }
+    }
 
     @CircuitInject(HomeScreen::class, AppScope::class)
     @AssistedFactory

@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
@@ -47,10 +49,10 @@ import com.slack.circuit.foundation.CircuitContent
 import contacts.app.shared.generated.resources.Res
 import contacts.app.shared.generated.resources.add_contact
 import contacts.app.shared.generated.resources.collapse_rail
-import contacts.app.shared.generated.resources.collapsed
-import contacts.app.shared.generated.resources.contacts_tab
+import contacts.app.shared.generated.resources.collapsed_adjective
+import contacts.app.shared.generated.resources.contacts_tab_noun
 import contacts.app.shared.generated.resources.expand_rail
-import contacts.app.shared.generated.resources.expanded
+import contacts.app.shared.generated.resources.expanded_adjective
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.launch
@@ -89,18 +91,24 @@ internal class HomeUi : StaticUi<HomeEvent>() {
             }
 
         NavigationSuite(
-            navigationType,
+            navigationType = navigationType,
             fab = { isExpanded ->
-                AddContactButton(isExpanded)
+                AddContactButton(
+                    onClick = {
+                        handleEvent(HomeEvent.AddContact)
+                    },
+                    isExpanded,
+                )
             },
             navigationIcons = {
                 NavigationItem(
                     navigationType = navigationType,
                     selected = true,
                     icon = Icons.People,
-                    text = stringResource(Res.string.contacts_tab),
+                    text = stringResource(Res.string.contacts_tab_noun),
                 )
             },
+            modifier = modifier,
         ) { padding ->
             CircuitContent(
                 screen = ContactListScreen,
@@ -191,6 +199,7 @@ internal class HomeUi : StaticUi<HomeEvent>() {
                 NavigationBar { navigationIcons() }
             },
             floatingActionButton = fab,
+            contentWindowInsets = WindowInsets.navigationBars,
         ) { padding ->
             content(padding)
         }
@@ -228,9 +237,9 @@ internal class HomeUi : StaticUi<HomeEvent>() {
             }
         val stateDescription =
             if (navigationRailState.currentValue == WideNavigationRailValue.Expanded) {
-                stringResource(Res.string.expanded)
+                stringResource(Res.string.expanded_adjective)
             } else {
-                stringResource(Res.string.collapsed)
+                stringResource(Res.string.collapsed_adjective)
             }
         IconButton(
             modifier =
@@ -263,10 +272,10 @@ internal class HomeUi : StaticUi<HomeEvent>() {
     }
 
     @Composable
-    private fun AddContactButton(isExpanded: Boolean) {
+    private fun AddContactButton(onClick: () -> Unit, isExpanded: Boolean) {
         if (isExpanded) {
             ExtendedFloatingActionButton(
-                onClick = {},
+                onClick = onClick,
                 icon = {
                     Icon(Icons.Add, null)
                 },
@@ -277,7 +286,7 @@ internal class HomeUi : StaticUi<HomeEvent>() {
             )
         } else {
             FloatingActionButton(
-                onClick = {},
+                onClick = onClick,
                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
             ) {
                 Icon(Icons.Add, stringResource(Res.string.add_contact))

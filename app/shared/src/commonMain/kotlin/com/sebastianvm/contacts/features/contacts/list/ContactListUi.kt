@@ -1,5 +1,6 @@
 package com.sebastianvm.contacts.features.contacts.list
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,12 +16,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.sebastianvm.contacts.designsys.components.ContactListItem
 import com.sebastianvm.contacts.features.base.EventHandler
 import com.sebastianvm.contacts.features.base.Ui
 import com.slack.circuit.codegen.annotations.CircuitInject
 import contacts.app.shared.generated.resources.Res
-import contacts.app.shared.generated.resources.contacts_tab
+import contacts.app.shared.generated.resources.contacts_tab_noun
 import contacts.app.shared.generated.resources.something_went_wrong
 import contacts.app.shared.generated.resources.try_again
 import dev.zacsweers.metro.AppScope
@@ -37,9 +39,9 @@ internal class ContactListUi : Ui<ContactListState, ContactListUiEvent>() {
         modifier: Modifier,
     ) {
         Scaffold(
-            modifier,
+            modifier.background(Color.Red),
             topBar = {
-                TopAppBar(title = { Text(text = stringResource(Res.string.contacts_tab)) })
+                TopAppBar(title = { Text(text = stringResource(Res.string.contacts_tab_noun)) })
             },
         ) { paddingValues ->
             val contentModifier = Modifier.fillMaxSize().padding(paddingValues)
