@@ -5,13 +5,16 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.update
 
 class FakeContactsRepository(
     initialContacts: List<Contact> = emptyList(),
     private val responseDelay: Duration = 1.milliseconds,
 ) : ContactsRepository {
-    private val contacts = initialContacts.toMutableList()
+    private val contacts = MutableStateFlow(initialContacts)
 
     var getContactsError: Throwable? = null
 
@@ -21,8 +24,14 @@ class FakeContactsRepository(
         // this flow resolves synchronously.
         delay(responseDelay)
         getContactsError?.let { throw it }
-        emit(contacts.toList())
+        emitAll(contacts)
     }
 
     override suspend fun refreshContacts() = Unit
+
+    override suspend fun createContact(contact: Contact) {
+        contacts.update { contactList ->
+            (contactList + contact).distinctBy { it.id }
+        }
+    }
 }
