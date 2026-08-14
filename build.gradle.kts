@@ -56,7 +56,8 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
                     "com.android." !in fullName &&
                         "org.jacoco" !in fullName &&
                         "hot-reload" !in fullName &&
-                        "kotlin-build-tools" !in fullName
+                        "kotlin-build-tools" !in fullName &&
+                        "junit-platform-launcher" !in fullName
                 }
                 .forEach {
                     appendLine(
@@ -75,7 +76,11 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
             "beta" !in currentVersion.lowercase() &&
                 "beta" in candidate.version.lowercase() &&
                 "androidx" !in candidate.group.lowercase()
-        isRejectableAlpha || isRejectableBeta
+        val isRejectableRC =
+            "rc" !in currentVersion.lowercase() &&
+                "rc" in candidate.version.lowercase() &&
+                "androidx" !in candidate.group.lowercase()
+        isRejectableAlpha || isRejectableBeta || isRejectableRC
     }
 }
 
