@@ -10,4 +10,6 @@ interface ContactsRepository {
 
     /** Fetches contacts from the network and persists them locally, if successful. */
     suspend fun refreshContacts()
+
+    suspend fun createContact(contact: Contact)
 }

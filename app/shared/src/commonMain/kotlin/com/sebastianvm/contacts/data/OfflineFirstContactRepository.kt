@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @ContributesBinding(AppScope::class)
 internal class OfflineFirstContactRepository(
     localContactsDataSource: LocalContactsDataSource,
-    contactsApiService: ContactsApiService,
+    private val contactsApiService: ContactsApiService,
 ) : ContactsRepository {
 
     private val contactsSource =
@@ -28,5 +28,9 @@ internal class OfflineFirstContactRepository(
 
     override suspend fun refreshContacts() {
         contactsSource.refresh()
+    }
+
+    override suspend fun createContact(contact: Contact) {
+        val _ = contactsApiService.createContact(contact)
     }
 }
