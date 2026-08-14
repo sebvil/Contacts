@@ -1,11 +1,28 @@
 <resources>
-    <string name="app_name">Contacts</string>
-    <string name="contacts_tab">Contacts</string>
+    <!-- App display name. Not currently referenced via stringResource in commonMain UI code. -->
+    <string name="app_name_noun">Contacts</string>
+    <!-- Title of the contacts list screen: TopAppBar title in ContactListUi, and nav rail/bar item label in HomeUi. -->
+    <string name="contacts_tab_noun">Contacts</string>
+    <!-- Error message shown in ContactListUi when loading contacts fails. -->
     <string name="something_went_wrong">Something went wrong.</string>
+    <!-- Label of the retry button shown alongside something_went_wrong in ContactListUi. -->
     <string name="try_again">Try again</string>
+    <!-- Label and content description of the FAB in HomeUi that navigates to the create-contact screen. -->
     <string name="add_contact">Add contact</string>
+    <!-- Content description for the button in HomeUi that collapses the wide navigation rail. -->
     <string name="collapse_rail">Collapse rail</string>
+    <!-- Content description for the button in HomeUi that expands the wide navigation rail. -->
     <string name="expand_rail">Expand rail</string>
-    <string name="expanded">Expanded</string>
-    <string name="collapsed">Collapsed</string>
+    <!-- Accessibility state description announced in HomeUi when the wide navigation rail is expanded. -->
+    <string name="expanded_adjective">Expanded</string>
+    <!-- Accessibility state description announced in HomeUi when the wide navigation rail is collapsed. -->
+    <string name="collapsed_adjective">Collapsed</string>
+    <!-- Title of the create-contact screen (TopAppBar title) in CreateContactUi. -->
+    <string name="create_contact">Create Contact</string>
+    <!-- Content description of the back navigation icon on CreateContactUi's TopAppBar. -->
+    <string name="back_noun">Back</string>
+    <!-- Label of the save button on CreateContactUi's TopAppBar. -->
+    <string name="save_verb">Save</string>
+    <!-- Label of the name text field on CreateContactUi. -->
+    <string name="name_noun">Name</string>
 </resources>
