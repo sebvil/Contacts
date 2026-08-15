@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+"$PROJECT_ROOT/gradlew" --quiet ":ktScripts:installDist" && "$PROJECT_ROOT/ktScripts/build/install/ktScripts/bin/ktScripts" "$@"

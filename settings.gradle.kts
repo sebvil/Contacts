@@ -54,3 +54,5 @@ include(":fixtures")
 include(":app:database")
 
 include(":core")
+
+include("ktScripts")
