@@ -4,9 +4,11 @@ package com.sebastianvm.contacts.app.database
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOne
 import com.sebastianvm.contacts.domain.Contact
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -32,11 +34,14 @@ public class SqlDelightLocalContactsDataSource(
             }
         }
     }
-}
 
-private fun com.sebastianvm.contacts.app.database.Contact.toDomainContact(): Contact {
-    return Contact(
-        id = id,
-        name = name,
-    )
+    override fun getContact(id: Uuid): Flow<Contact> =
+        contactsQueries.selectById(id).asFlow().mapToOne(ioDispatcher).map { it.toDomainContact() }
+
+    private fun com.sebastianvm.contacts.app.database.Contact.toDomainContact(): Contact {
+        return Contact(
+            id = id,
+            name = name,
+        )
+    }
 }
