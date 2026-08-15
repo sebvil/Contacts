@@ -10,11 +10,15 @@ import com.sebastianvm.contacts.domain.Contact
 import com.sebastianvm.contacts.features.base.Presenter
 import com.sebastianvm.contacts.features.base.ScreenState
 import com.sebastianvm.contacts.features.base.withEventHandler
+import com.sebastianvm.contacts.features.contacts.details.ContactDetailsScreen
 import com.sebastianvm.contacts.ui.mappers.toContactListItemState
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.produceRetainedState
+import com.slack.circuit.runtime.Navigator
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,10 +26,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-@CircuitInject(ContactListScreen::class, AppScope::class)
-@Inject
-class ContactListPresenter(private val contactsRepository: suspend () -> ContactsRepository) :
-    Presenter<ContactListState, ContactListUiEvent> {
+@AssistedInject
+class ContactListPresenter(
+    @Assisted private val navigator: Navigator,
+    private val contactsRepository: suspend () -> ContactsRepository,
+) : Presenter<ContactListState, ContactListUiEvent> {
 
     private companion object {
         val SHOW_LOADING_DELAY = 200.milliseconds
@@ -76,7 +81,17 @@ class ContactListPresenter(private val contactsRepository: suspend () -> Contact
                     is ContactListUiEvent.TryAgain -> {
                         retryCount++
                     }
+
+                    is ContactListUiEvent.ContactClicked -> {
+                        navigator.goTo(ContactDetailsScreen(event.contactId))
+                    }
                 }
             }
+    }
+
+    @CircuitInject(ContactListScreen::class, AppScope::class)
+    @AssistedFactory
+    fun interface Factory {
+        fun create(navigator: Navigator): ContactListPresenter
     }
 }

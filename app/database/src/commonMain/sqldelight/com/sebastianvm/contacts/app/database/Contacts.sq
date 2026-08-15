@@ -10,3 +10,6 @@ INSERT OR REPLACE INTO contact(id, name) VALUES (?, ?);
 
 selectAll:
 SELECT * FROM contact;
+
+selectById:
+SELECT * FROM contact WHERE id = :id;

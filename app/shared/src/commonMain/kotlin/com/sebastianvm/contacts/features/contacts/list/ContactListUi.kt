@@ -1,6 +1,7 @@
 package com.sebastianvm.contacts.features.contacts.list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +51,13 @@ internal class ContactListUi : Ui<ContactListState, ContactListUiEvent>() {
                 is ContactListState.Data -> {
                     LazyColumn(modifier = contentModifier) {
                         items(state.contacts, key = { it.id }) { contact ->
-                            ContactListItem(contact)
+                            ContactListItem(
+                                contact,
+                                modifier =
+                                    Modifier.clickable {
+                                        handleEvent(ContactListUiEvent.ContactClicked(contact.id))
+                                    },
+                            )
                         }
                     }
                 }

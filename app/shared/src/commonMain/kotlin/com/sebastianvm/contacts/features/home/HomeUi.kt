@@ -45,7 +45,9 @@ import com.sebastianvm.contacts.features.base.EventHandler
 import com.sebastianvm.contacts.features.base.StaticUi
 import com.sebastianvm.contacts.features.contacts.list.ContactListScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
-import com.slack.circuit.foundation.CircuitContent
+import com.slack.circuit.foundation.NavigableCircuitContent
+import com.slack.circuit.foundation.navstack.rememberSaveableNavStack
+import com.slack.circuit.foundation.rememberCircuitNavigator
 import contacts.app.shared.generated.resources.Res
 import contacts.app.shared.generated.resources.add_contact
 import contacts.app.shared.generated.resources.collapse_rail
@@ -110,8 +112,11 @@ internal class HomeUi : StaticUi<HomeEvent>() {
             },
             modifier = modifier,
         ) { padding ->
-            CircuitContent(
-                screen = ContactListScreen,
+            val navStack = rememberSaveableNavStack(root = ContactListScreen)
+            val navigator = rememberCircuitNavigator(navStack) {}
+            NavigableCircuitContent(
+                navigator = navigator,
+                navStack = navStack,
                 modifier = Modifier.fillMaxSize().padding(padding),
             )
         }

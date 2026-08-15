@@ -7,11 +7,12 @@ import com.sebastianvm.contacts.networking.ContactsApiService
 import com.sebastianvm.contacts.networking.toContact
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.flow.Flow
 
 @ContributesBinding(AppScope::class)
 internal class OfflineFirstContactRepository(
-    localContactsDataSource: LocalContactsDataSource,
+    private val localContactsDataSource: LocalContactsDataSource,
     private val contactsApiService: ContactsApiService,
 ) : ContactsRepository {
 
@@ -33,4 +34,6 @@ internal class OfflineFirstContactRepository(
     override suspend fun createContact(contact: Contact) {
         val _ = contactsApiService.createContact(contact)
     }
+
+    override fun getContact(id: Uuid): Flow<Contact> = localContactsDataSource.getContact(id)
 }

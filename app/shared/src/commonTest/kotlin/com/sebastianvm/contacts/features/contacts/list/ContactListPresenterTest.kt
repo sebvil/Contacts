@@ -4,6 +4,7 @@ import com.sebastianvm.contacts.data.FakeContactsRepository
 import com.sebastianvm.contacts.designsys.components.ContactListItem
 import com.sebastianvm.contacts.fixtures.makeContacts
 import com.sebastianvm.contacts.testutils.awaitState
+import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
@@ -140,5 +141,6 @@ val ContactListPresenterTest by testSuite {
 
 private fun makeSubject(
     contactsRepository: FakeContactsRepository =
-        FakeContactsRepository(responseDelay = FAST_RESPONSE)
-) = ContactListPresenter { contactsRepository }
+        FakeContactsRepository(responseDelay = FAST_RESPONSE),
+    navigator: FakeNavigator = FakeNavigator(ContactListScreen),
+) = ContactListPresenter(navigator) { contactsRepository }

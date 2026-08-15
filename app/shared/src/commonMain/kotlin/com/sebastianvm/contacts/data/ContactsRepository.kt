@@ -1,6 +1,7 @@
 package com.sebastianvm.contacts.data
 
 import com.sebastianvm.contacts.domain.Contact
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.flow.Flow
 
 interface ContactsRepository {
@@ -12,4 +13,6 @@ interface ContactsRepository {
     suspend fun refreshContacts()
 
     suspend fun createContact(contact: Contact)
+
+    fun getContact(id: Uuid): Flow<Contact>
 }

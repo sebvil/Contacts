@@ -3,11 +3,13 @@ package com.sebastianvm.contacts.data
 import com.sebastianvm.contacts.domain.Contact
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 class FakeContactsRepository(
@@ -32,6 +34,12 @@ class FakeContactsRepository(
     override suspend fun createContact(contact: Contact) {
         contacts.update { contactList ->
             (contactList + contact).distinctBy { it.id }
+        }
+    }
+
+    override fun getContact(id: Uuid): Flow<Contact> {
+        return contacts.map {
+            it.find { contact -> contact.id == id } ?: throw NoSuchElementException()
         }
     }
 }
