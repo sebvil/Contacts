@@ -19,9 +19,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":routes"))
-            implementation(project(":domain"))
-            api(project(":app:database"))
+            implementation(project(":app:routes"))
+            implementation(project(":app:domain"))
+            api(project(":app:client:database"))
             implementation(libs.sqldelight.coroutines)
 
             implementation(libs.bundles.ktorClient)
@@ -47,7 +47,7 @@ kotlin {
         }
 
         commonTest.dependencies {
-            implementation(project(":fixtures"))
+            implementation(project(":app:fixtures"))
             implementation(libs.ktor.client.mock)
             implementation(libs.turbine)
             implementation(libs.circuit.test)

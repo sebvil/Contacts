@@ -22,10 +22,10 @@ import com.sebastianvm.contacts.designsys.components.ContactListItem
 import com.sebastianvm.contacts.features.base.EventHandler
 import com.sebastianvm.contacts.features.base.Ui
 import com.slack.circuit.codegen.annotations.CircuitInject
-import contacts.app.shared.generated.resources.Res
-import contacts.app.shared.generated.resources.contacts_tab_noun
-import contacts.app.shared.generated.resources.something_went_wrong
-import contacts.app.shared.generated.resources.try_again
+import contacts.app.client.shared.generated.resources.Res
+import contacts.app.client.shared.generated.resources.contacts_tab_noun
+import contacts.app.client.shared.generated.resources.something_went_wrong
+import contacts.app.client.shared.generated.resources.try_again
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import org.jetbrains.compose.resources.stringResource

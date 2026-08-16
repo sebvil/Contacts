@@ -5,8 +5,7 @@ data class GradleVersionsCatalog(
     val libraries: List<TomlTableSection<Library>>,
     val bundles: List<TomlTableSection<Bundle>>,
     val plugins: List<TomlTableSection<Plugin>>,
-
-    ) {
+) {
 
     class Builder {
         var versions: List<TomlTableSection<Version>> = emptyList()
@@ -22,6 +21,5 @@ data class GradleVersionsCatalog(
                 plugins = plugins,
             )
         }
-
     }
 }

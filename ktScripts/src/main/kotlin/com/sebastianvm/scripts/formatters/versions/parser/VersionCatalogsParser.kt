@@ -1,3 +1,5 @@
+@file:Suppress("UnsafeCallOnNullableType")
+
 package com.sebastianvm.scripts.formatters.versions.parser
 
 import com.github.ajalt.clikt.core.CliktCommand
@@ -13,48 +15,50 @@ import org.intellij.lang.annotations.Language
 class VersionCatalogsParser {
     private var currentLineIndex = 0
 
-
     context(command: CliktCommand)
     fun parse(fileName: String, lines: List<String>): GradleVersionsCatalog {
-        return try {
-            GradleVersionsCatalog.Builder().apply {
-                while (currentLineIndex < lines.size) {
-                    val line = lines[currentLineIndex]
-                    val tableName = TableName.valueOf(line.trim('[', ']').uppercase())
-                    when (tableName) {
-                        TableName.VERSIONS -> versions = parseVersions(lines)
-                        TableName.LIBRARIES -> libraries = parseLibraries(lines)
-                        TableName.BUNDLES -> bundles = parseBundles(lines)
-                        TableName.PLUGINS -> plugins = parsePlugins(lines)
+        return runCatching {
+                GradleVersionsCatalog.Builder()
+                    .apply {
+                        while (currentLineIndex < lines.size) {
+                            val line = lines[currentLineIndex]
+                            val tableName = TableName.valueOf(line.trim('[', ']').uppercase())
+                            when (tableName) {
+                                TableName.VERSIONS -> versions = parseVersions(lines)
+                                TableName.LIBRARIES -> libraries = parseLibraries(lines)
+                                TableName.BUNDLES -> bundles = parseBundles(lines)
+                                TableName.PLUGINS -> plugins = parsePlugins(lines)
+                            }
+                        }
                     }
-                }
-            }.build()
-        } catch (e: Exception) {
-            command.echo("Error parsing $fileName:${currentLineIndex+1}")
-            throw e
-        }
+                    .build()
+            }
+            .onFailure {
+                command.echo("Error parsing $fileName:${currentLineIndex+1}")
+            }
+            .getOrThrow()
     }
 
     private fun parseVersions(lines: List<String>): List<TomlTableSection<Version>> =
-        parseSingleLineElementsTable(lines, """(?<name>.*)="(?<version>.*)"""") { groups, comments ->
+        parseSingleLineElementsTable(lines, """(?<name>.*)="(?<version>.*)"""") { groups, comments
+            ->
             Version(
                 name = groups["name"]!!.value,
                 value = groups["version"]!!.value,
-                comments = comments.toList()
+                comments = comments.toList(),
             )
         }
 
-    context(command: CliktCommand)
     private fun parseLibraries(lines: List<String>): List<TomlTableSection<Library>> =
         parseSingleLineElementsTable(
             lines,
-            """(?<name>.*)=\{module="(?<module>.*)",version.ref="(?<version>.*)"}"""
+            """(?<name>.*)=\{module="(?<module>.*)",version.ref="(?<version>.*)"}""",
         ) { groups, comments ->
             Library(
                 name = groups["name"]!!.value,
                 module = groups["module"]!!.value,
                 version = groups["version"]!!.value,
-                comments = comments.toList()
+                comments = comments.toList(),
             )
         }
 
@@ -67,15 +71,16 @@ class VersionCatalogsParser {
                 currentLineIndex++
                 currentLine = lines[currentLineIndex]
             }
-            val bundleString = bundleLines.joinToString(separator = "").replace(Regex("""["\s\n]"""), "") + "]"
-            val parsedBundle = Regex("""(?<name>.*)=\[(?<libraries>.*)]""").find(bundleString)
-                ?: error("Could not parse bundle: $bundleString")
+            val bundleString =
+                bundleLines.joinToString(separator = "").replace(Regex("""["\s\n]"""), "") + "]"
+            val parsedBundle =
+                Regex("""(?<name>.*)=\[(?<libraries>.*)]""").find(bundleString)
+                    ?: error("Could not parse bundle: $bundleString")
             Bundle(
                 name = parsedBundle.groups["name"]!!.value,
                 libraries = parsedBundle.groups["libraries"]!!.value.split(",").sorted(),
-                comments = comments.toList()
+                comments = comments.toList(),
             )
-
         }
     }
 
@@ -88,31 +93,29 @@ class VersionCatalogsParser {
                 name = groups["name"]!!.value,
                 id = groups["id"]!!.value,
                 version = groups["version"]?.value,
-                comments = comments.toList()
+                comments = comments.toList(),
             )
         }
 
-
-    private fun <T: VersionCatalogEntry> parseSingleLineElementsTable(
+    private fun <T : VersionCatalogEntry> parseSingleLineElementsTable(
         lines: List<String>,
         @Language("RegExp") vararg regex: String,
-        buildElement: (groups: MatchGroupCollection, comments: List<String>) -> T
+        buildElement: (groups: MatchGroupCollection, comments: List<String>) -> T,
     ): List<TomlTableSection<T>> {
         return parseTable(lines) { comments ->
             val currentLine = lines[currentLineIndex]
             val strippedLine = currentLine.replace(" ", "")
-            val match = regex.firstNotNullOfOrNull {
-                Regex(it).find(strippedLine)
-            } ?: error("Couldn't parse $currentLine at $currentLine")
+            val match =
+                regex.firstNotNullOfOrNull {
+                    Regex(it).find(strippedLine)
+                } ?: error("Couldn't parse $currentLine at $currentLine")
             buildElement(match.groups, comments)
-
-
         }
     }
 
-    private fun <T: VersionCatalogEntry> parseTable(
+    private fun <T : VersionCatalogEntry> parseTable(
         lines: List<String>,
-        buildElement: (comments: List<String>) -> T
+        buildElement: (comments: List<String>) -> T,
     ): List<TomlTableSection<T>> {
         currentLineIndex++
         var currentLine = lines[currentLineIndex]
@@ -153,9 +156,10 @@ class VersionCatalogsParser {
         return sections
     }
 
-
     private enum class TableName {
-        VERSIONS, LIBRARIES, BUNDLES, PLUGINS
+        VERSIONS,
+        LIBRARIES,
+        BUNDLES,
+        PLUGINS,
     }
-
 }

@@ -9,8 +9,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":domain"))
-            implementation(project(":routes"))
+            implementation(project(":app:domain"))
+            implementation(project(":app:routes"))
         }
     }
 }
