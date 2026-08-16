@@ -6,18 +6,19 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.sebastianvm.scripts.formatters.versions.model.TomlTableSection
 import com.sebastianvm.scripts.formatters.versions.model.VersionCatalogEntry
 import com.sebastianvm.scripts.formatters.versions.parser.VersionCatalogsParser
+import com.sebastianvm.scripts.util.projectRoot
 import java.io.File
 
 class FormatVersionCatalogs : CliktCommand(name = "versions") {
 
-    val dryRun by
+    private val dryRun by
         option(
                 "--dryRun",
                 "-n",
                 help = "Prints out the formatted file without actually overwriting it",
             )
             .flag(default = false)
-    private val projectRoot by option(envvar = "PROJECT_ROOT")
+    private val projectRoot by projectRoot()
 
     override fun run() {
         echo("Formatting version catalogs")

@@ -27,7 +27,7 @@ internal fun Project.configureWebTargets(isExecutable: Boolean) {
             configureJs()
         }
     }
-    configureKotlin<KotlinMultiplatformExtension>(isLibrary = !isExecutable, hasCompose = true)
+    configureKotlin<KotlinMultiplatformExtension>(hasCompose = true)
 }
 
 private fun KotlinJsTargetDsl.configureJs() {

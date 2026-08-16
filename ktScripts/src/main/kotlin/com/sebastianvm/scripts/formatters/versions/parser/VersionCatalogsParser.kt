@@ -10,6 +10,7 @@ import com.sebastianvm.scripts.formatters.versions.model.Plugin
 import com.sebastianvm.scripts.formatters.versions.model.TomlTableSection
 import com.sebastianvm.scripts.formatters.versions.model.Version
 import com.sebastianvm.scripts.formatters.versions.model.VersionCatalogEntry
+import java.util.Locale
 import org.intellij.lang.annotations.Language
 
 class VersionCatalogsParser {
@@ -22,12 +23,18 @@ class VersionCatalogsParser {
                     .apply {
                         while (currentLineIndex < lines.size) {
                             val line = lines[currentLineIndex]
-                            val tableName = TableName.valueOf(line.trim('[', ']').uppercase())
+                            val tableName =
+                                TableName.valueOf(
+                                    line.trim('[', ']').replaceFirstChar {
+                                        if (it.isLowerCase()) it.titlecase(Locale.ROOT)
+                                        else it.toString()
+                                    }
+                                )
                             when (tableName) {
-                                TableName.VERSIONS -> versions = parseVersions(lines)
-                                TableName.LIBRARIES -> libraries = parseLibraries(lines)
-                                TableName.BUNDLES -> bundles = parseBundles(lines)
-                                TableName.PLUGINS -> plugins = parsePlugins(lines)
+                                TableName.Versions -> versions = parseVersions(lines)
+                                TableName.Libraries -> libraries = parseLibraries(lines)
+                                TableName.Bundles -> bundles = parseBundles(lines)
+                                TableName.Plugins -> plugins = parsePlugins(lines)
                             }
                         }
                     }
@@ -157,9 +164,9 @@ class VersionCatalogsParser {
     }
 
     private enum class TableName {
-        VERSIONS,
-        LIBRARIES,
-        BUNDLES,
-        PLUGINS,
+        Versions,
+        Libraries,
+        Bundles,
+        Plugins,
     }
 }

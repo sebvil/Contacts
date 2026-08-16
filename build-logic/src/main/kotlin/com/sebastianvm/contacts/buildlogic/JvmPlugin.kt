@@ -16,7 +16,7 @@ internal inline fun <
     configure<E> {
         configureJava(this@configureJavaAndKotlin)
     }
-    configureKotlin<E>(isLibrary = isLibrary, hasCompose = hasCompose)
+    configureKotlin<E>(hasCompose = hasCompose)
 
     dependencies {
         testImplementation(bundle("unitTests"))

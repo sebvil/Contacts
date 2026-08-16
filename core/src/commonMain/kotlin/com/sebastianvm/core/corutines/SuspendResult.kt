@@ -1,4 +1,4 @@
-package com.sebastianvm.contacts.core.corutines
+package com.sebastianvm.core.corutines
 
 import kotlinx.coroutines.CancellationException
 

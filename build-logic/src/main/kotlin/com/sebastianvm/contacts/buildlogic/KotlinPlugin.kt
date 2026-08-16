@@ -9,14 +9,13 @@ import org.jetbrains.kotlin.gradle.dsl.HasConfigurableKotlinCompilerOptions
 
 @OptIn(ExperimentalMetroGradleApi::class)
 internal inline fun <reified E : HasConfigurableKotlinCompilerOptions<*>> Project.configureKotlin(
-    isLibrary: Boolean,
-    hasCompose: Boolean,
+    hasCompose: Boolean
 ) {
     alias("metro")
     alias("testBalloon")
 
     configure<E> {
-        this.configureKotlin(isLibrary)
+        this.configureKotlin()
     }
     configureDetekt(includeComposeRules = hasCompose)
 
@@ -25,15 +24,14 @@ internal inline fun <reified E : HasConfigurableKotlinCompilerOptions<*>> Projec
     }
 }
 
-private inline fun <reified E : HasConfigurableKotlinCompilerOptions<*>> E.configureKotlin(
-    isLibrary: Boolean
-) {
+private inline fun <reified E : HasConfigurableKotlinCompilerOptions<*>> E.configureKotlin() {
     compilerOptions {
         freeCompilerArgs.addAll(
             "-Wextra",
             "-Xintrinsic-const-evaluation",
             "-Xconsistent-data-class-copy-visibility",
             "-Xreturn-value-checker=full",
+            "-Xcontext-sensitive-resolution",
             // errors rn, try later
             // "-Xallow-returns-result-of",
             "-Werror",
