@@ -51,5 +51,5 @@ internal fun Project.configureKmpLibrary(
 
     additionalConfiguration()
 
-    configureKotlin<KotlinMultiplatformExtension>(isLibrary = true, hasCompose = useCompose)
+    configureKotlin<KotlinMultiplatformExtension>(hasCompose = useCompose)
 }

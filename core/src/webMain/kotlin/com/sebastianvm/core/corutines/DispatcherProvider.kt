@@ -1,6 +1,6 @@
 @file:Suppress("InjectDispatcher")
 
-package com.sebastianvm.contacts.core.corutines
+package com.sebastianvm.core.corutines
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo

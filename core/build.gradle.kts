@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.sebastianvm.contacts.core"
+        namespace = "com.sebastianvm.core"
     }
 
     sourceSets {
