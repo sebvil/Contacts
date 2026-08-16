@@ -33,26 +33,29 @@ plugins {
     id("io.github.ben-manes.versions.settings") version "0.61.0"
 }
 
-includeBuild("build-logic")
+includeBuild(Constants.BUILD_LOGIC_DIR_NAME)
 
-include(":app:androidApp")
+File(rootDir, "app").includeModules()
 
-include(":app:desktopApp")
+rootDir.includeModules()
 
-include(":app:shared")
+fun File.includeModules() {
+    if (!isDirectory) {
+        return
+    }
+    val isModule =
+        this != rootDir &&
+            name != Constants.BUILD_LOGIC_DIR_NAME &&
+            File(this, "build.gradle.kts").exists()
+    if (isModule) {
+        val relativePath = canonicalPath.substringAfter(rootDir.canonicalPath)
+        val moduleName = relativePath.replace(File.separator, ":")
+        include(moduleName)
+    } else {
+        listFiles { it.isDirectory }!!.forEach { it.includeModules() }
+    }
+}
 
-include(":app:webApp")
-
-include(":server")
-
-include(":routes")
-
-include(":domain")
-
-include(":fixtures")
-
-include(":app:database")
-
-include(":core")
-
-include("ktScripts")
+object Constants {
+    const val BUILD_LOGIC_DIR_NAME = "build-logic"
+}

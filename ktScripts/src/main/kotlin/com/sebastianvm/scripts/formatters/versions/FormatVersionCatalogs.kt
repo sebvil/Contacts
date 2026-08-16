@@ -1,7 +1,6 @@
 package com.sebastianvm.scripts.formatters.versions
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.sebastianvm.scripts.formatters.versions.model.TomlTableSection
@@ -11,10 +10,15 @@ import java.io.File
 
 class FormatVersionCatalogs : CliktCommand(name = "versions") {
 
-    val dryRun by option("--dryRun", "-n", help = "Prints out the formatted file without actually overwriting it").flag(
-        default = false
-    )
+    val dryRun by
+        option(
+                "--dryRun",
+                "-n",
+                help = "Prints out the formatted file without actually overwriting it",
+            )
+            .flag(default = false)
     private val projectRoot by option(envvar = "PROJECT_ROOT")
+
     override fun run() {
         echo("Formatting version catalogs")
         val catalogPath = "$projectRoot/gradle/libs.versions.toml"
@@ -28,7 +32,9 @@ class FormatVersionCatalogs : CliktCommand(name = "versions") {
             }
 
             appendTable("libraries", catalogs.libraries) { library ->
-                appendLine("""${library.name} = { module = "${library.module}", version.ref = "${library.version}" }""")
+                appendLine(
+                    """${library.name} = { module = "${library.module}", version.ref = "${library.version}" }"""
+                )
             }
 
             appendTable("bundles", catalogs.bundles) { bundle ->
@@ -39,7 +45,9 @@ class FormatVersionCatalogs : CliktCommand(name = "versions") {
 
             appendTable("plugins", catalogs.plugins) { plugin ->
                 if (plugin.version != null) {
-                    appendLine("""${plugin.name} = { id = "${plugin.id}", version.ref = "${plugin.version}" }""")
+                    appendLine(
+                        """${plugin.name} = { id = "${plugin.id}", version.ref = "${plugin.version}" }"""
+                    )
                 } else {
                     appendLine("""${plugin.name} = { id = "${plugin.id}" }""")
                 }
@@ -52,14 +60,12 @@ class FormatVersionCatalogs : CliktCommand(name = "versions") {
             versionCatalogsFile.writeText(newCatalogs)
             echo("Successfully formatted $catalogPath")
         }
-
-
     }
 
     private fun <T : VersionCatalogEntry> StringBuilder.appendTable(
         name: String,
         table: List<TomlTableSection<T>>,
-        builder: StringBuilder.(T) -> Unit
+        builder: StringBuilder.(T) -> Unit,
     ) {
         appendLine("[$name]")
         table.forEach { section ->
@@ -69,7 +75,7 @@ class FormatVersionCatalogs : CliktCommand(name = "versions") {
 
     private fun <T : VersionCatalogEntry> StringBuilder.appendSection(
         section: TomlTableSection<T>,
-        builder: StringBuilder.(T) -> Unit
+        builder: StringBuilder.(T) -> Unit,
     ) {
         section.comments.forEach {
             appendLine(it)
@@ -81,6 +87,5 @@ class FormatVersionCatalogs : CliktCommand(name = "versions") {
             builder(value)
         }
         appendLine()
-
     }
 }

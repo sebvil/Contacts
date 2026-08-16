@@ -35,7 +35,7 @@ kotlin {
         }
 
         commonMain.dependencies {
-            implementation(project(":domain"))
+            implementation(project(":app:domain"))
             implementation(libs.sqldelight.coroutines)
             api(project(":core"))
         }

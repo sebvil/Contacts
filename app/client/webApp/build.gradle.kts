@@ -5,8 +5,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.app.shared)
-
+            implementation(project(":app:client:shared"))
             implementation(libs.compose.ui)
         }
     }

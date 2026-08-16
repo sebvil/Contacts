@@ -19,8 +19,8 @@ import com.sebastianvm.contacts.designsys.theme.icons.Icons
 import com.sebastianvm.contacts.features.base.EventHandler
 import com.sebastianvm.contacts.features.base.Ui
 import com.slack.circuit.codegen.annotations.CircuitInject
-import contacts.app.shared.generated.resources.Res
-import contacts.app.shared.generated.resources.back_noun
+import contacts.app.client.shared.generated.resources.Res
+import contacts.app.client.shared.generated.resources.back_noun
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import org.jetbrains.compose.resources.stringResource

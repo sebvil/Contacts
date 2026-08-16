@@ -11,7 +11,6 @@ application {
     applicationDefaultJvmArgs = listOf("--enable-native-access=ALL-UNNAMED")
 }
 
-
 dependencies {
     implementation(libs.clikt)
 }

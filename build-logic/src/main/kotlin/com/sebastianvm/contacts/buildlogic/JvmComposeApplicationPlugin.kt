@@ -13,7 +13,7 @@ internal inline fun <
     ClientModulePlugin(useCompose = true, isMultiplatform = false).apply(this)
     configureJavaAndKotlin<E>(isLibrary = false, hasCompose = true)
     dependencies {
-        implementation(project(":app:shared"))
+        implementation(project(":app:client:shared"))
         implementation(library("compose.uiToolingPreview"))
     }
 }

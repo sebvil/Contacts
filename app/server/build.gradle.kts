@@ -15,12 +15,12 @@ application {
 }
 
 dependencies {
-    implementation(project(":routes"))
-    implementation(project(":domain"))
+    implementation(project(":app:routes"))
+    implementation(project(":app:domain"))
     implementation(libs.logback)
     implementation(libs.bundles.ktorServer)
     implementation(libs.bundles.exposed)
-    testImplementation(project(":fixtures"))
+    testImplementation(project(":app:fixtures"))
     testImplementation(libs.bundles.ktorClient)
     testImplementation(libs.ktor.serverTestHost)
     testImplementation(libs.testcontainers.postgresql)
