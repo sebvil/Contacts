@@ -59,6 +59,7 @@ Compose:
     active: true
   PreviewNaming:
     active: true
+
   PreviewPublic:
     active: true
   RememberContentMissing:

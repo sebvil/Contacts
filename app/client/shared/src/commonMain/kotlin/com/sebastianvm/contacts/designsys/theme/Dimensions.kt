@@ -12,6 +12,6 @@ object Dimensions {
     }
 
     val ListItemSpacing: Dp = Raw.sm8
-    val MaxButtonWidth: Dp = Raw.lg320
+    val ConstrainedMaxWidth: Dp = Raw.lg320
     val ScreenEdgePadding: Dp = Raw.sm16
 }

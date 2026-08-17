@@ -7,18 +7,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.tooling.preview.PreviewWrapper
+import androidx.compose.ui.tooling.preview.PreviewWrapperProvider
 import com.sebastianvm.contacts.designsys.theme.AppTheme
 import com.sebastianvm.contacts.designsys.theme.Dimensions
 
-@PreviewLightDark @PreviewFontScale annotation class PreviewComponent
+@PreviewWrapper(ComponentPreviewWrapperProvider::class)
+@PreviewLightDark
+@PreviewFontScale
+annotation class PreviewComponent
 
 @PreviewLightDark @PreviewFontScale @PreviewScreenSizes annotation class PreviewScreens
 
-@Composable
-fun ComponentPreview(modifier: Modifier = Modifier, content: @Composable (() -> Unit)) {
-    AppTheme {
-        Surface(modifier = modifier.padding(all = Dimensions.ScreenEdgePadding)) {
-            content()
+class ComponentPreviewWrapperProvider : PreviewWrapperProvider {
+    @Composable
+    override fun Wrap(content: @Composable (() -> Unit)) {
+        AppTheme {
+            Surface(modifier = Modifier.padding(all = Dimensions.ScreenEdgePadding)) {
+                content()
+            }
         }
     }
+}
+
+// PreviewWrapper does not seem to work in Intellij yet, so need to keep this.
+@Composable
+fun PreviewWrapper(content: @Composable () -> Unit) {
+    ComponentPreviewWrapperProvider().Wrap { content() }
 }
