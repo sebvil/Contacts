@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -17,12 +18,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.sebastianvm.contacts.designsys.components.CountryCode
+import com.sebastianvm.contacts.designsys.components.PhoneNumberTextField
 import com.sebastianvm.contacts.designsys.theme.icons.ArrowBack
 import com.sebastianvm.contacts.designsys.theme.icons.Icons
 import com.sebastianvm.contacts.features.base.EventHandler
 import com.sebastianvm.contacts.features.base.Ui
+import com.sebastianvm.contacts.ui.fillConstrainedMaxWidth
 import com.slack.circuit.codegen.annotations.CircuitInject
 import contacts.app.client.shared.generated.resources.Res
 import contacts.app.client.shared.generated.resources.back_noun
@@ -83,9 +91,20 @@ internal class CreateContactUi : Ui<CreateContactState, CreateContactUiEvent>() 
                     value = state.name,
                     onValueChange = { handleEvent(CreateContactUiEvent.NameChanged(it)) },
                     label = { Text(stringResource(Res.string.name_noun)) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillConstrainedMaxWidth(),
                     enabled = !state.isSaving,
                     singleLine = true,
+                )
+
+                val textFieldState = rememberTextFieldState()
+                var countryCode by remember {
+                    mutableStateOf(CountryCode.US)
+                }
+                PhoneNumberTextField(
+                    textFieldState = textFieldState,
+                    countryCode = countryCode,
+                    onCountryCodeChange = { countryCode = it },
+                    modifier = Modifier.fillConstrainedMaxWidth(),
                 )
             }
         }

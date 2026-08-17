@@ -27,6 +27,6 @@ internal class PreviewsContainer {
     @PreviewComponent
     @Composable
     private fun Preview() {
-        ComponentPreview { ContactListItem(State(Uuid.random(), "Elliot")) }
+        ContactListItem(State(Uuid.random(), "Elliot"))
     }
 }
