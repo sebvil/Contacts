@@ -4,11 +4,13 @@ import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.worker.WebWorkerDriver
 import app.cash.sqldelight.driver.worker.expected.Worker
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 
 @ContributesTo(AppScope::class)
-public interface SqlLiteDriverProvider {
+@BindingContainer
+public object SqlLiteDriverProvider {
 
     @OptIn(ExperimentalWasmJsInterop::class)
     @Provides

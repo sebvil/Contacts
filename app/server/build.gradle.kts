@@ -24,6 +24,7 @@ dependencies {
     testImplementation(libs.bundles.ktorClient)
     testImplementation(libs.ktor.serverTestHost)
     testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.testcontainers)
 }
 
 tasks.register<Exec>("startDb") {

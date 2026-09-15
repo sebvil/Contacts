@@ -5,9 +5,12 @@ import com.sebastianvm.contacts.routes.Routes
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
+import org.testcontainers.postgresql.PostgreSQLContainer
 
 @DependencyGraph(AppScope::class)
 interface TestAppGraph {
+
+    val postgres: PostgreSQLContainer
 
     suspend fun routes(): Routes
 

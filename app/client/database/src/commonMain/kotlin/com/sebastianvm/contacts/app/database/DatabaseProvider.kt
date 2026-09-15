@@ -3,17 +3,19 @@ package com.sebastianvm.contacts.app.database
 import app.cash.sqldelight.ColumnAdapter
 import app.cash.sqldelight.db.SqlDriver
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import kotlin.uuid.Uuid
 
 @ContributesTo(AppScope::class)
-public interface DatabaseProvider {
+@BindingContainer
+public object DatabaseProvider {
 
     @Provides
     @SingleIn(AppScope::class)
-    private fun provideDatabase(driver: SqlDriver): Database =
+    public fun provideDatabase(driver: SqlDriver): Database =
         Database(
             driver = driver,
             contactAdapter =
@@ -31,6 +33,5 @@ public interface DatabaseProvider {
         )
 
     @Provides
-    private fun provideContactQueries(database: Database): ContactsQueries =
-        database.contactsQueries
+    public fun provideContactQueries(database: Database): ContactsQueries = database.contactsQueries
 }
