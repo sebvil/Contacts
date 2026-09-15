@@ -1,6 +1,6 @@
 package com.sebastianvm.contacts.features.contacts.list
 
-import com.sebastianvm.contacts.features.base.Parcelize
 import com.sebastianvm.contacts.features.base.Screen
+import kotlinx.serialization.Serializable
 
-@Parcelize internal data object ContactListScreen : Screen
+@Serializable internal data object ContactListScreen : Screen
