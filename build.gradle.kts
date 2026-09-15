@@ -12,7 +12,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.ktor) apply false
     alias(libs.plugins.metro) apply false
-    alias(libs.plugins.kotlin.plugin.parcelize) apply false
     alias(libs.plugins.androidApp) apply false
     alias(libs.plugins.desktopApp) apply false
     alias(libs.plugins.kmpComposeLibrary) apply false
@@ -41,47 +40,11 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     checkForGradleUpdate = true
     outputDir = "build/dependencyUpdates"
     reportfileName = "report"
-
-    outputFormatter {
-        val res = buildString {
-            appendLine("The following dependencies are up to date:")
-            current.dependencies.forEach {
-                appendLine("- ${it.group}:${it.name}:${it.version}")
-            }
-            appendLine()
-            appendLine("The following dependencies can be updated:")
-            outdated.dependencies
-                .filter {
-                    val fullName = "${it.group}:${it.name}"
-                    "com.android." !in fullName &&
-                        "org.jacoco" !in fullName &&
-                        "hot-reload" !in fullName &&
-                        "kotlin-build-tools" !in fullName &&
-                        "junit-platform-launcher" !in fullName
-                }
-                .forEach {
-                    appendLine(
-                        "- ${it.group}:${it.name}:${it.version} -> ${it.available.release ?: it.available.milestone ?: it.available.integration}"
-                    )
-                }
+    rejectPreReleases = true
+    filterDeclaredConfigurations =
+        Spec<String> {
+            it != "androidJacocoAnt" && !it.startsWith("_internal-unified-test-platform")
         }
-
-        File(outputDir, "$reportfileName.txt").writeText(res)
-    }
-
-    rejectVersionIf {
-        val isRejectableAlpha =
-            "alpha" !in currentVersion.lowercase() && "alpha" in candidate.version.lowercase()
-        val isRejectableBeta =
-            "beta" !in currentVersion.lowercase() &&
-                "beta" in candidate.version.lowercase() &&
-                "androidx" !in candidate.group.lowercase()
-        val isRejectableRC =
-            "rc" !in currentVersion.lowercase() &&
-                "rc" in candidate.version.lowercase() &&
-                "androidx" !in candidate.group.lowercase()
-        isRejectableAlpha || isRejectableBeta || isRejectableRC
-    }
 }
 
 private fun BaseKotlinExtension.configure() {

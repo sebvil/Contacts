@@ -2,19 +2,11 @@ import dev.zacsweers.metro.gradle.ExperimentalMetroGradleApi
 
 plugins {
     alias(libs.plugins.kmpComposeLibrary)
-    alias(libs.plugins.kotlin.plugin.parcelize)
 }
 
 kotlin {
     android {
         namespace = "com.sebastianvm.contacts.app.shared"
-
-        compilerOptions {
-            freeCompilerArgs.addAll(
-                "-P",
-                "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=com.sebastianvm.contacts.features.base.Parcelize",
-            )
-        }
     }
 
     sourceSets {
