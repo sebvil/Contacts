@@ -12,7 +12,7 @@ interface ContactsRepository {
     /** Fetches contacts from the network and persists them locally, if successful. */
     suspend fun refreshContacts()
 
-    suspend fun createContact(contact: Contact)
+    suspend fun createContact(contactName: String)
 
     fun getContact(id: Uuid): Flow<Contact>
 }

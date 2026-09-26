@@ -31,9 +31,9 @@ class FakeContactsRepository(
 
     override suspend fun refreshContacts() = Unit
 
-    override suspend fun createContact(contact: Contact) {
+    override suspend fun createContact(contactName: String) {
         contacts.update { contactList ->
-            (contactList + contact).distinctBy { it.id }
+            (contactList + Contact(id = Uuid.random(), name = contactName)).distinctBy { it.id }
         }
     }
 

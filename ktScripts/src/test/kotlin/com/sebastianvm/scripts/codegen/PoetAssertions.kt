@@ -1,0 +1,31 @@
+package com.sebastianvm.scripts.codegen
+
+import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeName
+import io.kotest.matchers.collections.shouldNotContain
+import io.kotest.matchers.shouldBe
+
+fun ParameterSpec.shouldBeParameter(
+    typeName: TypeName,
+    parameterName: String,
+    defaultValue: CodeBlock? = null,
+) {
+    type shouldBe typeName
+    name shouldBe parameterName
+    defaultValue shouldBe defaultValue
+}
+
+fun PropertySpec.shouldBeDataClassProperty(
+    typeName: TypeName,
+    propertyName: String,
+    defaultValue: CodeBlock? = null,
+) {
+    mutable shouldBe false
+    modifiers shouldNotContain KModifier.PRIVATE
+    type shouldBe typeName
+    name shouldBe propertyName
+    defaultValue shouldBe defaultValue
+}
