@@ -31,8 +31,8 @@ internal class OfflineFirstContactRepository(
         contactsSource.refresh()
     }
 
-    override suspend fun createContact(contact: Contact) {
-        val _ = contactsApiService.createContact(contact)
+    override suspend fun createContact(contactName: String) {
+        val _ = contactsApiService.createContact(Contact(id = Uuid.random(), name = contactName))
     }
 
     override fun getContact(id: Uuid): Flow<Contact> = localContactsDataSource.getContact(id)

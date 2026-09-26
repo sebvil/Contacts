@@ -17,7 +17,7 @@ import kotlin.io.path.pathString
 import kotlin.io.path.writeText
 import org.intellij.lang.annotations.Language
 
-class MakeModule : CliktCommand() {
+class MakeModule : CliktCommand(name = "module") {
 
     private val name by argument().transformAll { it.last().trim(':') }
     private val moduleType: ModuleType by option(help = "Module type").enum<ModuleType>().required()

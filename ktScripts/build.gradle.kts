@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.jvmApp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 group = "com.sebastianvm.scripts"
@@ -13,4 +14,6 @@ application {
 
 dependencies {
     implementation(libs.clikt)
+    implementation(libs.kotaml)
+    implementation(libs.ktPoet)
 }

@@ -7,7 +7,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.sebastianvm.contacts.data.ContactsRepository
-import com.sebastianvm.contacts.domain.Contact
 import com.sebastianvm.contacts.features.base.Presenter
 import com.sebastianvm.contacts.features.base.ScreenState
 import com.sebastianvm.contacts.features.base.withEventHandler
@@ -43,7 +42,7 @@ class CreateContactPresenter(
                     CreateContactUiEvent.SaveContact -> {
                         isSaving = true
                         scope.launch {
-                            contactsRepository().createContact(Contact(name = name))
+                            contactsRepository().createContact(contactName = name)
                             isSaving = false
                             navigator.pop()
                         }

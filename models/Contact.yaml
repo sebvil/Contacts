@@ -1,0 +1,7 @@
+name: Contact
+properties:
+  id:
+    type: uuid
+    isPrimaryKey: true
+  name:
+    type: string
