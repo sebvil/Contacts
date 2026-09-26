@@ -6,6 +6,7 @@ import com.sebastianvm.scripts.codegen.models.defintions.StringProperty
 import com.sebastianvm.scripts.codegen.models.defintions.UuidProperty
 import com.sebastianvm.scripts.codegen.shouldBeDataClassProperty
 import com.sebastianvm.scripts.codegen.shouldBeParameter
+import com.sebastianvm.scripts.util.EchoHandler
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeSpec
@@ -23,13 +24,15 @@ val DomainModelGeneratorTest by testSuite {
                 name = "Contact",
                 properties =
                     mapOf(
-                        "id" to UuidProperty(isPrimaryKey = true),
-                        "name" to StringProperty,
+                        "id" to UuidProperty(isPrimaryKey = true, description = ""),
+                        "name" to StringProperty(description = ""),
                     ),
+                description = "",
             )
 
         val sut = DomainModelGenerator(modelDefinition)
-        val generatedModel = sut.generateModel()
+
+        val generatedModel = with(object : EchoHandler {}) { sut.generateModel() }
         with(generatedModel) {
             packageName shouldBe Constants.Packages.DOMAIN_MODELS
             name shouldBe modelDefinition.name

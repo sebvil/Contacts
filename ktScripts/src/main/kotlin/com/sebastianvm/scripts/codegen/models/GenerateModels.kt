@@ -4,15 +4,15 @@ import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.decodeFromStream
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.mordant.rendering.TextColors
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
 import com.sebastianvm.scripts.codegen.models.generators.DomainModelGenerator
 import com.sebastianvm.scripts.codegen.models.util.poet.writeTo
+import com.sebastianvm.scripts.util.BaseCliktCommand
 import com.sebastianvm.scripts.util.projectRoot
 import java.io.File
 
-class GenerateModels : CliktCommand("models") {
+class GenerateModels : BaseCliktCommand("models") {
 
     private val projectRoot by projectRoot()
 

@@ -5,10 +5,12 @@ import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
 import com.sebastianvm.scripts.codegen.models.defintions.toTypeName
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassPropertyDefinition
+import com.sebastianvm.scripts.util.EchoHandler
 import com.squareup.kotlinpoet.FileSpec
 
 class DomainModelGenerator(private val modelDefinition: ModelDefinition) {
 
+    context(_: EchoHandler)
     fun generateModel(): FileSpec {
         val dataClassDefinition =
             DataClassDefinition(
@@ -19,10 +21,10 @@ class DomainModelGenerator(private val modelDefinition: ModelDefinition) {
                         DataClassPropertyDefinition(
                             propertyName = it.key,
                             type = it.value.toTypeName(),
-                            description = "",
+                            description = it.value.description,
                         )
                     },
-                description = "",
+                description = modelDefinition.description,
             )
         return dataClassDefinition.toFileSpec()
     }

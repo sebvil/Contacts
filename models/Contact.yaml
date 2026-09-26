@@ -1,7 +1,10 @@
 name: Contact
+description: Represents information for a contact.
 properties:
   id:
     type: uuid
     isPrimaryKey: true
+    description: Unique identifier.
   name:
     type: string
+    description: Name of the contact.
