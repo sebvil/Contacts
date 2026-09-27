@@ -7,6 +7,7 @@ import com.charleskorn.kaml.decodeFromStream
 import com.github.ajalt.mordant.rendering.TextColors
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
 import com.sebastianvm.scripts.codegen.models.generators.DomainModelGenerator
+import com.sebastianvm.scripts.codegen.models.generators.ExposedTableGenerator
 import com.sebastianvm.scripts.codegen.models.util.poet.writeTo
 import com.sebastianvm.scripts.util.BaseCliktCommand
 import com.sebastianvm.scripts.util.projectRoot
@@ -19,27 +20,57 @@ class GenerateModels : BaseCliktCommand("models") {
     override fun run() {
         val modelFiles = File(projectRoot, Constants.Directories.YAML_MODELS)
         val models =
-            modelFiles
-                .walk()
-                .filter { it.extension == "yaml" }
-                .map {
-                    Yaml(
-                            configuration =
-                                YamlConfiguration(polymorphismStyle = PolymorphismStyle.Property)
-                        )
-                        .decodeFromStream<ModelDefinition>(it.inputStream())
+            runStep(
+                {
+                    modelFiles
+                        .walk()
+                        .filter { it.extension == "yaml" }
+                        .map {
+                            Yaml(
+                                    configuration =
+                                        YamlConfiguration(
+                                            polymorphismStyle = PolymorphismStyle.Property
+                                        )
+                                )
+                                .decodeFromStream<ModelDefinition>(it.inputStream())
+                        }
+                        .toList()
+                },
+                { models -> "Successfully parsed ${models.size} models." },
+            )
+
+        val domainModelFileSpecs =
+            runStep(
+                action = {
+                    models.map { DomainModelGenerator(it).generateModel() }
+                },
+                successMessage = { "Successfully created domain models specs." },
+            )
+
+        val serverTablesSpecs =
+            runStep(
+                action = {
+                    models.map { ExposedTableGenerator(it).generateModel() }
+                },
+                successMessage = { "Successfully created Exposed database tables specs." },
+            )
+
+        runStep(
+            action = {
+                domainModelFileSpecs.forEach {
+                    it.writeTo(module = Constants.Modules.DOMAIN)
                 }
-                .toList()
+                serverTablesSpecs.forEach {
+                    it.writeTo(module = Constants.Modules.SERVER)
+                }
+            },
+            successMessage = { "Successfully created files" },
+        )
+    }
 
-        echo(TextColors.brightGreen("Successfully parsed ${models.size} models."))
-
-        val domainModelFileSpecs = models.map { DomainModelGenerator(it).generateModel() }
-        echo(TextColors.brightGreen("Successfully created domain models specs."))
-
-        domainModelFileSpecs.forEach {
-            it.writeTo(module = Constants.Modules.DOMAIN)
-        }
-
-        echo(TextColors.brightGreen("Successfully created files"))
+    private fun <T> runStep(action: () -> T, successMessage: (T) -> String): T {
+        val res = action()
+        echo(TextColors.brightGreen(successMessage(res)))
+        return res
     }
 }

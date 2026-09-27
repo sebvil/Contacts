@@ -1,49 +1,23 @@
 package com.sebastianvm.scripts.codegen.models.generators
 
 import com.sebastianvm.scripts.codegen.models.Constants
-import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.PropertyDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.StringType
-import com.sebastianvm.scripts.codegen.models.defintions.UuidType
 import com.sebastianvm.scripts.codegen.shouldBeDataClassProperty
 import com.sebastianvm.scripts.codegen.shouldBeParameter
-import com.sebastianvm.scripts.util.EchoHandler
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeSpec
-import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-val DomainModelGeneratorTest by testSuite {
+val DomainModelGeneratorTest by generatorTestSuite {
     test("generates simple model") {
-        val modelDefinition =
-            ModelDefinition(
-                name = "Contact",
-                properties =
-                    listOf(
-                        PropertyDefinition(
-                            name = "id",
-                            isPrimaryKey = true,
-                            description = "",
-                            schema = UuidType,
-                        ),
-                        PropertyDefinition(
-                            name = "name",
-                            isPrimaryKey = false,
-                            description = "",
-                            schema = StringType,
-                        ),
-                    ),
-                description = "",
-            )
+        val modelDefinition = Fixtures.makeModel()
 
         val sut = DomainModelGenerator(modelDefinition)
-
-        val generatedModel = with(object : EchoHandler {}) { sut.generateModel() }
+        val generatedModel = sut.generateModel()
         with(generatedModel) {
             packageName shouldBe Constants.Packages.DOMAIN_MODELS
             name shouldBe modelDefinition.name

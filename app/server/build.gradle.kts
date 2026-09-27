@@ -10,6 +10,14 @@ group = "com.sebastianvm.contacts"
 
 version = "1.0.0"
 
+kotlin {
+    sourceSets {
+        main {
+            kotlin.srcDir("src/gen/kotlin")
+        }
+    }
+}
+
 application {
     mainClass = "com.sebastianvm.contacts.ApplicationKt"
 }
