@@ -4,6 +4,7 @@ import com.sebastianvm.scripts.codegen.models.Constants
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
 import com.sebastianvm.scripts.codegen.models.defintions.StringType
 import com.sebastianvm.scripts.codegen.models.defintions.UuidType
+import com.sebastianvm.scripts.codegen.models.defintions.isPrimaryKey
 import com.sebastianvm.scripts.codegen.models.util.poet.pluralize
 import com.sebastianvm.scripts.util.EchoHandler
 import com.squareup.kotlinpoet.FileSpec
@@ -64,7 +65,7 @@ val ExposedTableGeneratorTest by
         }
 
         listOf(
-                Triple(UuidType, Constants.Types.UUID, """uuid("prop")"""),
+                Triple(UuidType(isPrimaryKey = false), Constants.Types.UUID, """uuid("prop")"""),
                 Triple(StringType, STRING, """varchar("prop", 255)"""),
             )
             .forEach { (typeDefinition, className, initializer) ->

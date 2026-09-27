@@ -4,6 +4,7 @@ import com.sebastianvm.scripts.codegen.models.Constants
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
 import com.sebastianvm.scripts.codegen.models.defintions.StringType
 import com.sebastianvm.scripts.codegen.models.defintions.UuidType
+import com.sebastianvm.scripts.codegen.models.defintions.isPrimaryKey
 import com.sebastianvm.scripts.codegen.models.util.poet.fileSpecBuilder
 import com.sebastianvm.scripts.codegen.models.util.poet.pluralize
 import com.sebastianvm.scripts.util.EchoHandler
@@ -55,7 +56,7 @@ class ExposedTableGenerator(private val modelDefinition: ModelDefinition) {
                 val initializer =
                     when (schema) {
                         StringType -> """varchar("%L", 255)"""
-                        UuidType -> """uuid("%L")"""
+                        is UuidType -> """uuid("%L")"""
                     }
                 PropertySpec.builder(it.name, columnType)
                     .initializer(initializer, it.name)
