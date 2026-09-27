@@ -2,7 +2,6 @@ package com.sebastianvm.scripts.codegen.models.generators
 
 import com.sebastianvm.scripts.codegen.models.Constants
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.toTypeName
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassPropertyDefinition
 import com.sebastianvm.scripts.util.EchoHandler
@@ -19,9 +18,9 @@ class DomainModelGenerator(private val modelDefinition: ModelDefinition) {
                 properties =
                     modelDefinition.properties.map {
                         DataClassPropertyDefinition(
-                            propertyName = it.key,
-                            type = it.value.toTypeName(),
-                            description = it.value.description,
+                            propertyName = it.name,
+                            type = it.schema.className,
+                            description = it.description,
                         )
                     },
                 description = modelDefinition.description,
