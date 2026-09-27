@@ -19,27 +19,27 @@ class VersionCatalogsParser {
     context(command: CliktCommand)
     fun parse(fileName: String, lines: List<String>): GradleVersionsCatalog {
         return runCatching {
-                GradleVersionsCatalog.Builder()
-                    .apply {
-                        while (currentLineIndex < lines.size) {
-                            val line = lines[currentLineIndex]
-                            val tableName =
-                                TableName.valueOf(
-                                    line.trim('[', ']').replaceFirstChar {
-                                        if (it.isLowerCase()) it.titlecase(Locale.ROOT)
-                                        else it.toString()
-                                    }
-                                )
-                            when (tableName) {
-                                TableName.Versions -> versions = parseVersions(lines)
-                                TableName.Libraries -> libraries = parseLibraries(lines)
-                                TableName.Bundles -> bundles = parseBundles(lines)
-                                TableName.Plugins -> plugins = parsePlugins(lines)
-                            }
+            GradleVersionsCatalog.Builder()
+                .apply {
+                    while (currentLineIndex < lines.size) {
+                        val line = lines[currentLineIndex]
+                        val tableName =
+                            TableName.valueOf(
+                                line.trim('[', ']').replaceFirstChar {
+                                    if (it.isLowerCase()) it.titlecase(Locale.ROOT)
+                                    else it.toString()
+                                }
+                            )
+                        when (tableName) {
+                            TableName.Versions -> versions = parseVersions(lines)
+                            TableName.Libraries -> libraries = parseLibraries(lines)
+                            TableName.Bundles -> bundles = parseBundles(lines)
+                            TableName.Plugins -> plugins = parsePlugins(lines)
                         }
                     }
-                    .build()
-            }
+                }
+                .build()
+        }
             .onFailure {
                 command.echo("Error parsing $fileName:${currentLineIndex+1}")
             }

@@ -12,18 +12,17 @@ import io.ktor.http.contentType
 suspend inline fun <reified T : Any, reified B : Any, reified R : Any> HttpClient.post(
     resource: T,
     body: B,
-): Result<R> =
-    runCatchingSuspend {
-            post(resource) {
-                    contentType(ContentType.Application.Json)
-                    setBody(body)
-                }
-                .body<R>()
+): Result<R> = runCatchingSuspend {
+    post(resource) {
+            contentType(ContentType.Application.Json)
+            setBody(body)
         }
-        .onFailure { println(it) }
+        .body<R>()
+}
+    .onFailure { println(it) }
 
 suspend inline fun <reified T : Any, reified R : Any> HttpClient.get(resource: T): Result<R> =
     runCatchingSuspend {
-            get(resource).body<R>()
-        }
-        .onFailure { println(it) }
+        get(resource).body<R>()
+    }
+    .onFailure { println(it) }
