@@ -6,6 +6,12 @@ import kotlinx.serialization.Serializable
 data class PropertyDefinition(
     val name: String,
     val description: String,
-    val isPrimaryKey: Boolean = false,
     val schema: TypeDefinition,
 )
+
+val PropertyDefinition.isPrimaryKey: Boolean
+    get() =
+        when (schema) {
+            is UuidType -> schema.isPrimaryKey
+            is StringType -> false
+        }

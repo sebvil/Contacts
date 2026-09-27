@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 sealed interface TypeDefinition {
@@ -14,8 +15,8 @@ sealed interface TypeDefinition {
 
 @Serializable
 @SerialName("uuid")
-data object UuidType : TypeDefinition {
-    override val className: TypeName = Constants.Types.UUID
+data class UuidType(val isPrimaryKey: Boolean = false) : TypeDefinition {
+    @Transient override val className: TypeName = Constants.Types.UUID
 }
 
 @Serializable

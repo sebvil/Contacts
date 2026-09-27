@@ -26,13 +26,11 @@ object Fixtures {
     fun makePrimaryKeyProperty(
         name: String = PRIMARY_KEY_NAME,
         description: String = PRIMARY_KEY_DESCRIPTION,
-        schema: TypeDefinition = UuidType,
     ): PropertyDefinition =
         PropertyDefinition(
             name = name,
             description = description,
-            isPrimaryKey = true,
-            schema = schema,
+            schema = UuidType(isPrimaryKey = true),
         )
 
     fun makeProperty(
@@ -43,7 +41,6 @@ object Fixtures {
         PropertyDefinition(
             name = name,
             description = description,
-            isPrimaryKey = false,
             schema = schema,
         )
 
