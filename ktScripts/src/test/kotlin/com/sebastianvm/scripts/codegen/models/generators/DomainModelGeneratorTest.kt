@@ -2,8 +2,9 @@ package com.sebastianvm.scripts.codegen.models.generators
 
 import com.sebastianvm.scripts.codegen.models.Constants
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.StringProperty
-import com.sebastianvm.scripts.codegen.models.defintions.UuidProperty
+import com.sebastianvm.scripts.codegen.models.defintions.PropertyDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.StringType
+import com.sebastianvm.scripts.codegen.models.defintions.UuidType
 import com.sebastianvm.scripts.codegen.shouldBeDataClassProperty
 import com.sebastianvm.scripts.codegen.shouldBeParameter
 import com.sebastianvm.scripts.util.EchoHandler
@@ -23,9 +24,19 @@ val DomainModelGeneratorTest by testSuite {
             ModelDefinition(
                 name = "Contact",
                 properties =
-                    mapOf(
-                        "id" to UuidProperty(isPrimaryKey = true, description = ""),
-                        "name" to StringProperty(description = ""),
+                    listOf(
+                        PropertyDefinition(
+                            name = "id",
+                            isPrimaryKey = true,
+                            description = "",
+                            schema = UuidType,
+                        ),
+                        PropertyDefinition(
+                            name = "name",
+                            isPrimaryKey = false,
+                            description = "",
+                            schema = StringType,
+                        ),
                     ),
                 description = "",
             )

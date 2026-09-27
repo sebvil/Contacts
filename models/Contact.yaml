@@ -1,10 +1,12 @@
 name: Contact
 description: Represents information for a contact.
 properties:
-  id:
-    type: uuid
+  - name: id
     isPrimaryKey: true
     description: Unique identifier.
-  name:
-    type: string
+    schema:
+      type: uuid
+  - name: name
     description: Name of the contact.
+    schema:
+      type: string
