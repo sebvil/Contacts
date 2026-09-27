@@ -1,7 +1,6 @@
 package com.sebastianvm.scripts.codegen.models.util.poet
 
 import com.sebastianvm.scripts.util.EchoHandler
-import com.sebastianvm.scripts.util.echo
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
@@ -24,14 +23,13 @@ data class DataClassDefinition(
 
     context(_: EchoHandler)
     private fun toTypeSpec(): TypeSpec {
-        echo(description)
         return TypeSpec.classBuilder(ClassName(packageName, className))
             .addModifiers(KModifier.DATA)
             .addKdoc(
                 """
                 |$description
                 |
-                |${properties.joinToString("\n") { "@param ${it.propertyName} ${it.description}" }}
+                |${properties.joinToString("\n") { "@property ${it.propertyName} ${it.description}" }}
             """
                     .trimMargin()
             )
@@ -52,7 +50,9 @@ data class DataClassDefinition(
             FunSpec.constructorBuilder()
                 .addParameters(
                     properties.map {
-                        ParameterSpec.builder(name = it.propertyName, type = it.type).build()
+                        ParameterSpec.builder(name = it.propertyName, type = it.type)
+                            .defaultValue(it.defaultValue)
+                            .build()
                     }
                 )
                 .build()

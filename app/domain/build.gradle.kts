@@ -10,6 +10,10 @@ kotlin {
     sourceSets {
         commonMain {
             kotlin.srcDir("src/gen/kotlin")
+
+            dependencies {
+                implementation(libs.datetime)
+            }
         }
     }
 }

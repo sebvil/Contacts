@@ -10,3 +10,8 @@ properties:
     description: Name of the contact.
     schema:
       type: string
+  - name: birthday
+    description: Contact's birthday.
+    schema:
+      type: date
+      isNullable: true

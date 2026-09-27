@@ -1,5 +1,6 @@
 package com.sebastianvm.scripts.codegen.models.generators
 
+import com.sebastianvm.scripts.codegen.models.defintions.DateType
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
 import com.sebastianvm.scripts.codegen.models.defintions.PropertyDefinition
 import com.sebastianvm.scripts.codegen.models.defintions.StringType
@@ -15,6 +16,11 @@ object Fixtures {
             listOf(
                 makePrimaryKeyProperty(),
                 makeProperty(),
+                makeProperty(
+                    name = "date",
+                    description = "Date property",
+                    schema = DateType(isNullable = true),
+                ),
             ),
     ): ModelDefinition =
         ModelDefinition(
@@ -36,7 +42,7 @@ object Fixtures {
     fun makeProperty(
         name: String = SECONDARY_PROPERTY_NAME,
         description: String = SECONDARY_PROPERTY_DESCRIPTION,
-        schema: TypeDefinition = StringType,
+        schema: TypeDefinition = StringType(),
     ): PropertyDefinition =
         PropertyDefinition(
             name = name,

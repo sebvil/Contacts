@@ -2,9 +2,11 @@ package com.sebastianvm.scripts.codegen.models.generators
 
 import com.sebastianvm.scripts.codegen.models.Constants
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.className
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassPropertyDefinition
 import com.sebastianvm.scripts.util.EchoHandler
+import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 
 class DomainModelGenerator(private val modelDefinition: ModelDefinition) {
@@ -21,6 +23,7 @@ class DomainModelGenerator(private val modelDefinition: ModelDefinition) {
                             propertyName = it.name,
                             type = it.schema.className,
                             description = it.description,
+                            defaultValue = if (it.schema.isNullable) CodeBlock.of("null") else null,
                         )
                     },
                 description = modelDefinition.description,

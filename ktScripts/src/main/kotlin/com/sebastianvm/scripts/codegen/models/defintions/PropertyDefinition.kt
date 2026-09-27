@@ -13,5 +13,6 @@ val PropertyDefinition.isPrimaryKey: Boolean
     get() =
         when (schema) {
             is UuidType -> schema.isPrimaryKey
-            is StringType -> false
+            is StringType,
+            is DateType -> false
         }
