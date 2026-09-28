@@ -140,7 +140,7 @@ private fun TestFixture.Scope<GeneratorScopeAction>.test(
     action: FileSpec.(ModelDefinition) -> Unit,
 ) =
     test(name, testConfig) {
-        val sut = ExposedTableGenerator(modelDefinition)
+        val sut = ExposedTableGenerator(modelDefinition, emptyMap())
         with(sut.generateModel()) {
             action(modelDefinition)
         }

@@ -1,0 +1,21 @@
+name: EmailAddress
+description: An email address.
+properties:
+  - name: id
+    description: Unique identifier.
+    schema:
+      type: uuid
+      isPrimaryKey: true
+  - name: contactId
+    description: ID of the contact to whom this address belongs.
+    schema:
+      type: uuid
+  - name: address
+    description: Email address value.
+    schema:
+      type: string
+  - name: label
+    description: Label to identify email address.
+    schema:
+      type: string
+      isNullable: true

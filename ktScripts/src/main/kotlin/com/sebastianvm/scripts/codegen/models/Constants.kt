@@ -31,6 +31,7 @@ object Constants {
         val CONTRIBUTES_INTO_SET = ClassName(Packages.METRO, "ContributesIntoSet")
         val APP_SCOPE = ClassName(Packages.METRO, "AppScope")
         val BINDING = ClassName(Packages.METRO, "binding")
+        val EXPOSED_REFERENCE_OPTION = ClassName(Packages.EXPOSED_CORE, "ReferenceOption")
     }
 
     object Members {
