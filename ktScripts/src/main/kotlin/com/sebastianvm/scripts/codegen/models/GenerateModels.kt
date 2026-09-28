@@ -6,6 +6,7 @@ import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.decodeFromStream
 import com.github.ajalt.mordant.rendering.TextColors
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.OneToManyRelation
 import com.sebastianvm.scripts.codegen.models.generators.DomainModelGenerator
 import com.sebastianvm.scripts.codegen.models.generators.ExposedTableGenerator
 import com.sebastianvm.scripts.codegen.models.util.poet.writeTo
@@ -54,7 +55,18 @@ class GenerateModels : BaseCliktCommand("models") {
         val serverTablesSpecs =
             runStep(
                 action = {
-                    models.map { ExposedTableGenerator(it).generateModel() }
+                    models.map { model ->
+                        val parentModels = models.filter {
+                            it.properties.any { prop ->
+                                prop.schema is OneToManyRelation && prop.schema.model == model.name
+                            }
+                        }
+                        val foreignKeys = parentModels.associate {
+                            "${it.name.replaceFirstChar { c -> c.lowercase() }}Id" to it.name
+                        }
+                        ExposedTableGenerator(modelDefinition = model, foreignKeys = foreignKeys)
+                            .generateModel()
+                    }
                 },
                 successMessage = { "Successfully created Exposed database tables specs." },
             )

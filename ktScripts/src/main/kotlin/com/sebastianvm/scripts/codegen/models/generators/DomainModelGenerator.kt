@@ -2,6 +2,7 @@ package com.sebastianvm.scripts.codegen.models.generators
 
 import com.sebastianvm.scripts.codegen.models.Constants
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.OneToManyRelation
 import com.sebastianvm.scripts.codegen.models.defintions.className
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassPropertyDefinition
@@ -23,7 +24,12 @@ class DomainModelGenerator(private val modelDefinition: ModelDefinition) {
                             propertyName = it.name,
                             type = it.schema.className,
                             description = it.description,
-                            defaultValue = if (it.schema.isNullable) CodeBlock.of("null") else null,
+                            defaultValue =
+                                when {
+                                    it.schema.isNullable -> CodeBlock.of("null")
+                                    it.schema is OneToManyRelation -> CodeBlock.of("emptyList()")
+                                    else -> null
+                                },
                         )
                     },
                 description = modelDefinition.description,

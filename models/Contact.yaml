@@ -15,3 +15,8 @@ properties:
     schema:
       type: date
       isNullable: true
+  - name: emailAddresses
+    description: Email addresses associated with this contact
+    schema:
+      type: oneToManyRelation
+      model: EmailAddress
