@@ -5,6 +5,7 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
+import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.testcontainers.postgresql.PostgreSQLContainer
 
@@ -18,7 +19,10 @@ object FakeDatabaseProvider {
         get() = PostgreSQLContainer("postgres:16-alpine")
 
     @Provides
-    suspend fun provideDatabase(providedPostgres: PostgreSQLContainer): R2dbcDatabase {
+    suspend fun provideDatabase(
+        providedPostgres: PostgreSQLContainer,
+        tables: Set<IdTable<*>>,
+    ): R2dbcDatabase {
         val postgres = providedPostgres.apply { start() }
         return R2dbcDatabase.connect(
                 url =
@@ -28,6 +32,6 @@ object FakeDatabaseProvider {
                 user = postgres.username,
                 password = postgres.password,
             )
-            .initialize()
+            .initialize(tables)
     }
 }

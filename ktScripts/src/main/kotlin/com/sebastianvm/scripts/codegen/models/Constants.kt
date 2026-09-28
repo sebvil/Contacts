@@ -19,13 +19,18 @@ object Constants {
         const val DOMAIN_MODELS = "$ROOT.domain"
         const val DATABASE_TABLES = "$ROOT.database.tables"
         const val EXPOSED_CORE = "org.jetbrains.exposed.v1.core"
+        const val METRO = "dev.zacsweers.metro"
     }
 
     object Types {
         val DATE = ClassName("kotlinx.datetime", "LocalDate")
         val UUID = ClassName("kotlin.uuid", "Uuid")
         val UUID_TABLE = ClassName("${Packages.EXPOSED_CORE}.dao.id", "UuidTable")
+        val ID_TABLE = ClassName("${Packages.EXPOSED_CORE}.dao.id", "IdTable")
         val EXPOSED_COLUMN = ClassName(Packages.EXPOSED_CORE, "Column")
+        val CONTRIBUTES_INTO_SET = ClassName(Packages.METRO, "ContributesIntoSet")
+        val APP_SCOPE = ClassName(Packages.METRO, "AppScope")
+        val BINDING = ClassName(Packages.METRO, "binding")
     }
 
     object Members {

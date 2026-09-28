@@ -1,11 +1,19 @@
 package com.sebastianvm.contacts.database.tables
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.binding
 import kotlinx.datetime.LocalDate
 import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.core.dao.id.UuidTable
 import org.jetbrains.exposed.v1.datetime.date
 
 /** Represents information for a contact. */
+@ContributesIntoSet(
+    scope = AppScope::class,
+    binding = binding<IdTable<*>>(),
+)
 object ContactsTable : UuidTable() {
     /** Name of the contact. */
     val name: Column<String> = varchar("name", 255)
