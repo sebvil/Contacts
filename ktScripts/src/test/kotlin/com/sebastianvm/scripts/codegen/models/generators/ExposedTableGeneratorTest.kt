@@ -11,6 +11,7 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.STAR
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeSpec
 import de.infix.testBalloon.framework.core.TestConfig
@@ -37,6 +38,21 @@ val ExposedTableGeneratorTest by
             generatedObject.shouldBeInstanceOf<TypeSpec>()
             generatedObject.name shouldBe tableName
             generatedObject.kind shouldBe TypeSpec.Kind.OBJECT
+            generatedObject.annotations shouldHaveSize 1
+            val annotation = generatedObject.annotations.first()
+            annotation.typeName shouldBe Constants.Types.CONTRIBUTES_INTO_SET
+            val annotationMembers = annotation.members
+            annotationMembers shouldHaveSize 2
+            val scope = annotationMembers[0]
+            scope shouldBe CodeBlock.of("scope = %T::class", Constants.Types.APP_SCOPE)
+            val binding = annotationMembers[1]
+            binding shouldBe
+                CodeBlock.of(
+                    "binding = %T()",
+                    Constants.Types.BINDING.parameterizedBy(
+                        Constants.Types.ID_TABLE.parameterizedBy(STAR)
+                    ),
+                )
         }
 
         listOf("Contact", "PhoneNumber", "EmailAddress").forEach { modelName ->
