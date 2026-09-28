@@ -7,4 +7,4 @@ import com.github.ajalt.clikt.parameters.options.required
 fun CliktCommand.projectRoot() = option(envvar = "PROJECT_ROOT").required()
 
 context(command: EchoHandler)
-fun echo(message: Any?) = command.echo(message)
+fun echo(message: Any?, err: Boolean = false) = command.echo(message, err)

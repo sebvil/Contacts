@@ -9,8 +9,10 @@ import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
 import com.sebastianvm.scripts.codegen.models.generators.DomainModelGenerator
 import com.sebastianvm.scripts.codegen.models.generators.ExposedTableGenerator
 import com.sebastianvm.scripts.codegen.models.util.poet.writeTo
+import com.sebastianvm.scripts.codegen.models.validation.ModelValidator
 import com.sebastianvm.scripts.util.BaseCliktCommand
 import com.sebastianvm.scripts.util.projectRoot
+import com.sebastianvm.scripts.util.runCommand
 import java.io.File
 
 class GenerateModels : BaseCliktCommand("models") {
@@ -39,6 +41,8 @@ class GenerateModels : BaseCliktCommand("models") {
                 { models -> "Successfully parsed ${models.size} models." },
             )
 
+        ModelValidator().validateModels(models)
+
         val domainModelFileSpecs =
             runStep(
                 action = {
@@ -66,6 +70,8 @@ class GenerateModels : BaseCliktCommand("models") {
             },
             successMessage = { "Successfully created files" },
         )
+
+        "./gradlew spotlessApply".runCommand(File(projectRoot))
     }
 
     private fun <T> runStep(action: () -> T, successMessage: (T) -> String): T {

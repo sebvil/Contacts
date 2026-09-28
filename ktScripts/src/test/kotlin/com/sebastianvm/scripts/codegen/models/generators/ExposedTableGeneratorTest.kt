@@ -1,17 +1,18 @@
 package com.sebastianvm.scripts.codegen.models.generators
 
 import com.sebastianvm.scripts.codegen.models.Constants
+import com.sebastianvm.scripts.codegen.models.defintions.DateType
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
 import com.sebastianvm.scripts.codegen.models.defintions.StringType
 import com.sebastianvm.scripts.codegen.models.defintions.UuidType
 import com.sebastianvm.scripts.codegen.models.defintions.isPrimaryKey
 import com.sebastianvm.scripts.codegen.models.util.poet.pluralize
-import com.sebastianvm.scripts.util.EchoHandler
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeSpec
-import de.infix.testBalloon.framework.core.Test
 import de.infix.testBalloon.framework.core.TestConfig
 import de.infix.testBalloon.framework.core.TestFixture
 import de.infix.testBalloon.framework.shared.TestElementName
@@ -65,12 +66,26 @@ val ExposedTableGeneratorTest by
         }
 
         listOf(
-                Triple(UuidType(isPrimaryKey = false), Constants.Types.UUID, """uuid("prop")"""),
-                Triple(StringType, STRING, """varchar("prop", 255)"""),
+                Triple(
+                    UuidType(isPrimaryKey = false),
+                    Constants.Types.UUID,
+                    CodeBlock.of("""uuid("prop")"""),
+                ),
+                Triple(StringType(), STRING, CodeBlock.of("""varchar("prop", 255)""")),
+                Triple(
+                    DateType(),
+                    Constants.Types.DATE,
+                    CodeBlock.of("""%M("prop")""", Constants.Members.EXPOSED_DATE_COLUMN),
+                ),
+                Triple(
+                    StringType(isNullable = true),
+                    STRING.copy(nullable = true) as ClassName,
+                    CodeBlock.of("""varchar("prop", 255).nullable().default(null)"""),
+                ),
             )
             .forEach { (typeDefinition, className, initializer) ->
                 test(
-                    "adds property of type Column<${className.simpleName}> with initializer",
+                    "adds property of type Column<${className}> with initializer",
                     modelDefinition =
                         Fixtures.makeModel(
                             properties =
@@ -84,7 +99,7 @@ val ExposedTableGeneratorTest by
                     val prop = generatedObject.propertySpecs.first()
                     prop.type shouldBe Constants.Types.EXPOSED_COLUMN.parameterizedBy(className)
                     prop.initializer.shouldNotBeNull {
-                        this.toString() shouldBe initializer
+                        this shouldBe initializer
                     }
                 }
             }
@@ -101,11 +116,8 @@ val ExposedTableGeneratorTest by
         }
     }
 
-typealias GeneratorScopeAction =
-    suspend EchoHandler.(testExecutionScope: Test.ExecutionScope) -> Unit
-
 @TestRegistering
-fun TestFixture.Scope<GeneratorScopeAction>.test(
+private fun TestFixture.Scope<GeneratorScopeAction>.test(
     @TestElementName name: String,
     modelDefinition: ModelDefinition,
     testConfig: TestConfig = TestConfig,

@@ -1,6 +1,7 @@
 package com.sebastianvm.scripts.codegen.models
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.MemberName
 
 object Constants {
 
@@ -21,8 +22,13 @@ object Constants {
     }
 
     object Types {
+        val DATE = ClassName("kotlinx.datetime", "LocalDate")
         val UUID = ClassName("kotlin.uuid", "Uuid")
         val UUID_TABLE = ClassName("${Packages.EXPOSED_CORE}.dao.id", "UuidTable")
         val EXPOSED_COLUMN = ClassName(Packages.EXPOSED_CORE, "Column")
+    }
+
+    object Members {
+        val EXPOSED_DATE_COLUMN = MemberName("org.jetbrains.exposed.v1.datetime", "date")
     }
 }

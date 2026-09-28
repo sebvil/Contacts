@@ -11,21 +11,20 @@ import io.kotest.matchers.shouldBe
 fun ParameterSpec.shouldBeParameter(
     typeName: TypeName,
     parameterName: String,
-    defaultValue: CodeBlock? = null,
+    expectedDefaultValue: CodeBlock? = null,
 ) {
     type shouldBe typeName
     name shouldBe parameterName
-    defaultValue shouldBe defaultValue
+    this.defaultValue shouldBe expectedDefaultValue
 }
 
 fun PropertySpec.shouldBeDataClassProperty(
     typeName: TypeName,
     propertyName: String,
-    defaultValue: CodeBlock? = null,
 ) {
     mutable shouldBe false
     modifiers shouldNotContain KModifier.PRIVATE
     type shouldBe typeName
     name shouldBe propertyName
-    defaultValue shouldBe defaultValue
+    initializer shouldBe CodeBlock.of(name)
 }

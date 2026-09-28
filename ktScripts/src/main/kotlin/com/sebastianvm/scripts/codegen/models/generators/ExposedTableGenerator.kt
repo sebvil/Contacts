@@ -1,13 +1,16 @@
 package com.sebastianvm.scripts.codegen.models.generators
 
 import com.sebastianvm.scripts.codegen.models.Constants
+import com.sebastianvm.scripts.codegen.models.defintions.DateType
 import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
 import com.sebastianvm.scripts.codegen.models.defintions.StringType
 import com.sebastianvm.scripts.codegen.models.defintions.UuidType
+import com.sebastianvm.scripts.codegen.models.defintions.className
 import com.sebastianvm.scripts.codegen.models.defintions.isPrimaryKey
 import com.sebastianvm.scripts.codegen.models.util.poet.fileSpecBuilder
 import com.sebastianvm.scripts.codegen.models.util.poet.pluralize
 import com.sebastianvm.scripts.util.EchoHandler
+import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
@@ -55,11 +58,21 @@ class ExposedTableGenerator(private val modelDefinition: ModelDefinition) {
                 val columnType = Constants.Types.EXPOSED_COLUMN.parameterizedBy(schema.className)
                 val initializer =
                     when (schema) {
-                        StringType -> """varchar("%L", 255)"""
-                        is UuidType -> """uuid("%L")"""
+                        is StringType -> CodeBlock.of("varchar(%S, 255)", it.name)
+                        is UuidType -> CodeBlock.of("uuid(%S)", it.name)
+                        is DateType ->
+                            CodeBlock.of(
+                                "%M(%S)",
+                                Constants.Members.EXPOSED_DATE_COLUMN,
+                                it.name,
+                            )
                     }
                 PropertySpec.builder(it.name, columnType)
-                    .initializer(initializer, it.name)
+                    .initializer(
+                        if (it.schema.isNullable)
+                            initializer.toBuilder().add(".nullable().default(null)").build()
+                        else initializer
+                    )
                     .addKdoc(it.description)
                     .build()
             }
