@@ -7,3 +7,5 @@ fun pluralize(string: String): String {
         else -> "${string}s"
     }
 }
+
+fun String.lowercaseFirst() = replaceFirstChar { it.lowercase() }

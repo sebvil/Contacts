@@ -9,8 +9,11 @@ kotlin {
     }
 
     sourceSets {
-        commonMain.dependencies {
-            implementation(libs.ktor.resources)
+        commonMain {
+            kotlin.srcDir("src/gen/kotlin")
+            dependencies {
+                implementation(libs.ktor.resources)
+            }
         }
     }
 }

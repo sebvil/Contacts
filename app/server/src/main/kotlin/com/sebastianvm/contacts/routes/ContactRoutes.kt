@@ -23,7 +23,7 @@ class ContactRoutes(private val contactsRepository: ContactsRepository) {
     }
 
     private fun Routing.post() {
-        post<Contacts, ContactsRequest> { _, contactsRequest ->
+        post<ContactsRoute, ContactsRequest> { _, contactsRequest ->
             val contact = contactsRepository.createContact(contactsRequest.toContact())
             call.respond(
                 status = HttpStatusCode.Created,
@@ -33,7 +33,7 @@ class ContactRoutes(private val contactsRepository: ContactsRepository) {
     }
 
     private fun Routing.get() {
-        get<Contacts> { _ ->
+        get<ContactsRoute> { _ ->
             val contactsResponse =
                 contactsRepository.getAllContacts().map { it.toContactsResponse() }
             call.respond(

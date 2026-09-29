@@ -5,6 +5,7 @@ import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
 import com.sebastianvm.scripts.codegen.models.defintions.OneToManyRelation
 import com.sebastianvm.scripts.codegen.models.defintions.UuidType
 import com.sebastianvm.scripts.codegen.models.defintions.isPrimaryKey
+import com.sebastianvm.scripts.codegen.models.util.poet.lowercaseFirst
 import com.sebastianvm.scripts.util.EchoHandler
 import com.sebastianvm.scripts.util.echo
 import kotlin.system.exitProcess
@@ -53,7 +54,7 @@ class ModelValidator {
                         "Model $relationshipModel referenced in ${model.name} does not exist",
                 )
                 relatedModel ?: return@forEach
-                val referencePropertyName = "${model.name.replaceFirstChar { it.lowercase() }}Id"
+                val referencePropertyName = "${model.name.lowercaseFirst()}Id"
                 val referenceIdProperty =
                     relatedModel.properties.find { prop -> prop.name == referencePropertyName }
                 validate(

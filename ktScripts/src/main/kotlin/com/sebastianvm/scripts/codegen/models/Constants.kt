@@ -12,11 +12,13 @@ object Constants {
     object Modules {
         const val DOMAIN = "domain"
         const val SERVER = "server"
+        const val ROUTES = "routes"
     }
 
     object Packages {
         const val ROOT = "com.sebastianvm.contacts"
         const val DOMAIN_MODELS = "$ROOT.domain"
+        const val ROUTES = "$ROOT.routes"
         const val DATABASE_TABLES = "$ROOT.database.tables"
         const val EXPOSED_CORE = "org.jetbrains.exposed.v1.core"
         const val METRO = "dev.zacsweers.metro"
@@ -32,6 +34,8 @@ object Constants {
         val APP_SCOPE = ClassName(Packages.METRO, "AppScope")
         val BINDING = ClassName(Packages.METRO, "binding")
         val EXPOSED_REFERENCE_OPTION = ClassName(Packages.EXPOSED_CORE, "ReferenceOption")
+
+        val KTOR_RESOURCE = ClassName("io.ktor.resources", "Resource")
     }
 
     object Members {
