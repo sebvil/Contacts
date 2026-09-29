@@ -13,7 +13,7 @@ data class DataClassDefinition(
     val packageName: String,
     val className: String,
     val properties: List<DataClassPropertyDefinition>,
-    val description: String,
+    val description: String?,
 ) {
 
     context(_: EchoHandler)
@@ -22,17 +22,21 @@ data class DataClassDefinition(
     }
 
     context(_: EchoHandler)
-    private fun toTypeSpec(): TypeSpec {
+    fun toTypeSpec(action: TypeSpec.Builder.() -> TypeSpec.Builder = { this }): TypeSpec {
         return TypeSpec.classBuilder(ClassName(packageName, className))
             .addModifiers(KModifier.DATA)
-            .addKdoc(
-                """
-                |$description
-                |
-                |${properties.joinToString("\n") { "@property ${it.propertyName} ${it.description}" }}
-            """
-                    .trimMargin()
-            )
+            .apply {
+                if (description != null) {
+                    addKdoc(
+                        """
+                        |$description
+                        |
+                        |${properties.joinToString("\n") { "@property ${it.propertyName} ${it.description}" }}
+                        """
+                            .trimMargin()
+                    )
+                }
+            }
             .addPrimaryConstructor()
             .addProperties(
                 propertySpecs =
@@ -42,6 +46,7 @@ data class DataClassDefinition(
                             .build()
                     }
             )
+            .action()
             .build()
     }
 

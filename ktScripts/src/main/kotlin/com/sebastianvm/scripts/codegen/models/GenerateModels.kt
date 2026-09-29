@@ -9,11 +9,14 @@ import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
 import com.sebastianvm.scripts.codegen.models.defintions.OneToManyRelation
 import com.sebastianvm.scripts.codegen.models.generators.DomainModelGenerator
 import com.sebastianvm.scripts.codegen.models.generators.ExposedTableGenerator
+import com.sebastianvm.scripts.codegen.models.generators.RouteGenerator
+import com.sebastianvm.scripts.codegen.models.util.poet.lowercaseFirst
 import com.sebastianvm.scripts.codegen.models.util.poet.writeTo
 import com.sebastianvm.scripts.codegen.models.validation.ModelValidator
 import com.sebastianvm.scripts.util.BaseCliktCommand
 import com.sebastianvm.scripts.util.projectRoot
 import com.sebastianvm.scripts.util.runCommand
+import com.squareup.kotlinpoet.FileSpec
 import java.io.File
 
 class GenerateModels : BaseCliktCommand("models") {
@@ -22,68 +25,93 @@ class GenerateModels : BaseCliktCommand("models") {
 
     override fun run() {
         val modelFiles = File(projectRoot, Constants.Directories.YAML_MODELS)
-        val models =
-            runStep(
-                {
-                    modelFiles
-                        .walk()
-                        .filter { it.extension == "yaml" }
-                        .map {
-                            Yaml(
-                                    configuration =
-                                        YamlConfiguration(
-                                            polymorphismStyle = PolymorphismStyle.Property
-                                        )
-                                )
-                                .decodeFromStream<ModelDefinition>(it.inputStream())
-                        }
-                        .toList()
-                },
-                { models -> "Successfully parsed ${models.size} models." },
-            )
-
+        val models = parseModels(modelFiles)
         ModelValidator().validateModels(models)
+        val domainModelFileSpecs = generateDomainModels(models)
+        val serverTablesSpecs = generateServerDbTables(models)
+        val routeSpecs = generateRoutes(models)
 
-        val domainModelFileSpecs =
-            runStep(
-                action = {
-                    models.map { DomainModelGenerator(it).generateModel() }
-                },
-                successMessage = { "Successfully created domain models specs." },
+        saveFiles(
+            listOf(
+                domainModelFileSpecs to Constants.Modules.DOMAIN,
+                serverTablesSpecs to Constants.Modules.SERVER,
+                routeSpecs to Constants.Modules.ROUTES,
             )
+        )
 
-        val serverTablesSpecs =
-            runStep(
-                action = {
-                    models.map { model ->
-                        val parentModels = models.filter {
-                            it.properties.any { prop ->
-                                prop.schema is OneToManyRelation && prop.schema.model == model.name
-                            }
-                        }
-                        val foreignKeys = parentModels.associate {
-                            "${it.name.replaceFirstChar { c -> c.lowercase() }}Id" to it.name
-                        }
-                        ExposedTableGenerator(modelDefinition = model, foreignKeys = foreignKeys)
-                            .generateModel()
+        "./gradlew spotlessApply".runCommand(File(projectRoot))
+    }
+
+    private fun parseModels(modelFiles: File): List<ModelDefinition> {
+        return runStep(
+            {
+                modelFiles
+                    .walk()
+                    .filter { it.extension == "yaml" }
+                    .map {
+                        Yaml(
+                                configuration =
+                                    YamlConfiguration(
+                                        polymorphismStyle = PolymorphismStyle.Property
+                                    )
+                            )
+                            .decodeFromStream<ModelDefinition>(it.inputStream())
                     }
-                },
-                successMessage = { "Successfully created Exposed database tables specs." },
-            )
+                    .toList()
+            },
+            { models -> "Successfully parsed ${models.size} models." },
+        )
+    }
 
+    private fun generateDomainModels(models: List<ModelDefinition>): List<FileSpec> {
+        return runStep(
+            action = {
+                models.map { DomainModelGenerator(it).generateModel() }
+            },
+            successMessage = { "Successfully created domain models specs." },
+        )
+    }
+
+    private fun generateServerDbTables(models: List<ModelDefinition>): List<FileSpec> {
+        return runStep(
+            action = {
+                models.map { model ->
+                    val parentModels = models.filter {
+                        it.properties.any { prop ->
+                            prop.schema is OneToManyRelation && prop.schema.model == model.name
+                        }
+                    }
+                    val foreignKeys = parentModels.associate {
+                        "${it.name.lowercaseFirst()}Id" to it.name
+                    }
+                    ExposedTableGenerator(modelDefinition = model, foreignKeys = foreignKeys)
+                        .generateModel()
+                }
+            },
+            successMessage = { "Successfully created Exposed database tables specs." },
+        )
+    }
+
+    private fun generateRoutes(models: List<ModelDefinition>): List<FileSpec> {
+        return runStep(
+            action = {
+                models.map { RouteGenerator(it).generateModel() }
+            },
+            successMessage = { "Successfully created routes." },
+        )
+    }
+
+    private fun saveFiles(specsAndModules: List<Pair<List<FileSpec>, String>>) {
         runStep(
             action = {
-                domainModelFileSpecs.forEach {
-                    it.writeTo(module = Constants.Modules.DOMAIN)
-                }
-                serverTablesSpecs.forEach {
-                    it.writeTo(module = Constants.Modules.SERVER)
+                specsAndModules.forEach { (specs, module) ->
+                    specs.forEach {
+                        it.writeTo(module = module)
+                    }
                 }
             },
             successMessage = { "Successfully created files" },
         )
-
-        "./gradlew spotlessApply".runCommand(File(projectRoot))
     }
 
     private fun <T> runStep(action: () -> T, successMessage: (T) -> String): T {

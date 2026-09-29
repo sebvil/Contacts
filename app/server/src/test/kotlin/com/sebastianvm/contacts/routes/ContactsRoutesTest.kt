@@ -26,7 +26,7 @@ val ContactRoutesTest by ktorTestSuite {
 
         applicationTest("creates and returns contact") {
             val contact = makeContact()
-            val response = client.post(Contacts, contact.toContactsRequest())
+            val response = client.post(ContactsRoute, contact.toContactsRequest())
             response.status shouldBe HttpStatusCode.Created
             response.body<ContactsResponse>() shouldBe contact.toContactsResponse()
             appGraph.contactsRepository().getContactById(contact.id) shouldBe contact
@@ -47,7 +47,7 @@ val ContactRoutesTest by ktorTestSuite {
             contacts.forEach {
                 @Suppress("RETURN_VALUE_NOT_USED_COERCION") contactsRepository.createContact(it)
             }
-            val response = client.get(resource = Contacts)
+            val response = client.get(resource = ContactsRoute)
             response.status shouldBe HttpStatusCode.OK
             response.body<List<ContactsResponse>>() shouldBe
                 contacts.map { it.toContactsResponse() }
