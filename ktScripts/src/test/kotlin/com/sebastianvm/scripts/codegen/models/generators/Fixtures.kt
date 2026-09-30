@@ -1,11 +1,11 @@
 package com.sebastianvm.scripts.codegen.models.generators
 
-import com.sebastianvm.scripts.codegen.models.defintions.DateType
-import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.PropertyDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.StringType
-import com.sebastianvm.scripts.codegen.models.defintions.TypeDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.UuidType
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.DateType
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.ModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.PropertyDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.StringType
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.TypeDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.UuidType
 
 object Fixtures {
 

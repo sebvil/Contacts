@@ -5,8 +5,9 @@ import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.decodeFromStream
 import com.github.ajalt.mordant.rendering.TextColors
-import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.OneToManyRelation
+import com.sebastianvm.scripts.codegen.models.defintions.processed.ProcessedModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.ModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.OneToManyRelation
 import com.sebastianvm.scripts.codegen.models.generators.DomainModelGenerator
 import com.sebastianvm.scripts.codegen.models.generators.ExposedTableGenerator
 import com.sebastianvm.scripts.codegen.models.generators.RouteGenerator
@@ -25,8 +26,9 @@ class GenerateModels : BaseCliktCommand("models") {
 
     override fun run() {
         val modelFiles = File(projectRoot, Constants.Directories.YAML_MODELS)
-        val models = parseModels(modelFiles)
-        ModelValidator().validateModels(models)
+        val rawModels = parseModels(modelFiles)
+        ModelValidator().validateModels(modelDefinitions = rawModels)
+        val models = processModels(modelDefinitions = rawModels)
         val domainModelFileSpecs = generateDomainModels(models)
         val serverTablesSpecs = generateServerDbTables(models)
         val routeSpecs = generateRoutes(models)
@@ -63,7 +65,24 @@ class GenerateModels : BaseCliktCommand("models") {
         )
     }
 
-    private fun generateDomainModels(models: List<ModelDefinition>): List<FileSpec> {
+    private fun processModels(
+        modelDefinitions: List<ModelDefinition>
+    ): List<ProcessedModelDefinition> {
+        return modelDefinitions.map { model ->
+            val parentModels = modelDefinitions.filter {
+                it.properties.any { prop ->
+                    prop.schema is OneToManyRelation && prop.schema.model == model.name
+                }
+            }
+            val foreignKeys = parentModels.associate {
+                "${it.name.lowercaseFirst()}Id" to it.name
+            }
+
+            ProcessedModelDefinition.from(modelDefinition = model, foreignKeys = foreignKeys)
+        }
+    }
+
+    private fun generateDomainModels(models: List<ProcessedModelDefinition>): List<FileSpec> {
         return runStep(
             action = {
                 models.map { DomainModelGenerator(it).generateModel() }
@@ -72,27 +91,18 @@ class GenerateModels : BaseCliktCommand("models") {
         )
     }
 
-    private fun generateServerDbTables(models: List<ModelDefinition>): List<FileSpec> {
+    private fun generateServerDbTables(models: List<ProcessedModelDefinition>): List<FileSpec> {
         return runStep(
             action = {
                 models.map { model ->
-                    val parentModels = models.filter {
-                        it.properties.any { prop ->
-                            prop.schema is OneToManyRelation && prop.schema.model == model.name
-                        }
-                    }
-                    val foreignKeys = parentModels.associate {
-                        "${it.name.lowercaseFirst()}Id" to it.name
-                    }
-                    ExposedTableGenerator(modelDefinition = model, foreignKeys = foreignKeys)
-                        .generateModel()
+                    ExposedTableGenerator(modelDefinition = model).generateModel()
                 }
             },
             successMessage = { "Successfully created Exposed database tables specs." },
         )
     }
 
-    private fun generateRoutes(models: List<ModelDefinition>): List<FileSpec> {
+    private fun generateRoutes(models: List<ProcessedModelDefinition>): List<FileSpec> {
         return runStep(
             action = {
                 models.map { RouteGenerator(it).generateModel() }

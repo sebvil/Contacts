@@ -1,11 +1,12 @@
 package com.sebastianvm.scripts.codegen.models.generators
 
 import com.sebastianvm.scripts.codegen.models.Constants
-import com.sebastianvm.scripts.codegen.models.defintions.DateType
-import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.StringType
-import com.sebastianvm.scripts.codegen.models.defintions.UuidType
-import com.sebastianvm.scripts.codegen.models.defintions.isPrimaryKey
+import com.sebastianvm.scripts.codegen.models.defintions.processed.ProcessedModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.DateType
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.ModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.StringType
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.UuidType
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.isPrimaryKey
 import com.sebastianvm.scripts.codegen.models.util.poet.pluralize
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -140,7 +141,7 @@ private fun TestFixture.Scope<GeneratorScopeAction>.test(
     action: FileSpec.(ModelDefinition) -> Unit,
 ) =
     test(name, testConfig) {
-        val sut = ExposedTableGenerator(modelDefinition, emptyMap())
+        val sut = ExposedTableGenerator(ProcessedModelDefinition.from(modelDefinition, emptyMap()))
         with(sut.generateModel()) {
             action(modelDefinition)
         }

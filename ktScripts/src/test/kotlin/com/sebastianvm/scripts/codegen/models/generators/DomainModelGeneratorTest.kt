@@ -1,9 +1,10 @@
 package com.sebastianvm.scripts.codegen.models.generators
 
 import com.sebastianvm.scripts.codegen.models.Constants
-import com.sebastianvm.scripts.codegen.models.defintions.DateType
-import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.className
+import com.sebastianvm.scripts.codegen.models.defintions.processed.ProcessedModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.DateType
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.ModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.className
 import com.sebastianvm.scripts.codegen.models.generators.Fixtures.makePrimaryKeyProperty
 import com.sebastianvm.scripts.codegen.models.generators.Fixtures.makeProperty
 import com.sebastianvm.scripts.codegen.shouldBeDataClassProperty
@@ -103,7 +104,7 @@ private fun TestFixture.Scope<GeneratorScopeAction>.test(
     action: FileSpec.(ModelDefinition, TypeSpec) -> Unit,
 ) =
     test(name, testConfig) {
-        val sut = DomainModelGenerator(modelDefinition)
+        val sut = DomainModelGenerator(ProcessedModelDefinition.from(modelDefinition, emptyMap()))
         with(sut.generateModel()) {
             members shouldHaveSize 1
             val generatedObject = members.first()

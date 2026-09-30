@@ -1,10 +1,10 @@
 package com.sebastianvm.scripts.codegen.models.validation
 
 import com.github.ajalt.mordant.rendering.TextColors
-import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.OneToManyRelation
-import com.sebastianvm.scripts.codegen.models.defintions.UuidType
-import com.sebastianvm.scripts.codegen.models.defintions.isPrimaryKey
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.ModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.OneToManyRelation
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.UuidType
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.isPrimaryKey
 import com.sebastianvm.scripts.codegen.models.util.poet.lowercaseFirst
 import com.sebastianvm.scripts.util.EchoHandler
 import com.sebastianvm.scripts.util.echo
@@ -26,8 +26,9 @@ class ModelValidator {
     context(_: EchoHandler)
     private fun validatePrimaryKeys(modelDefinitions: List<ModelDefinition>) {
         modelDefinitions.forEach { model ->
-            val hasPrimaryKey = model.properties.any { it.isPrimaryKey }
-            validate(hasPrimaryKey, "Model ${model.name} does not have a primary key.")
+            val primaryKeyCount = model.properties.count { it.isPrimaryKey }
+            validate(primaryKeyCount != 0, "Model ${model.name} does not have a primary key.")
+            validate(primaryKeyCount == 1, "Model ${model.name} has more than one primary key.")
 
             val nullablePrimaryKeys =
                 model.properties.filter { it.schema.isNullable && it.isPrimaryKey }

@@ -1,14 +1,11 @@
 package com.sebastianvm.scripts.codegen.models.generators
 
 import com.sebastianvm.scripts.codegen.models.Constants
-import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.className
-import com.sebastianvm.scripts.codegen.models.defintions.isPrimaryKey
+import com.sebastianvm.scripts.codegen.models.defintions.processed.ProcessedModelDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassPropertyDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.fileSpecBuilder
 import com.sebastianvm.scripts.codegen.models.util.poet.lowercaseFirst
-import com.sebastianvm.scripts.codegen.models.util.poet.pluralize
 import com.sebastianvm.scripts.util.EchoHandler
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
@@ -17,10 +14,8 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
 
-class RouteGenerator(private val modelDefinition: ModelDefinition) {
-
-    private val pluralModelName = pluralize(modelDefinition.name)
-    private val routeName = "${pluralModelName}Route"
+class RouteGenerator(private val domainModelDefinition: ProcessedModelDefinition) {
+    private val routeName = domainModelDefinition.routeName
     private val packageName = Constants.Packages.ROUTES
     private val topLevelRouteName = ClassName(packageName, routeName)
 
@@ -40,7 +35,7 @@ class RouteGenerator(private val modelDefinition: ModelDefinition) {
             TypeSpec.objectBuilder(topLevelRouteName)
                 .addModifiers(KModifier.DATA)
                 .addIdRoute()
-                .addResourceAnnotation("/${pluralModelName.lowercaseFirst()}")
+                .addResourceAnnotation("/${domainModelDefinition.pluralModelName.lowercaseFirst()}")
                 .build()
         )
     }
@@ -60,19 +55,15 @@ class RouteGenerator(private val modelDefinition: ModelDefinition) {
                                 defaultValue = CodeBlock.of("%T", topLevelRouteName),
                             ),
                             DataClassPropertyDefinition(
-                                propertyName = "id",
-                                type =
-                                    modelDefinition.properties
-                                        .first { it.isPrimaryKey }
-                                        .schema
-                                        .className,
+                                propertyName = domainModelDefinition.primaryKeyProperty.name,
+                                type = domainModelDefinition.primaryKeyProperty.domainModelType,
                                 description = "",
                             ),
                         ),
                     description = null,
                 )
                 .toTypeSpec {
-                    this.addResourceAnnotation("{id}")
+                    this.addResourceAnnotation("{${domainModelDefinition.primaryKeyProperty.name}}")
                 }
         )
     }

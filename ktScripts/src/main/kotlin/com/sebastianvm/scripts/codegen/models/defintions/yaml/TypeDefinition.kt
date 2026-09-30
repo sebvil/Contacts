@@ -1,4 +1,4 @@
-package com.sebastianvm.scripts.codegen.models.defintions
+package com.sebastianvm.scripts.codegen.models.defintions.yaml
 
 import com.sebastianvm.scripts.codegen.models.Constants
 import com.squareup.kotlinpoet.ClassName

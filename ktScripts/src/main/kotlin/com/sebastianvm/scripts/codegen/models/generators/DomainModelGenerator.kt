@@ -1,35 +1,27 @@
 package com.sebastianvm.scripts.codegen.models.generators
 
 import com.sebastianvm.scripts.codegen.models.Constants
-import com.sebastianvm.scripts.codegen.models.defintions.ModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.OneToManyRelation
-import com.sebastianvm.scripts.codegen.models.defintions.className
+import com.sebastianvm.scripts.codegen.models.defintions.processed.ProcessedModelDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassPropertyDefinition
 import com.sebastianvm.scripts.util.EchoHandler
-import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 
-class DomainModelGenerator(private val modelDefinition: ModelDefinition) {
+class DomainModelGenerator(private val modelDefinition: ProcessedModelDefinition) {
 
     context(_: EchoHandler)
     fun generateModel(): FileSpec {
         val dataClassDefinition =
             DataClassDefinition(
                 packageName = Constants.Packages.DOMAIN_MODELS,
-                className = modelDefinition.name,
+                className = modelDefinition.domainModelName,
                 properties =
-                    modelDefinition.properties.map {
+                    modelDefinition.allProperties.map {
                         DataClassPropertyDefinition(
                             propertyName = it.name,
-                            type = it.schema.className,
+                            type = it.domainModelType,
                             description = it.description,
-                            defaultValue =
-                                when {
-                                    it.schema.isNullable -> CodeBlock.of("null")
-                                    it.schema is OneToManyRelation -> CodeBlock.of("emptyList()")
-                                    else -> null
-                                },
+                            defaultValue = it.domainModelDefaultValue,
                         )
                     },
                 description = modelDefinition.description,
