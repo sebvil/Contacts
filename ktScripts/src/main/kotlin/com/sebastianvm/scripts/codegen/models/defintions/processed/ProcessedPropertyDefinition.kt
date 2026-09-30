@@ -11,12 +11,14 @@ import com.sebastianvm.scripts.codegen.models.defintions.yaml.isPrimaryKey
 import com.sebastianvm.scripts.codegen.models.util.poet.tableName
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.LIST
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
 
 sealed interface ProcessedPropertyDefinition {
     val name: String
     val domainModelType: TypeName
+    val requestType: TypeName
     val description: String
     val domainModelDefaultValue: CodeBlock?
 
@@ -26,13 +28,18 @@ sealed interface ProcessedPropertyDefinition {
         override val description: String,
         override val domainModelDefaultValue: CodeBlock?,
         val isPrimaryKey: Boolean,
+        val isForeignKey: Boolean,
         val exposedTableColumnType: TypeName,
         val exposedTableDefaultValue: CodeBlock,
-    ) : ProcessedPropertyDefinition
+    ) : ProcessedPropertyDefinition {
+        override val requestType: TypeName
+            get() = domainModelType
+    }
 
     data class RelationshipProperty(
         override val name: String,
         override val domainModelType: TypeName,
+        override val requestType: TypeName,
         override val description: String,
         override val domainModelDefaultValue: CodeBlock?,
     ) : ProcessedPropertyDefinition
@@ -55,19 +62,27 @@ sealed interface ProcessedPropertyDefinition {
                 RelationshipProperty(
                     name = name,
                     domainModelType = domainModelType,
+                    requestType =
+                        LIST.parameterizedBy(
+                            ClassName(
+                                Constants.Packages.DTO,
+                                "${propertyDefinition.schema.model}Request",
+                            )
+                        ),
                     description = description,
                     domainModelDefaultValue = domainModelDefaultValue,
                 )
             } else {
+                val foreignKey = foreignKeys[name]
                 val exposedTableDefaultValue =
                     CodeBlock.builder()
                         .apply {
                             when (propertyDefinition.schema) {
                                 is DateType ->
                                     add("%M(%S)", Constants.Members.EXPOSED_DATE_COLUMN, name)
+
                                 is StringType -> add("varchar(%S, 255)", name)
                                 is UuidType -> {
-                                    val foreignKey = foreignKeys[name]
                                     if (foreignKey == null) {
                                         add("uuid(%S)", name)
                                     } else {
@@ -94,6 +109,7 @@ sealed interface ProcessedPropertyDefinition {
                     description = description,
                     domainModelDefaultValue = domainModelDefaultValue,
                     isPrimaryKey = propertyDefinition.isPrimaryKey,
+                    isForeignKey = foreignKey != null,
                     exposedTableColumnType =
                         Constants.Types.EXPOSED_COLUMN.parameterizedBy(domainModelType),
                     exposedTableDefaultValue = exposedTableDefaultValue,

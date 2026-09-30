@@ -20,8 +20,10 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.DefaultJson
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.testing.testApplication
+import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 
@@ -57,7 +59,12 @@ fun KtorTestSuite.applicationTest(
             }
             client = createClient {
                 install(ContentNegotiation) {
-                    json()
+                    json(
+                        json =
+                            Json(DefaultJson) {
+                                encodeDefaults = false
+                            }
+                    )
                 }
                 install(Resources)
                 defaultRequest {

@@ -17,6 +17,8 @@ object Constants {
 
     object Packages {
         const val ROOT = "com.sebastianvm.contacts"
+        const val DTO = "$ROOT.dto"
+        const val TYPES = "com.sebastianvm.core.types"
         const val DOMAIN_MODELS = "$ROOT.domain"
         const val ROUTES = "$ROOT.routes"
         const val DATABASE_TABLES = "$ROOT.database.tables"
@@ -36,6 +38,8 @@ object Constants {
         val EXPOSED_REFERENCE_OPTION = ClassName(Packages.EXPOSED_CORE, "ReferenceOption")
 
         val KTOR_RESOURCE = ClassName("io.ktor.resources", "Resource")
+        val OPTION = ClassName(Packages.TYPES, "Option")
+        val NONE = ClassName(Packages.TYPES, "None")
     }
 
     object Members {

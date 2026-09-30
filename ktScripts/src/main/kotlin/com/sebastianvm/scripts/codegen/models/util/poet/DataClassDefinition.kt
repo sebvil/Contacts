@@ -1,6 +1,5 @@
 package com.sebastianvm.scripts.codegen.models.util.poet
 
-import com.sebastianvm.scripts.util.EchoHandler
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
@@ -16,12 +15,10 @@ data class DataClassDefinition(
     val description: String?,
 ) {
 
-    context(_: EchoHandler)
-    fun toFileSpec(): FileSpec {
-        return fileSpecBuilder(packageName, className).addType(toTypeSpec()).build()
+    fun toFileSpec(action: TypeSpec.Builder.() -> TypeSpec.Builder = { this }): FileSpec {
+        return fileSpecBuilder(packageName, className).addType(toTypeSpec(action)).build()
     }
 
-    context(_: EchoHandler)
     fun toTypeSpec(action: TypeSpec.Builder.() -> TypeSpec.Builder = { this }): TypeSpec {
         return TypeSpec.classBuilder(ClassName(packageName, className))
             .addModifiers(KModifier.DATA)
