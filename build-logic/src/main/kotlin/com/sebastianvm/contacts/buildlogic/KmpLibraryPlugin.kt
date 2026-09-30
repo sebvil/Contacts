@@ -21,7 +21,7 @@ internal class KmpLibraryPlugin : Plugin<Project> {
  * applied; [additionalConfiguration] runs afterward for anything specific to a given plugin (e.g.
  * Compose-only dependencies).
  */
-internal fun Project.configureKmpLibrary(
+private fun Project.configureKmpLibrary(
     useCompose: Boolean,
     additionalConfiguration: Project.() -> Unit = {},
 ) {
