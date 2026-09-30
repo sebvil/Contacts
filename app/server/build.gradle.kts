@@ -25,7 +25,6 @@ application {
 dependencies {
     implementation(project(":core"))
     implementation(project(":app:routes"))
-    implementation(project(":app:domain"))
     implementation(libs.logback)
     implementation(libs.bundles.ktorServer)
     implementation(libs.bundles.exposed)
