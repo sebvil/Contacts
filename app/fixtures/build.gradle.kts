@@ -9,6 +9,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(project(":core"))
             implementation(project(":app:domain"))
             implementation(project(":app:routes"))
         }

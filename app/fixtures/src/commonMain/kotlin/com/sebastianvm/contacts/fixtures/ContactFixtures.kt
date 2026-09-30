@@ -3,6 +3,7 @@ package com.sebastianvm.contacts.fixtures
 import com.sebastianvm.contacts.domain.Contact
 import com.sebastianvm.contacts.dto.ContactsRequest
 import com.sebastianvm.contacts.dto.ContactsResponse
+import com.sebastianvm.core.types.Some
 import kotlin.uuid.Uuid
 
 fun makeContact(name: String = "Elliot"): Contact = Contact(id = Uuid.random(), name = name)
@@ -12,4 +13,4 @@ fun makeContacts(): List<Contact> =
 
 fun Contact.toContactsRequest(): ContactsRequest = ContactsRequest(id = id, name = name)
 
-fun Contact.toContactsResponse(): ContactsResponse = ContactsResponse(id = id, name = name)
+fun Contact.toContactsResponse(): ContactsResponse = ContactsResponse(id = id, name = Some(name))

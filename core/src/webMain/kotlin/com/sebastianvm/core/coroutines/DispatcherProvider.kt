@@ -1,6 +1,6 @@
 @file:Suppress("InjectDispatcher")
 
-package com.sebastianvm.core.corutines
+package com.sebastianvm.core.coroutines
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer

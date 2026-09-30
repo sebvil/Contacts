@@ -3,6 +3,7 @@ package com.sebastianvm.contacts.networking
 import com.sebastianvm.contacts.dto.ContactsResponse
 import com.sebastianvm.contacts.fixtures.makeContact
 import com.sebastianvm.contacts.fixtures.toContactsResponse
+import com.sebastianvm.core.types.Some
 import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
 import io.ktor.client.engine.mock.MockEngine
@@ -13,8 +14,10 @@ val KtorContactsApiServiceTest by testSuite {
     test("GET contacts fetches contacts") {
         val mockEngine = MockEngine.Queue()
         val client = HttpClientProvider.provideHttpClient(mockEngine)
-        val contact1 = ContactsResponse(id = Uuid.random(), "Elliot")
-        val contact2 = ContactsResponse(id = Uuid.random(), "Darlene")
+        val contact1Name = "Elliot"
+        val contact2Name = "Darlene"
+        val contact1 = ContactsResponse(id = Uuid.random(), Some(contact1Name))
+        val contact2 = ContactsResponse(id = Uuid.random(), Some(contact2Name))
         mockEngine.enqueueHandlerForPath(
             path = "/contacts",
             method = HttpMethod.Get,
@@ -23,11 +26,11 @@ val KtorContactsApiServiceTest by testSuite {
                 [
                     {
                         "id": "${contact1.id}",
-                        "name": "${contact1.name}"
+                        "name": "$contact1Name"
                     },
                     {
                         "id": "${contact2.id}",
-                        "name": "${contact2.name}"
+                        "name": "$contact2Name"
                     }
                 ]
                 """

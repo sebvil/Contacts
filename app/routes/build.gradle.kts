@@ -12,6 +12,7 @@ kotlin {
         commonMain {
             kotlin.srcDir("src/gen/kotlin")
             dependencies {
+                implementation(project(":core"))
                 implementation(libs.ktor.resources)
             }
         }
