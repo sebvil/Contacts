@@ -1,8 +1,6 @@
 package com.sebastianvm.contacts.routes
 
-import com.sebastianvm.contacts.dto.ContactsRequest
-import com.sebastianvm.contacts.dto.toContact
-import com.sebastianvm.contacts.dto.toContactsResponse
+import com.sebastianvm.contacts.dto.ContactRequest
 import com.sebastianvm.contacts.repository.ContactsRepository
 import dev.zacsweers.metro.Inject
 import io.ktor.http.HttpStatusCode
@@ -23,19 +21,18 @@ class ContactRoutes(private val contactsRepository: ContactsRepository) {
     }
 
     private fun Routing.post() {
-        post<ContactsRoute, ContactsRequest> { _, contactsRequest ->
-            val contact = contactsRepository.createContact(contactsRequest.toContact())
+        post<ContactsRoute, ContactRequest> { _, contactsRequest ->
+            val contact = contactsRepository.createContact(contactsRequest)
             call.respond(
                 status = HttpStatusCode.Created,
-                message = contact.toContactsResponse(),
+                message = contact,
             )
         }
     }
 
     private fun Routing.get() {
         get<ContactsRoute> { _ ->
-            val contactsResponse =
-                contactsRepository.getAllContacts().map { it.toContactsResponse() }
+            val contactsResponse = contactsRepository.getAllContacts()
             call.respond(
                 status = HttpStatusCode.OK,
                 message = contactsResponse,

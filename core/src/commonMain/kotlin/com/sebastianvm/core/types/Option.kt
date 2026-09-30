@@ -40,5 +40,15 @@ fun <T> Option<T>.ifExists(action: (T) -> Unit) {
 }
 
 fun <T> Option<T>.getOrElse(default: () -> T): T {
-    return (this as? Some)?.value ?: default()
+    return when (this) {
+        is Some<T> -> value
+        is None -> default()
+    }
+}
+
+fun <T> Option<T>.getOrThrow(): T {
+    return when (this) {
+        is Some<T> -> value
+        is None -> throw NoSuchElementException()
+    }
 }

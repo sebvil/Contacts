@@ -1,6 +1,6 @@
 package com.sebastianvm.contacts.networking
 
-import com.sebastianvm.contacts.dto.ContactsResponse
+import com.sebastianvm.contacts.dto.ContactResponse
 import com.sebastianvm.contacts.fixtures.makeContact
 import com.sebastianvm.contacts.fixtures.toContactsResponse
 import com.sebastianvm.core.types.Some
@@ -16,8 +16,8 @@ val KtorContactsApiServiceTest by testSuite {
         val client = HttpClientProvider.provideHttpClient(mockEngine)
         val contact1Name = "Elliot"
         val contact2Name = "Darlene"
-        val contact1 = ContactsResponse(id = Uuid.random(), Some(contact1Name))
-        val contact2 = ContactsResponse(id = Uuid.random(), Some(contact2Name))
+        val contact1 = ContactResponse(id = Uuid.random(), Some(contact1Name))
+        val contact2 = ContactResponse(id = Uuid.random(), Some(contact2Name))
         mockEngine.enqueueHandlerForPath(
             path = "/contacts",
             method = HttpMethod.Get,

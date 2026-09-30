@@ -2,7 +2,7 @@ package com.sebastianvm.contacts.data
 
 import com.sebastianvm.contacts.app.database.LocalContactsDataSource
 import com.sebastianvm.contacts.domain.Contact
-import com.sebastianvm.contacts.dto.ContactsResponse
+import com.sebastianvm.contacts.dto.ContactResponse
 import com.sebastianvm.contacts.networking.ContactsApiService
 import com.sebastianvm.contacts.networking.toContact
 import dev.zacsweers.metro.AppScope
@@ -20,8 +20,8 @@ internal class OfflineFirstContactRepository(
         OfflineFirstSource(
             readLocal = localContactsDataSource::getAllContacts,
             fetchRemote = contactsApiService::fetchContacts,
-            persist = { contacts: List<ContactsResponse> ->
-                localContactsDataSource.insertContacts(contacts.map(ContactsResponse::toContact))
+            persist = { contacts: List<ContactResponse> ->
+                localContactsDataSource.insertContacts(contacts.map(ContactResponse::toContact))
             },
         )
 
