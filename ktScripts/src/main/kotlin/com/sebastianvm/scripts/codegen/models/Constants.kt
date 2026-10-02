@@ -28,6 +28,7 @@ object Constants {
 
     object Types {
         val DATE = ClassName("kotlinx.datetime", "LocalDate")
+        val INSTANT = ClassName("kotlin.time", "Instant")
         val UUID = ClassName("kotlin.uuid", "Uuid")
         val UUID_TABLE = ClassName("${Packages.EXPOSED_CORE}.dao.id", "UuidTable")
         val ID_TABLE = ClassName("${Packages.EXPOSED_CORE}.dao.id", "IdTable")
@@ -44,5 +45,8 @@ object Constants {
 
     object Members {
         val EXPOSED_DATE_COLUMN = MemberName("org.jetbrains.exposed.v1.datetime", "date")
+        val EXPOSED_TIMESTAMP_COLUMN = MemberName("org.jetbrains.exposed.v1.datetime", "timestamp")
+        val EXPOSED_CURRENT_TIMESTAMP =
+            MemberName("org.jetbrains.exposed.v1.datetime", "CurrentTimestamp")
     }
 }

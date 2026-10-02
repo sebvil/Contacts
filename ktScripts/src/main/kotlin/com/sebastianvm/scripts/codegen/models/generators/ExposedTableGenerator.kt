@@ -4,6 +4,7 @@ import com.sebastianvm.scripts.codegen.models.Constants
 import com.sebastianvm.scripts.codegen.models.defintions.processed.ProcessedModelDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.fileSpecBuilder
 import com.squareup.kotlinpoet.AnnotationSpec
+import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
@@ -56,15 +57,31 @@ class ExposedTableGenerator(private val modelDefinition: ProcessedModelDefinitio
 
     private fun TypeSpec.Builder.addProperties(): TypeSpec.Builder {
         return addProperties(
-            modelDefinition.modelProperties.map {
-                val columnType = it.exposedTableColumnType
-                val initializer = it.exposedTableDefaultValue
-                PropertySpec.builder(it.name, columnType)
-                    .initializer(initializer)
-                    .addKdoc(it.description)
+                modelDefinition.modelProperties.map {
+                    val columnType = it.exposedTableColumnType
+                    val initializer = it.exposedTableDefaultValue
+                    PropertySpec.builder(it.name, columnType)
+                        .initializer(initializer)
+                        .addKdoc(it.description)
+                        .build()
+                }
+            )
+            .addProperty(
+                PropertySpec.builder(
+                        "creationTimestamp",
+                        Constants.Types.EXPOSED_COLUMN.parameterizedBy(Constants.Types.INSTANT),
+                    )
+                    .initializer(
+                        CodeBlock.of(
+                            "%M(%S).defaultExpression(%M)",
+                            Constants.Members.EXPOSED_TIMESTAMP_COLUMN,
+                            "creationTimestamp",
+                            Constants.Members.EXPOSED_CURRENT_TIMESTAMP,
+                        )
+                    )
+                    .addKdoc("Object creation timestamp.")
                     .build()
-            }
-        )
+            )
     }
 
     private fun TypeSpec.Builder.addKdoc(): TypeSpec.Builder {
