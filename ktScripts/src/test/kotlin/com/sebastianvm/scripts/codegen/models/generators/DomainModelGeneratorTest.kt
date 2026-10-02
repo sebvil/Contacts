@@ -105,7 +105,7 @@ private fun TestFixture.Scope<GeneratorScopeAction>.test(
 ) =
     test(name, testConfig) {
         val sut = DomainModelGenerator(ProcessedModelDefinition.from(modelDefinition, emptyMap()))
-        with(sut.generateModel()) {
+        with(sut.generate()) {
             members shouldHaveSize 1
             val generatedObject = members.first()
             generatedObject.shouldBeInstanceOf<TypeSpec>()

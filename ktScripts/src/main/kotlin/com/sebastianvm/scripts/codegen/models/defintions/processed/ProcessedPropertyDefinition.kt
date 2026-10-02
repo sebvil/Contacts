@@ -5,6 +5,7 @@ import com.sebastianvm.scripts.codegen.models.defintions.yaml.DateType
 import com.sebastianvm.scripts.codegen.models.defintions.yaml.OneToManyRelation
 import com.sebastianvm.scripts.codegen.models.defintions.yaml.PropertyDefinition
 import com.sebastianvm.scripts.codegen.models.defintions.yaml.StringType
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.TypeDefinition
 import com.sebastianvm.scripts.codegen.models.defintions.yaml.UuidType
 import com.sebastianvm.scripts.codegen.models.defintions.yaml.className
 import com.sebastianvm.scripts.codegen.models.defintions.yaml.isPrimaryKey
@@ -15,35 +16,18 @@ import com.squareup.kotlinpoet.LIST
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
 
-sealed interface ProcessedPropertyDefinition {
-    val name: String
-    val domainModelType: TypeName
-    val requestType: TypeName
-    val description: String
-    val domainModelDefaultValue: CodeBlock?
-
-    data class ModelProperty(
-        override val name: String,
-        override val domainModelType: TypeName,
-        override val description: String,
-        override val domainModelDefaultValue: CodeBlock?,
-        val isPrimaryKey: Boolean,
-        val isForeignKey: Boolean,
-        val exposedTableColumnType: TypeName,
-        val exposedTableDefaultValue: CodeBlock,
-    ) : ProcessedPropertyDefinition {
-        override val requestType: TypeName
-            get() = domainModelType
-    }
-
-    data class RelationshipProperty(
-        override val name: String,
-        override val domainModelType: TypeName,
-        override val requestType: TypeName,
-        override val description: String,
-        override val domainModelDefaultValue: CodeBlock?,
-    ) : ProcessedPropertyDefinition
-
+data class ProcessedPropertyDefinition(
+    val name: String,
+    val domainModelType: TypeName,
+    val requestType: TypeName,
+    val responseType: TypeName,
+    val description: String,
+    val domainModelDefaultValue: CodeBlock?,
+    val isForeignKey: Boolean,
+    val exposedTableColumnType: TypeName,
+    val exposedTableDefaultValue: CodeBlock?,
+    val responseDefaultValue: CodeBlock?,
+) {
     companion object {
         fun from(
             propertyDefinition: PropertyDefinition,
@@ -58,63 +42,100 @@ sealed interface ProcessedPropertyDefinition {
                     propertyDefinition.schema is OneToManyRelation -> CodeBlock.of("emptyList()")
                     else -> null
                 }
-            return if (propertyDefinition.schema is OneToManyRelation) {
-                RelationshipProperty(
-                    name = name,
-                    domainModelType = domainModelType,
-                    requestType =
-                        LIST.parameterizedBy(
-                            ClassName(
-                                Constants.Packages.DTO,
-                                "${propertyDefinition.schema.model}Request",
-                            )
-                        ),
-                    description = description,
-                    domainModelDefaultValue = domainModelDefaultValue,
-                )
-            } else {
-                val foreignKey = foreignKeys[name]
-                val exposedTableDefaultValue =
-                    CodeBlock.builder()
-                        .apply {
-                            when (propertyDefinition.schema) {
-                                is DateType ->
-                                    add("%M(%S)", Constants.Members.EXPOSED_DATE_COLUMN, name)
+            val schema = propertyDefinition.schema
+            val requestType =
+                if (schema is OneToManyRelation) {
+                    getToManyRelationModelDtoType(
+                        modelName = propertyDefinition.schema.model,
+                        suffix = "Request",
+                    )
+                } else {
+                    Constants.Types.OPTION.parameterizedBy(domainModelType)
+                }
+            val responseType =
+                when {
+                    propertyDefinition.isPrimaryKey -> domainModelType
+                    schema is OneToManyRelation ->
+                        getToManyRelationModelDtoType(
+                            modelName = propertyDefinition.schema.model,
+                            suffix = "Response",
+                        )
 
-                                is StringType -> add("varchar(%S, 255)", name)
-                                is UuidType -> {
-                                    if (foreignKey == null) {
-                                        add("uuid(%S)", name)
-                                    } else {
-                                        add(
-                                            "uuid(%S).references(ref = %T.id, onDelete = %T.CASCADE)",
-                                            name,
-                                            ClassName(
-                                                packageName = Constants.Packages.DATABASE_TABLES,
-                                                tableName(foreignKey),
-                                            ),
-                                            Constants.Types.EXPOSED_REFERENCE_OPTION,
-                                        )
-                                    }
-                                }
-                            }
-                            if (propertyDefinition.schema.isNullable) {
-                                add(".nullable().default(null)")
+                    else -> Constants.Types.OPTION.parameterizedBy(domainModelType)
+                }
+            val foreignKey = foreignKeys[name]
+
+            return ProcessedPropertyDefinition(
+                name = name,
+                domainModelType = domainModelType,
+                requestType = requestType,
+                responseType = responseType,
+                description = description,
+                domainModelDefaultValue = domainModelDefaultValue,
+                isForeignKey = foreignKey != null,
+                exposedTableColumnType =
+                    Constants.Types.EXPOSED_COLUMN.parameterizedBy(domainModelType),
+                exposedTableDefaultValue =
+                    getExposedTableDefaultValue(
+                        schema = schema,
+                        propertyName = name,
+                        foreignKey = foreignKey,
+                    ),
+                responseDefaultValue =
+                    if (propertyDefinition.isPrimaryKey) null
+                    else
+                        CodeBlock.of(
+                            "%T",
+                            Constants.Types.NONE,
+                        ),
+            )
+        }
+
+        private fun getToManyRelationModelDtoType(modelName: String, suffix: String): TypeName {
+            return Constants.Types.OPTION.parameterizedBy(
+                LIST.parameterizedBy(
+                    ClassName(
+                        Constants.Packages.DTO,
+                        "$modelName$suffix",
+                    )
+                )
+            )
+        }
+
+        private fun getExposedTableDefaultValue(
+            schema: TypeDefinition,
+            propertyName: String,
+            foreignKey: String?,
+        ): CodeBlock? {
+            if (schema is OneToManyRelation) return null
+            return CodeBlock.builder()
+                .apply {
+                    when (schema) {
+                        is DateType ->
+                            add("%M(%S)", Constants.Members.EXPOSED_DATE_COLUMN, propertyName)
+
+                        is StringType -> add("varchar(%S, 255)", propertyName)
+                        is UuidType -> {
+                            if (foreignKey == null) {
+                                add("uuid(%S)", propertyName)
+                            } else {
+                                add(
+                                    "uuid(%S).references(ref = %T.id, onDelete = %T.CASCADE)",
+                                    propertyName,
+                                    ClassName(
+                                        packageName = Constants.Packages.DATABASE_TABLES,
+                                        tableName(foreignKey),
+                                    ),
+                                    Constants.Types.EXPOSED_REFERENCE_OPTION,
+                                )
                             }
                         }
-                        .build()
-                ModelProperty(
-                    name = name,
-                    domainModelType = domainModelType,
-                    description = description,
-                    domainModelDefaultValue = domainModelDefaultValue,
-                    isPrimaryKey = propertyDefinition.isPrimaryKey,
-                    isForeignKey = foreignKey != null,
-                    exposedTableColumnType =
-                        Constants.Types.EXPOSED_COLUMN.parameterizedBy(domainModelType),
-                    exposedTableDefaultValue = exposedTableDefaultValue,
-                )
-            }
+                    }
+                    if (schema.isNullable) {
+                        add(".nullable().default(null)")
+                    }
+                }
+                .build()
         }
     }
 }

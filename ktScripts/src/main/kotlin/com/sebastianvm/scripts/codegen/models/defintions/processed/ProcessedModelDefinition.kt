@@ -1,6 +1,8 @@
 package com.sebastianvm.scripts.codegen.models.defintions.processed
 
 import com.sebastianvm.scripts.codegen.models.defintions.yaml.ModelDefinition
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.OneToManyRelation
+import com.sebastianvm.scripts.codegen.models.defintions.yaml.isPrimaryKey
 import com.sebastianvm.scripts.codegen.models.util.poet.pluralize
 
 data class ProcessedModelDefinition(
@@ -8,11 +10,12 @@ data class ProcessedModelDefinition(
     val serverDatabaseTableName: String,
     val routeName: String,
     val requestName: String,
+    val responseName: String,
     val pluralModelName: String,
     val description: String,
-    val primaryKeyProperty: ProcessedPropertyDefinition.ModelProperty,
-    val modelProperties: List<ProcessedPropertyDefinition.ModelProperty>,
-    val relationshipProperties: List<ProcessedPropertyDefinition.RelationshipProperty>,
+    val primaryKeyProperty: ProcessedPropertyDefinition,
+    val modelProperties: List<ProcessedPropertyDefinition>,
+    val relationshipProperties: List<ProcessedPropertyDefinition>,
 ) {
 
     val allProperties: List<ProcessedPropertyDefinition> =
@@ -23,27 +26,41 @@ data class ProcessedModelDefinition(
             modelDefinition: ModelDefinition,
             foreignKeys: Map<String, String>,
         ): ProcessedModelDefinition {
-            val properties =
-                modelDefinition.properties.map {
-                    ProcessedPropertyDefinition.from(
-                        propertyDefinition = it,
-                        foreignKeys = foreignKeys,
-                    )
-                }
+            val primaryKeyProperty =
+                ProcessedPropertyDefinition.from(
+                    propertyDefinition = modelDefinition.properties.first { it.isPrimaryKey },
+                    foreignKeys = emptyMap(),
+                )
             val modelProperties =
-                properties.filterIsInstance<ProcessedPropertyDefinition.ModelProperty>()
+                modelDefinition.properties
+                    .filter { !it.isPrimaryKey && it.schema !is OneToManyRelation }
+                    .map {
+                        ProcessedPropertyDefinition.from(
+                            propertyDefinition = it,
+                            foreignKeys = foreignKeys,
+                        )
+                    }
+            val relationshipProperties =
+                modelDefinition.properties
+                    .filter { it.schema is OneToManyRelation }
+                    .map {
+                        ProcessedPropertyDefinition.from(
+                            propertyDefinition = it,
+                            foreignKeys = foreignKeys,
+                        )
+                    }
             val pluralModelName: String = pluralize(modelDefinition.name)
             return ProcessedModelDefinition(
                 domainModelName = modelDefinition.name,
                 serverDatabaseTableName = "${pluralModelName}Table",
                 routeName = "${pluralModelName}Route",
                 requestName = "${modelDefinition.name}Request",
+                responseName = "${modelDefinition.name}Response",
                 pluralModelName = pluralModelName,
                 description = modelDefinition.description,
-                primaryKeyProperty = modelProperties.first { it.isPrimaryKey },
-                modelProperties = modelProperties.filter { !it.isPrimaryKey },
-                relationshipProperties =
-                    properties.filterIsInstance<ProcessedPropertyDefinition.RelationshipProperty>(),
+                primaryKeyProperty = primaryKeyProperty,
+                modelProperties = modelProperties,
+                relationshipProperties = relationshipProperties,
             )
         }
     }

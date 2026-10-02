@@ -3,7 +3,6 @@ package com.sebastianvm.scripts.codegen.models.generators
 import com.sebastianvm.scripts.codegen.models.Constants
 import com.sebastianvm.scripts.codegen.models.defintions.processed.ProcessedModelDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.fileSpecBuilder
-import com.sebastianvm.scripts.util.EchoHandler
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
@@ -11,13 +10,12 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.STAR
 import com.squareup.kotlinpoet.TypeSpec
 
-class ExposedTableGenerator(private val modelDefinition: ProcessedModelDefinition) {
+class ExposedTableGenerator(private val modelDefinition: ProcessedModelDefinition) : Generator {
 
     private val tableName = modelDefinition.serverDatabaseTableName
     private val packageName = Constants.Packages.DATABASE_TABLES
 
-    context(_: EchoHandler)
-    fun generateModel(): FileSpec {
+    override fun generate(): FileSpec {
         return fileSpecBuilder(
                 packageName = packageName,
                 fileName = tableName,

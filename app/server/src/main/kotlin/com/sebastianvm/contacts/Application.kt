@@ -40,6 +40,7 @@ fun Application.module(routes: Routes) {
             json =
                 Json(from = DefaultJson) {
                     ignoreUnknownKeys = true
+                    encodeDefaults = false
                 }
         )
     }

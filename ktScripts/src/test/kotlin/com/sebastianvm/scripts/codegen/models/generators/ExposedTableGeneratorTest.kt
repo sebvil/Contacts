@@ -142,7 +142,7 @@ private fun TestFixture.Scope<GeneratorScopeAction>.test(
 ) =
     test(name, testConfig) {
         val sut = ExposedTableGenerator(ProcessedModelDefinition.from(modelDefinition, emptyMap()))
-        with(sut.generateModel()) {
+        with(sut.generate()) {
             action(modelDefinition)
         }
     }
