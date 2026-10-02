@@ -14,6 +14,7 @@ kotlin {
             dependencies {
                 implementation(project(":core"))
                 implementation(libs.ktor.resources)
+                implementation(libs.datetime)
             }
         }
     }

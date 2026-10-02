@@ -16,4 +16,6 @@ dependencies {
     implementation(libs.clikt)
     implementation(libs.kotaml)
     implementation(libs.ktPoet)
+
+    testImplementation(libs.annotations)
 }
