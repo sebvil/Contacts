@@ -4,13 +4,11 @@ import com.sebastianvm.scripts.codegen.models.Constants
 import com.sebastianvm.scripts.codegen.models.defintions.processed.ProcessedModelDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassPropertyDefinition
-import com.sebastianvm.scripts.util.EchoHandler
 import com.squareup.kotlinpoet.FileSpec
 
-class DomainModelGenerator(private val modelDefinition: ProcessedModelDefinition) {
+class DomainModelGenerator(private val modelDefinition: ProcessedModelDefinition) : Generator {
 
-    context(_: EchoHandler)
-    fun generateModel(): FileSpec {
+    override fun generate(): FileSpec {
         val dataClassDefinition =
             DataClassDefinition(
                 packageName = Constants.Packages.DOMAIN_MODELS,

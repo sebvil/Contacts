@@ -1,17 +1,18 @@
 package com.sebastianvm.scripts.codegen.models.generators
 
-val ModelRequestGeneratorTest by
-    generatorTestSuite("ModelRequestGenerator") {
-        test("generates request classes") {
+val ModelResponseGeneratorTest by
+    generatorTestSuite("ModelResponeGenerator") {
+        test("generates response classes") {
             val models = getProcessedModels()
-            ModelRequestGenerator(models.first()) generatedOutputShouldBe
-                EXPECTED_BASE_MODEL_REQUEST
+            ModelResponseGenerator(models.first()) generatedOutputShouldBe
+                EXPECTED_BASE_MODEL_RESPONSE
 
-            ModelRequestGenerator(models[1]) generatedOutputShouldBe EXPECTED_RELATED_MODEL_REQUEST
+            ModelResponseGenerator(models[1]) generatedOutputShouldBe
+                EXPECTED_RELATED_MODEL_RESPONSE
         }
     }
 
-private const val EXPECTED_BASE_MODEL_REQUEST =
+private const val EXPECTED_BASE_MODEL_RESPONSE =
     """
     package com.sebastianvm.contacts.dto
 
@@ -30,17 +31,17 @@ private const val EXPECTED_BASE_MODEL_REQUEST =
      * @property oneToManyRelationProperty One-to-many relationship property.
      */
     @Serializable
-    data class BaseModelRequest(
-        val id: Option<Uuid> = None,
+    data class BaseModelResponse(
+        val id: Uuid,
         val stringProperty: Option<String> = None,
         val dateProperty: Option<LocalDate> = None,
-        val oneToManyRelationProperty: Option<List<RelatedModelRequest>> = None,
+        val oneToManyRelationProperty: Option<List<RelatedModelResponse>> = None,
     )
 
     """
         .trimIndent()
 
-private const val EXPECTED_RELATED_MODEL_REQUEST =
+private const val EXPECTED_RELATED_MODEL_RESPONSE =
     """
     package com.sebastianvm.contacts.dto
 
@@ -58,8 +59,8 @@ private const val EXPECTED_RELATED_MODEL_REQUEST =
      * @property nullableDateProperty Nullable date property.
      */
     @Serializable
-    data class RelatedModelRequest(
-        val id: Option<Uuid> = None,
+    data class RelatedModelResponse(
+        val id: Uuid,
         val nullableStringProperty: Option<String?> = None,
         val nullableDateProperty: Option<LocalDate?> = None,
     )

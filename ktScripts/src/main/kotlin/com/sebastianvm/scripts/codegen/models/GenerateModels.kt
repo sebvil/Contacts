@@ -12,6 +12,7 @@ import com.sebastianvm.scripts.codegen.models.generators.DomainModelGenerator
 import com.sebastianvm.scripts.codegen.models.generators.ExposedTableGenerator
 import com.sebastianvm.scripts.codegen.models.generators.Generator
 import com.sebastianvm.scripts.codegen.models.generators.ModelRequestGenerator
+import com.sebastianvm.scripts.codegen.models.generators.ModelResponseGenerator
 import com.sebastianvm.scripts.codegen.models.generators.RouteGenerator
 import com.sebastianvm.scripts.codegen.models.util.poet.lowercaseFirst
 import com.sebastianvm.scripts.codegen.models.util.poet.writeTo
@@ -31,24 +32,7 @@ class GenerateModels : BaseCliktCommand("models") {
         val modelFiles = File(projectRoot, Constants.Directories.YAML_MODELS)
         val rawModels = parseModels(modelFiles)
         val models = processModels(modelDefinitions = rawModels)
-        val domainModelFileSpecs = generateDomainModels(models)
-        val serverTablesSpecs = generateServerDbTables(models)
-        val routeSpecs = generateRoutes(models)
-        val requestSpecs =
-            generateFileContents(
-                generator = { ModelRequestGenerator(it) },
-                message = { "Successfully generated requests" },
-                models = models,
-            )
-
-        saveFiles(
-            listOf(
-                domainModelFileSpecs to Constants.Modules.DOMAIN,
-                serverTablesSpecs to Constants.Modules.SERVER,
-                routeSpecs to Constants.Modules.ROUTES,
-                requestSpecs to Constants.Modules.ROUTES,
-            )
-        )
+        createFiles(models)
 
         "./gradlew spotlessApply".runCommand(File(projectRoot))
     }
@@ -74,49 +58,57 @@ class GenerateModels : BaseCliktCommand("models") {
         )
     }
 
-    private fun generateDomainModels(models: List<ProcessedModelDefinition>): List<FileSpec> {
-        return runStep(
-            action = {
-                models.map { DomainModelGenerator(it).generateModel() }
-            },
-            successMessage = { "Successfully created domain models specs." },
-        )
+    private fun createFiles(models: List<ProcessedModelDefinition>) {
+        val generationInputs =
+            listOf(
+                GenerationInputs(
+                    factory = ::DomainModelGenerator,
+                    successMessage = "Domain model specs created.",
+                    module = Constants.Modules.DOMAIN,
+                ),
+                GenerationInputs(
+                    factory = ::ExposedTableGenerator,
+                    successMessage = "Exposed tables specs created.",
+                    module = Constants.Modules.SERVER,
+                ),
+                GenerationInputs(
+                    factory = ::RouteGenerator,
+                    successMessage = "Exposed tables specs created.",
+                    module = Constants.Modules.ROUTES,
+                ),
+                GenerationInputs(
+                    factory = ::ModelRequestGenerator,
+                    successMessage = "Request model specs created.",
+                    module = Constants.Modules.ROUTES,
+                ),
+                GenerationInputs(
+                    factory = ::ModelResponseGenerator,
+                    successMessage = "Response model specs created.",
+                    module = Constants.Modules.ROUTES,
+                ),
+            )
+
+        val generationOutputs = generateFiles(generationInputs, models)
+        saveFiles(generationOutputs)
     }
 
-    private fun generateServerDbTables(models: List<ProcessedModelDefinition>): List<FileSpec> {
-        return runStep(
-            action = {
-                models.map { model ->
-                    ExposedTableGenerator(modelDefinition = model).generateModel()
-                }
-            },
-            successMessage = { "Successfully created Exposed database tables specs." },
-        )
-    }
-
-    private fun generateRoutes(models: List<ProcessedModelDefinition>): List<FileSpec> {
-        return runStep(
-            action = {
-                models.map { RouteGenerator(it).generateModel() }
-            },
-            successMessage = { "Successfully created routes." },
-        )
-    }
-
-    private fun generateFileContents(
-        generator: (ProcessedModelDefinition) -> Generator,
-        message: (List<FileSpec>) -> String,
+    private fun generateFiles(
+        generationInputs: List<GenerationInputs>,
         models: List<ProcessedModelDefinition>,
-    ): List<FileSpec> {
-        return runStep(
-            action = {
-                models.map { generator(it).generate() }
-            },
-            successMessage = message,
-        )
+    ): List<GenerationOutputs> {
+        return generationInputs.map { inputs ->
+            val specs =
+                runStep(
+                    action = {
+                        models.map { inputs.factory(it).generate() }
+                    },
+                    successMessage = { inputs.successMessage },
+                )
+            GenerationOutputs(specs = specs, module = inputs.module)
+        }
     }
 
-    private fun saveFiles(specsAndModules: List<Pair<List<FileSpec>, String>>) {
+    private fun saveFiles(specsAndModules: List<GenerationOutputs>) {
         runStep(
             action = {
                 specsAndModules.forEach { (specs, module) ->
@@ -134,6 +126,17 @@ class GenerateModels : BaseCliktCommand("models") {
         echo(TextColors.brightGreen(successMessage(res)))
         return res
     }
+
+    data class GenerationInputs(
+        val factory: (ProcessedModelDefinition) -> Generator,
+        val successMessage: String,
+        val module: String,
+    )
+
+    data class GenerationOutputs(
+        val specs: List<FileSpec>,
+        val module: String,
+    )
 
     companion object {
         context(_: EchoHandler)

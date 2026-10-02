@@ -6,7 +6,6 @@ import com.sebastianvm.scripts.codegen.models.util.poet.DataClassDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassPropertyDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.fileSpecBuilder
 import com.sebastianvm.scripts.codegen.models.util.poet.lowercaseFirst
-import com.sebastianvm.scripts.util.EchoHandler
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -14,13 +13,12 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
 
-class RouteGenerator(private val domainModelDefinition: ProcessedModelDefinition) {
+class RouteGenerator(private val domainModelDefinition: ProcessedModelDefinition) : Generator {
     private val routeName = domainModelDefinition.routeName
     private val packageName = Constants.Packages.ROUTES
     private val topLevelRouteName = ClassName(packageName, routeName)
 
-    context(_: EchoHandler)
-    fun generateModel(): FileSpec {
+    override fun generate(): FileSpec {
         return fileSpecBuilder(
                 packageName = packageName,
                 fileName = routeName,
@@ -29,7 +27,6 @@ class RouteGenerator(private val domainModelDefinition: ProcessedModelDefinition
             .build()
     }
 
-    context(_: EchoHandler)
     private fun FileSpec.Builder.addTopLevelRoute(): FileSpec.Builder {
         return addType(
             TypeSpec.objectBuilder(topLevelRouteName)
@@ -40,7 +37,6 @@ class RouteGenerator(private val domainModelDefinition: ProcessedModelDefinition
         )
     }
 
-    context(_: EchoHandler)
     private fun TypeSpec.Builder.addIdRoute(): TypeSpec.Builder {
         return addType(
             DataClassDefinition(
