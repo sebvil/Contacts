@@ -1,148 +1,109 @@
 package com.sebastianvm.scripts.codegen.models.generators
 
-import com.sebastianvm.scripts.codegen.models.Constants
-import com.sebastianvm.scripts.codegen.models.defintions.processed.ProcessedModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.yaml.DateType
-import com.sebastianvm.scripts.codegen.models.defintions.yaml.ModelDefinition
-import com.sebastianvm.scripts.codegen.models.defintions.yaml.StringType
-import com.sebastianvm.scripts.codegen.models.defintions.yaml.UuidType
-import com.sebastianvm.scripts.codegen.models.defintions.yaml.isPrimaryKey
-import com.sebastianvm.scripts.codegen.models.util.poet.pluralize
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.CodeBlock
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.STAR
-import com.squareup.kotlinpoet.STRING
-import com.squareup.kotlinpoet.TypeSpec
-import de.infix.testBalloon.framework.core.TestConfig
-import de.infix.testBalloon.framework.core.TestFixture
-import de.infix.testBalloon.framework.shared.TestElementName
-import de.infix.testBalloon.framework.shared.TestRegistering
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
-
 val ExposedTableGeneratorTest by
-    generatorTestSuite(name = "ExposedTableGenerator") {
-        test(
-            "generates single object in the database.table package",
-            modelDefinition = Fixtures.makeModel(),
-        ) { model ->
-            val tableName = "${pluralize(model.name)}Table"
-            packageName shouldBe Constants.Packages.DATABASE_TABLES
-            name shouldBe tableName
-            members shouldHaveSize 1
-            val generatedObject = members.first()
-            generatedObject.shouldBeInstanceOf<TypeSpec>()
-            generatedObject.name shouldBe tableName
-            generatedObject.kind shouldBe TypeSpec.Kind.OBJECT
-            generatedObject.annotations shouldHaveSize 1
-            val annotation = generatedObject.annotations.first()
-            annotation.typeName shouldBe Constants.Types.CONTRIBUTES_INTO_SET
-            val annotationMembers = annotation.members
-            annotationMembers shouldHaveSize 2
-            val scope = annotationMembers[0]
-            scope shouldBe CodeBlock.of("scope = %T::class", Constants.Types.APP_SCOPE)
-            val binding = annotationMembers[1]
-            binding shouldBe
-                CodeBlock.of(
-                    "binding = %T()",
-                    Constants.Types.BINDING.parameterizedBy(
-                        Constants.Types.ID_TABLE.parameterizedBy(STAR)
-                    ),
-                )
-        }
+    generatorTestSuite("ExposedTableGenerator") {
+        test("generates exposed table objects") {
+            val models = getProcessedModels()
+            ExposedTableGenerator(models.first()) generatedOutputShouldBe EXPECTED_BASE_MODEL_TABLE
 
-        listOf("Contact", "PhoneNumber", "EmailAddress").forEach { modelName ->
-            val tableName = "${pluralize(modelName)}Table"
-            test(
-                name = "generates file and object named $tableName for model with name $modelName",
-                modelDefinition = Fixtures.makeModel(name = modelName),
-            ) {
-                name shouldBe tableName
-                val generatedObject = members.first() as TypeSpec
-                generatedObject.name shouldBe tableName
-            }
-        }
-
-        test("generates object with UuidTable superclass", modelDefinition = Fixtures.makeModel()) {
-            val generatedObject = members.first() as TypeSpec
-            generatedObject.superclass shouldBe Constants.Types.UUID_TABLE
-        }
-
-        test("adds only non-primary key properties", modelDefinition = Fixtures.makeModel()) { model
-            ->
-            val generatedObject = members.first() as TypeSpec
-            val properties = generatedObject.propertySpecs
-            properties shouldHaveSize model.properties.size - 1
-            val nonPrimaryKeys = model.properties.filter { !it.isPrimaryKey }.map { it.name }
-            properties.map { it.name } shouldContainExactly nonPrimaryKeys
-        }
-
-        listOf(
-                Triple(
-                    UuidType(isPrimaryKey = false),
-                    Constants.Types.UUID,
-                    CodeBlock.of("""uuid("prop")"""),
-                ),
-                Triple(StringType(), STRING, CodeBlock.of("""varchar("prop", 255)""")),
-                Triple(
-                    DateType(),
-                    Constants.Types.DATE,
-                    CodeBlock.of("""%M("prop")""", Constants.Members.EXPOSED_DATE_COLUMN),
-                ),
-                Triple(
-                    StringType(isNullable = true),
-                    STRING.copy(nullable = true) as ClassName,
-                    CodeBlock.of("""varchar("prop", 255).nullable().default(null)"""),
-                ),
-            )
-            .forEach { (typeDefinition, className, initializer) ->
-                test(
-                    "adds property of type Column<${className}> with initializer",
-                    modelDefinition =
-                        Fixtures.makeModel(
-                            properties =
-                                listOf(
-                                    Fixtures.makePrimaryKeyProperty(),
-                                    Fixtures.makeProperty(name = "prop", schema = typeDefinition),
-                                )
-                        ),
-                ) {
-                    val generatedObject = members.first() as TypeSpec
-                    val prop = generatedObject.propertySpecs.first()
-                    prop.type shouldBe Constants.Types.EXPOSED_COLUMN.parameterizedBy(className)
-                    prop.initializer.shouldNotBeNull {
-                        this shouldBe initializer
-                    }
-                }
-            }
-
-        test("documents object", modelDefinition = Fixtures.makeModel()) { model ->
-            val generatedObject = members.first() as TypeSpec
-            val kdoc = generatedObject.kdoc.toString()
-            kdoc shouldBe model.description
-            val objectProperties =
-                model.properties.filter { !it.isPrimaryKey }.associateBy { it.name }
-            generatedObject.propertySpecs.forEach {
-                it.kdoc.toString() shouldBe objectProperties[it.name]!!.description
-            }
+            ExposedTableGenerator(models[1]) generatedOutputShouldBe EXPECTED_RELATED_MODEL_TABLE
         }
     }
 
-@TestRegistering
-private fun TestFixture.Scope<GeneratorScopeAction>.test(
-    @TestElementName name: String,
-    modelDefinition: ModelDefinition,
-    testConfig: TestConfig = TestConfig,
-    action: FileSpec.(ModelDefinition) -> Unit,
-) =
-    test(name, testConfig) {
-        val sut = ExposedTableGenerator(ProcessedModelDefinition.from(modelDefinition, emptyMap()))
-        with(sut.generate()) {
-            action(modelDefinition)
-        }
+private const val EXPECTED_BASE_MODEL_TABLE =
+    """
+    package com.sebastianvm.contacts.database.tables
+
+    import dev.zacsweers.metro.AppScope
+    import dev.zacsweers.metro.ContributesIntoSet
+    import dev.zacsweers.metro.binding
+    import kotlin.time.Instant
+    import kotlinx.datetime.LocalDate
+    import org.jetbrains.exposed.v1.core.Column
+    import org.jetbrains.exposed.v1.core.dao.id.IdTable
+    import org.jetbrains.exposed.v1.core.dao.id.UuidTable
+    import org.jetbrains.exposed.v1.datetime.CurrentTimestamp
+    import org.jetbrains.exposed.v1.datetime.date
+    import org.jetbrains.exposed.v1.datetime.timestamp
+
+    /**
+     * Base model.
+     */
+    @ContributesIntoSet(
+        scope = AppScope::class,
+        binding = binding<IdTable<*>>(),
+    )
+    object BaseModelsTable : UuidTable() {
+        /**
+         * String property.
+         */
+        val stringProperty: Column<String> = varchar("stringProperty", 255)
+
+        /**
+         * Date property.
+         */
+        val dateProperty: Column<LocalDate> = date("dateProperty")
+
+        /**
+         * Object creation timestamp.
+         */
+        val creationTimestamp: Column<Instant> =
+                timestamp("creationTimestamp").defaultExpression(CurrentTimestamp)
     }
+
+    """
+        .trimIndent()
+
+private const val EXPECTED_RELATED_MODEL_TABLE =
+    """
+    package com.sebastianvm.contacts.database.tables
+
+    import dev.zacsweers.metro.AppScope
+    import dev.zacsweers.metro.ContributesIntoSet
+    import dev.zacsweers.metro.binding
+    import kotlin.time.Instant
+    import kotlin.uuid.Uuid
+    import kotlinx.datetime.LocalDate
+    import org.jetbrains.exposed.v1.core.Column
+    import org.jetbrains.exposed.v1.core.ReferenceOption
+    import org.jetbrains.exposed.v1.core.dao.id.IdTable
+    import org.jetbrains.exposed.v1.core.dao.id.UuidTable
+    import org.jetbrains.exposed.v1.datetime.CurrentTimestamp
+    import org.jetbrains.exposed.v1.datetime.date
+    import org.jetbrains.exposed.v1.datetime.timestamp
+
+    /**
+     * Related model.
+     */
+    @ContributesIntoSet(
+        scope = AppScope::class,
+        binding = binding<IdTable<*>>(),
+    )
+    object RelatedModelsTable : UuidTable() {
+        /**
+         * Base model id.
+         */
+        val baseModelId: Column<Uuid> =
+                uuid("baseModelId").references(ref = BaseModelsTable.id, onDelete = ReferenceOption.CASCADE)
+
+        /**
+         * Nullable string property.
+         */
+        val nullableStringProperty: Column<String?> =
+                varchar("nullableStringProperty", 255).nullable().default(null)
+
+        /**
+         * Nullable date property.
+         */
+        val nullableDateProperty: Column<LocalDate?> =
+                date("nullableDateProperty").nullable().default(null)
+
+        /**
+         * Object creation timestamp.
+         */
+        val creationTimestamp: Column<Instant> =
+                timestamp("creationTimestamp").defaultExpression(CurrentTimestamp)
+    }
+
+    """
+        .trimIndent()
