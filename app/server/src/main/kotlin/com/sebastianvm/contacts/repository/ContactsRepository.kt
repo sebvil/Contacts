@@ -27,6 +27,7 @@ class ContactsRepository(private val db: R2dbcDatabase) {
             ContactsTable.insertReturning { table ->
                     contact.id.ifExists { table[id] = it }
                     contact.name.ifExists { table[name] = it }
+                    contact.birthday.ifExists { table[birthday] = it }
                 }
                 .map { it.toContactResponse() }
                 .single()
@@ -50,4 +51,8 @@ class ContactsRepository(private val db: R2dbcDatabase) {
 }
 
 private fun ResultRow.toContactResponse(): ContactResponse =
-    ContactResponse(id = get(ContactsTable.id).value, name = Some(get(ContactsTable.name)))
+    ContactResponse(
+        id = get(ContactsTable.id).value,
+        name = Some(get(ContactsTable.name)),
+        birthday = Some(get(ContactsTable.birthday)),
+    )
