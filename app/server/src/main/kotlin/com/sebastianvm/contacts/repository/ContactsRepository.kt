@@ -3,7 +3,7 @@ package com.sebastianvm.contacts.repository
 import com.sebastianvm.contacts.database.tables.ContactsTable
 import com.sebastianvm.contacts.dto.ContactRequest
 import com.sebastianvm.contacts.dto.ContactResponse
-import com.sebastianvm.core.types.Some
+import com.sebastianvm.core.types.None
 import com.sebastianvm.core.types.ifExists
 import dev.zacsweers.metro.Inject
 import kotlin.uuid.Uuid
@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.toList
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.insertReturning
@@ -29,14 +28,16 @@ class ContactsRepository(private val db: R2dbcDatabase) {
                     contact.name.ifExists { table[name] = it }
                     contact.birthday.ifExists { table[birthday] = it }
                 }
-                .map { it.toContactResponse() }
+                .map { it.toContactResponse(emailAddresses = None) }
                 .single()
         }
     }
 
     suspend fun getAllContacts(): List<ContactResponse> {
         return suspendTransaction(db) {
-            ContactsTable.select(ContactsTable.columns).mapLazy { it.toContactResponse() }.toList()
+            ContactsTable.select(ContactsTable.columns)
+                .mapLazy { it.toContactResponse(emailAddresses = None) }
+                .toList()
         }
     }
 
@@ -44,15 +45,8 @@ class ContactsRepository(private val db: R2dbcDatabase) {
         return suspendTransaction(db) {
             ContactsTable.select(ContactsTable.columns)
                 .where { ContactsTable.id eq id }
-                .mapLazy { it.toContactResponse() }
+                .mapLazy { it.toContactResponse(emailAddresses = None) }
                 .singleOrNull()
         }
     }
 }
-
-private fun ResultRow.toContactResponse(): ContactResponse =
-    ContactResponse(
-        id = get(ContactsTable.id).value,
-        name = Some(get(ContactsTable.name)),
-        birthday = Some(get(ContactsTable.birthday)),
-    )

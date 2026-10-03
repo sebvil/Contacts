@@ -26,12 +26,14 @@ data class ProcessedPropertyDefinition(
     val isForeignKey: Boolean,
     val exposedTableColumnType: TypeName,
     val exposedTableDefaultValue: CodeBlock?,
+    val resultRowMapperInitializer: CodeBlock,
     val responseDefaultValue: CodeBlock?,
 ) {
     companion object {
         fun from(
             propertyDefinition: PropertyDefinition,
             foreignKeys: Map<String, String>,
+            tableName: ClassName,
         ): ProcessedPropertyDefinition {
             val name = propertyDefinition.name
             val domainModelType = propertyDefinition.schema.className
@@ -88,6 +90,13 @@ data class ProcessedPropertyDefinition(
                             "%T",
                             Constants.Types.NONE,
                         ),
+                resultRowMapperInitializer =
+                    getResultRowToResponseValue(
+                        tableName = tableName,
+                        propertyName = name,
+                        schema = schema,
+                        isPrimaryKey = propertyDefinition.isPrimaryKey,
+                    ),
             )
         }
 
@@ -136,6 +145,36 @@ data class ProcessedPropertyDefinition(
                     }
                 }
                 .build()
+        }
+
+        private fun getResultRowToResponseValue(
+            tableName: ClassName,
+            propertyName: String,
+            schema: TypeDefinition,
+            isPrimaryKey: Boolean,
+        ): CodeBlock {
+            return when (schema) {
+                is UuidType if isPrimaryKey ->
+                    CodeBlock.of(
+                        "%L = get(%T.%L).value,",
+                        propertyName,
+                        tableName,
+                        propertyName,
+                    )
+
+                is UuidType,
+                is StringType,
+                is DateType ->
+                    CodeBlock.of(
+                        "%L = %T(get(%T.%L)),",
+                        propertyName,
+                        Constants.Types.SOME,
+                        tableName,
+                        propertyName,
+                    )
+
+                is OneToManyRelation -> CodeBlock.of("%L = %L,", propertyName, propertyName)
+            }
         }
     }
 }

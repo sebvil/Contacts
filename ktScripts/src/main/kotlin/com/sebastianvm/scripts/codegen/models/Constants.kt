@@ -20,6 +20,7 @@ object Constants {
         const val DTO = "$ROOT.dto"
         const val TYPES = "com.sebastianvm.core.types"
         const val DOMAIN_MODELS = "$ROOT.domain"
+        const val REPOSITORY = "$ROOT.repository"
         const val ROUTES = "$ROOT.routes"
         const val DATABASE_TABLES = "$ROOT.database.tables"
         const val EXPOSED_CORE = "org.jetbrains.exposed.v1.core"
@@ -33,6 +34,7 @@ object Constants {
         val UUID_TABLE = ClassName("${Packages.EXPOSED_CORE}.dao.id", "UuidTable")
         val ID_TABLE = ClassName("${Packages.EXPOSED_CORE}.dao.id", "IdTable")
         val EXPOSED_COLUMN = ClassName(Packages.EXPOSED_CORE, "Column")
+        val EXPOSED_RESULT_ROW = ClassName(Packages.EXPOSED_CORE, "ResultRow")
         val CONTRIBUTES_INTO_SET = ClassName(Packages.METRO, "ContributesIntoSet")
         val APP_SCOPE = ClassName(Packages.METRO, "AppScope")
         val BINDING = ClassName(Packages.METRO, "binding")
@@ -41,6 +43,7 @@ object Constants {
         val KTOR_RESOURCE = ClassName("io.ktor.resources", "Resource")
         val OPTION = ClassName(Packages.TYPES, "Option")
         val NONE = ClassName(Packages.TYPES, "None")
+        val SOME = ClassName(Packages.TYPES, "Some")
     }
 
     object Members {

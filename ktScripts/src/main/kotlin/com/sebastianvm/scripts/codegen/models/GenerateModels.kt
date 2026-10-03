@@ -14,6 +14,7 @@ import com.sebastianvm.scripts.codegen.models.generators.Generator
 import com.sebastianvm.scripts.codegen.models.generators.ModelRequestGenerator
 import com.sebastianvm.scripts.codegen.models.generators.ModelResponseGenerator
 import com.sebastianvm.scripts.codegen.models.generators.RouteGenerator
+import com.sebastianvm.scripts.codegen.models.generators.ServerRepositoryGenerator
 import com.sebastianvm.scripts.codegen.models.util.poet.lowercaseFirst
 import com.sebastianvm.scripts.codegen.models.util.poet.writeTo
 import com.sebastianvm.scripts.codegen.models.validation.ModelValidator
@@ -85,6 +86,11 @@ class GenerateModels : BaseCliktCommand("models") {
                     factory = ::ModelResponseGenerator,
                     successMessage = "Response model specs created.",
                     module = Constants.Modules.ROUTES,
+                ),
+                GenerationInputs(
+                    factory = ::ServerRepositoryGenerator,
+                    successMessage = "Repository specs created.",
+                    module = Constants.Modules.SERVER,
                 ),
             )
 
