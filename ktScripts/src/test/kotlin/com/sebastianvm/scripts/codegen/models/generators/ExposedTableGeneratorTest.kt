@@ -37,7 +37,7 @@ private const val EXPECTED_BASE_MODEL_TABLE =
         /**
          * String property.
          */
-        val stringProperty: Column<String> = varchar("stringProperty", 255)
+        val stringProperty: Column<String> = varchar("stringProperty", 255).default("")
 
         /**
          * Date property.

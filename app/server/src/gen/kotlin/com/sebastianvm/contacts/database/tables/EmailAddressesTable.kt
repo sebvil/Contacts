@@ -23,7 +23,7 @@ object EmailAddressesTable : UuidTable() {
         uuid("contactId").references(ref = ContactsTable.id, onDelete = ReferenceOption.CASCADE)
 
     /** Email address value. */
-    val address: Column<String> = varchar("address", 255)
+    val address: Column<String> = varchar("address", 255).default("")
 
     /** Label to identify email address. */
     val label: Column<String?> = varchar("label", 255).nullable().default(null)

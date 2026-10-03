@@ -114,7 +114,12 @@ data class ProcessedPropertyDefinition(
                         is DateType ->
                             add("%M(%S)", Constants.Members.EXPOSED_DATE_COLUMN, propertyName)
 
-                        is StringType -> add("varchar(%S, 255)", propertyName)
+                        is StringType -> {
+                            add("varchar(%S, 255)", propertyName)
+                            if (!schema.isNullable) {
+                                add(".default(%S)", "")
+                            }
+                        }
                         is UuidType -> {
                             if (foreignKey == null) {
                                 add("uuid(%S)", propertyName)
