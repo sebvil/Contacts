@@ -19,7 +19,7 @@ import org.jetbrains.exposed.v1.datetime.timestamp
 )
 object ContactsTable : UuidTable() {
     /** Name of the contact. */
-    val name: Column<String> = varchar("name", 255)
+    val name: Column<String> = varchar("name", 255).default("")
 
     /** Contact's birthday. */
     val birthday: Column<LocalDate?> = date("birthday").nullable().default(null)
