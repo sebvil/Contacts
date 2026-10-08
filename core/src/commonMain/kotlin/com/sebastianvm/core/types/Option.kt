@@ -35,8 +35,15 @@ sealed interface Option<out T> {
 
 @Serializable data class Some<T>(val value: T) : Option<T>
 
-fun <T> Option<T>.ifExists(action: (T) -> Unit) {
+inline fun <T> Option<T>.ifExists(action: (T) -> Unit) {
     (this as? Some)?.let { action(it.value) }
+}
+
+inline fun <T, U> Option<T>.map(transform: (T) -> U): Option<U> {
+    return when (this) {
+        is Some<T> -> Some(transform(this.value))
+        is None -> None
+    }
 }
 
 fun <T> Option<T>.getOrElse(default: () -> T): T {
