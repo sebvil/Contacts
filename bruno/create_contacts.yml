@@ -10,8 +10,18 @@ http:
     type: json
     data: |-
       {
-        id: "{{$randomUUID}}"
-        name: "Elliot"
+        "id": "{{$randomUUID}}"
+        "name": "Elliot",
+        "emailAddresses": [
+          {
+            "address": "elliot@fsociety.org",
+            "label": "Work"
+          },
+          {
+            "address": "elliot@example.com",
+            "label": "Personal"
+          }
+        ]
       }
   auth: inherit
 

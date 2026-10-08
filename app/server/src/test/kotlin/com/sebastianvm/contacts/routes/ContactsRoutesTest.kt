@@ -52,6 +52,7 @@ val ContactRoutesTest by ktorTestSuite {
                                 day = 17,
                             )
                         ),
+                    emailAddresses = Some(emptyList()),
                 )
         }
     }

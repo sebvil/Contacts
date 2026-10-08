@@ -16,6 +16,7 @@ class ContactRoutes(private val contactsRepository: ContactsRepository) {
     operator fun invoke() {
         with(route) {
             post()
+            getAll()
             get()
         }
     }
@@ -30,13 +31,27 @@ class ContactRoutes(private val contactsRepository: ContactsRepository) {
         }
     }
 
-    private fun Routing.get() {
+    private fun Routing.getAll() {
         get<ContactsRoute> { _ ->
             val contactsResponse = contactsRepository.getAllContacts()
             call.respond(
                 status = HttpStatusCode.OK,
                 message = contactsResponse,
             )
+        }
+    }
+
+    private fun Routing.get() {
+        get<ContactsRoute.Id> { id ->
+            contactsRepository.getContactById(id.id)?.let {
+                call.respond(
+                    status = HttpStatusCode.OK,
+                    message = it,
+                )
+            }
+                ?: run {
+                    call.respond(status = HttpStatusCode.NotFound, "Contact not found")
+                }
         }
     }
 }
