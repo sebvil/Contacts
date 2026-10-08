@@ -10,4 +10,6 @@ fun pluralize(string: String): String {
 
 fun String.lowercaseFirst() = replaceFirstChar { it.lowercase() }
 
+fun String.capitalizeFirst() = replaceFirstChar { it.uppercase() }
+
 fun tableName(modelName: String) = "${pluralize(modelName)}Table"
