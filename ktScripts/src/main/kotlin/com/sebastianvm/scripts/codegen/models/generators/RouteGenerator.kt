@@ -4,6 +4,7 @@ import com.sebastianvm.scripts.codegen.models.Constants
 import com.sebastianvm.scripts.codegen.models.defintions.processed.ProcessedModelDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassDefinition
 import com.sebastianvm.scripts.codegen.models.util.poet.DataClassPropertyDefinition
+import com.sebastianvm.scripts.codegen.models.util.poet.capitalizeFirst
 import com.sebastianvm.scripts.codegen.models.util.poet.fileSpecBuilder
 import com.sebastianvm.scripts.codegen.models.util.poet.lowercaseFirst
 import com.squareup.kotlinpoet.AnnotationSpec
@@ -13,8 +14,8 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
 
-class RouteGenerator(private val domainModelDefinition: ProcessedModelDefinition) : Generator {
-    private val routeName = domainModelDefinition.routeName
+class RouteGenerator(private val modelDefinition: ProcessedModelDefinition) : Generator {
+    private val routeName = modelDefinition.routeName
     private val packageName = Constants.Packages.ROUTES
     private val topLevelRouteName = ClassName(packageName, routeName)
 
@@ -32,7 +33,7 @@ class RouteGenerator(private val domainModelDefinition: ProcessedModelDefinition
             TypeSpec.objectBuilder(topLevelRouteName)
                 .addModifiers(KModifier.DATA)
                 .addIdRoute()
-                .addResourceAnnotation("/${domainModelDefinition.pluralModelName.lowercaseFirst()}")
+                .addResourceAnnotation("/${modelDefinition.pluralModelName.lowercaseFirst()}")
                 .build()
         )
     }
@@ -51,17 +52,44 @@ class RouteGenerator(private val domainModelDefinition: ProcessedModelDefinition
                                 defaultValue = CodeBlock.of("%T", topLevelRouteName),
                             ),
                             DataClassPropertyDefinition(
-                                propertyName = domainModelDefinition.primaryKeyProperty.name,
-                                type = domainModelDefinition.primaryKeyProperty.domainModelType,
+                                propertyName = modelDefinition.primaryKeyProperty.name,
+                                type = modelDefinition.primaryKeyProperty.domainModelType,
                                 description = "",
                             ),
                         ),
                     description = null,
                 )
                 .toTypeSpec {
-                    this.addResourceAnnotation("{${domainModelDefinition.primaryKeyProperty.name}}")
+                    addResourceAnnotation("{${modelDefinition.primaryKeyProperty.name}}")
+                        .addChildrenResources()
                 }
         )
+    }
+
+    private fun TypeSpec.Builder.addChildrenResources(): TypeSpec.Builder {
+        return apply {
+            modelDefinition.relationshipProperties.forEach {
+                addType(
+                    DataClassDefinition(
+                            packageName = packageName,
+                            className = it.name.capitalizeFirst(),
+                            properties =
+                                listOf(
+                                    DataClassPropertyDefinition(
+                                        propertyName = "parent",
+                                        type =
+                                            ClassName(packageName, modelDefinition.routeName, "Id"),
+                                        description = "",
+                                    )
+                                ),
+                            description = null,
+                        )
+                        .toTypeSpec {
+                            this.addResourceAnnotation("/${it.name}")
+                        }
+                )
+            }
+        }
     }
 
     private fun TypeSpec.Builder.addResourceAnnotation(path: String): TypeSpec.Builder {

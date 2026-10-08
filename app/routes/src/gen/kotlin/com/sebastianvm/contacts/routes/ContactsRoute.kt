@@ -9,5 +9,7 @@ data object ContactsRoute {
     data class Id(
         val parent: ContactsRoute = ContactsRoute,
         val id: Uuid,
-    )
+    ) {
+        @Resource("/emailAddresses") data class EmailAddresses(val parent: Id)
+    }
 }
